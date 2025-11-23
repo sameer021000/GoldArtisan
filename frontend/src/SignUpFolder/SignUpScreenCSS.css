@@ -1,0 +1,111 @@
+/* SignUpScreenCSS.css - use only the ids from SignUpScreen.jsx */
+
+/* Outer container for sign-up page */
+#divId1 {
+  width: 100%;
+  min-height: calc(100vh - 36px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 20px;
+  padding-bottom: 28px;
+}
+
+/* The card that contains heading + form */
+#divId1 > #h2Id1,
+#formId1 {
+  max-width: 420px;
+  width: 100%;
+}
+
+/* Heading */
+#h2Id1 {
+  font-size: 22px;
+  margin: 0 0 12px 0;
+  color: #2b2130;
+  font-weight: 700;
+  padding-left: 6px;
+}
+
+/* Form card */
+#formId1 {
+  background: linear-gradient(180deg, #fff, #fff);
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 10px 24px rgba(12,12,20,0.06);
+  display: grid;
+  gap: 12px;
+}
+
+/* Labels as stacked blocks */
+#labelId1,
+#labelId2,
+#labelId3,
+#labelId4,
+#labelId5,
+#labelId6 {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* Input styling using only ids — target each input by its id */
+#inputId1,
+#inputId2,
+#inputId3,
+#inputId4,
+#inputId5,
+#inputId6 {
+  display: block;
+  margin-top: 8px;
+  padding: 12px 12px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(243,243,246,1), rgba(255,255,255,1));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+  border: 1px solid rgba(18,18,24,0.06);
+  font-size: 15px;
+  color: #111;
+}
+
+/* Focus state for accessibility */
+#inputId1:focus,
+#inputId2:focus,
+#inputId3:focus,
+#inputId4:focus,
+#inputId5:focus,
+#inputId6:focus {
+  outline: 3px solid rgba(176,106,179,0.12);
+  border-color: rgba(176,106,179,0.28);
+  box-shadow: 0 6px 20px rgba(176,106,179,0.06);
+}
+
+/* Submit button */
+#btnId1.signup-button {
+  margin-top: 6px;
+  width: 100%;
+  padding: 14px 12px;
+  border-radius: 12px;
+  font-weight: 600;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  color: white;
+  box-shadow: 0 8px 22px rgba(176,106,179,0.14);
+  transition: transform .15s ease, box-shadow .15s ease, opacity .12s ease;
+}
+
+/* Button press state */
+#btnId1.signup-button:active {
+  transform: translateY(2px) scale(.997);
+  box-shadow: 0 6px 14px rgba(16,16,24,0.08);
+}
+
+/* Make the form visually lighter on tiny screens */
+@media (max-width: 360px) {
+  #formId1 { padding: 12px; border-radius: 12px; }
+  #inputId1, #inputId2, #inputId3, #inputId4, #inputId5, #inputId6 { padding: 10px; font-size: 15px; border-radius: 10px; }
+  #btnId1.signup-button { padding: 12px; border-radius: 10px; font-size: 15px; }
+}
+
+/* Accessibility: reduce motion for users preferring reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}

@@ -1,0 +1,68 @@
+/* SplashScreenCSS.css - use only the ids from SplashScreen.jsx */
+
+/* Outer wrapper - full viewport center */
+#divId1 {
+  min-height: calc(100vh - 36px); /* account for global padding */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(176,106,179,0.08) 0%, rgba(247,178,103,0.04) 100%);
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+/* Inner card area */
+#divId2 {
+  width: 100%;
+  max-width: 420px;
+  padding: 28px;
+  border-radius: 18px;
+  backdrop-filter: blur(6px);
+  background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.80));
+  box-shadow: 0 12px 28px rgba(18, 18, 24, 0.08);
+  text-align: center;
+  transform-origin: center;
+  animation: cardPop 700ms cubic-bezier(.2,.9,.3,1);
+}
+
+/* Headline */
+#h1Id1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #2a1b2e;
+  margin-bottom: 8px;
+  letter-spacing: 0.2px;
+}
+
+/* Subtext */
+#pId1 {
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 0;
+}
+
+/* subtle brand mark (using pseudo-element to avoid adding tags) */
+#divId2::before {
+  content: "";
+  display: block;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 14px auto;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  box-shadow: 0 6px 18px rgba(176,106,179,0.18);
+  transform: translateY(-6px);
+}
+
+/* small animation */
+@keyframes cardPop {
+  0% { opacity: 0; transform: translateY(8px) scale(.98); }
+  60% { opacity: 1; transform: translateY(-4px) scale(1.02); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+/* Make sure text scales nicely on very small screens */
+@media (max-width: 360px) {
+  #h1Id1 { font-size: 18px; }
+  #divId2 { padding: 20px; border-radius: 14px; }
+}
