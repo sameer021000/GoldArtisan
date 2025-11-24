@@ -65,6 +65,15 @@
   padding: 6px 0;
 }
 
+#divId4
+{
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
 /* Abbreviations row styling: the three h4s (h4Id1..h4Id3) */
 #h4Id1, #h4Id2, #h4Id3 {
   margin: 0;

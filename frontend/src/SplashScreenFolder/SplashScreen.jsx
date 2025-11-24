@@ -19,7 +19,7 @@ const SplashScreen = () => {
         <h1 id="h1Id1">Welcome COMer</h1>
 
         <div id="divId3" aria-hidden="true">
-          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
+          <div id="divId4">
             <h4 id="h4Id1">C - Customized</h4>
             <h4 id="h4Id2">O - Ornament</h4>
             <h4 id="h4Id3">M - Maker</h4>
