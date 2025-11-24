@@ -122,8 +122,8 @@ html, body, #root {
 #inputId4[aria-valid="true"],
 #inputId5[aria-valid="true"],
 #inputId6[aria-valid="true"] {
-  border-color: #4cff89;
-  box-shadow: 0 0 10px rgba(76,255,137,0.22);
+  border-color: rgba(23, 23, 227, 0.6);
+  box-shadow: 0 0 10px rgba(23, 23, 227, 0.6);
 }
 
 #inputId1[aria-invalid="true"],
@@ -142,7 +142,7 @@ html, body, #root {
   display: inline-block;
   min-width: 18px;
   margin-left: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 7px;
   font-weight: 700;
   vertical-align: middle;
   color: rgba(255,255,255,0.9);
@@ -165,12 +165,12 @@ html, body, #root {
 #icon_inputId6 {
   font-size: 16px;
 }
-#icon_inputId1:contains("✓") { color: #4cff89; } /* not standard, fallback below */
-#icon_inputId2:contains("✓") { color: #4cff89; }
-#icon_inputId3:contains("✓") { color: #4cff89; }
-#icon_inputId4:contains("✓") { color: #4cff89; }
-#icon_inputId5:contains("✓") { color: #4cff89; }
-#icon_inputId6:contains("✓") { color: #4cff89; }
+#icon_inputId1:contains("✓") { color: rgba(23, 23, 227, 0.6); } /* not standard, fallback below */
+#icon_inputId2:contains("✓") { color: rgba(23, 23, 227, 0.6); }
+#icon_inputId3:contains("✓") { color: rgba(23, 23, 227, 0.6); }
+#icon_inputId4:contains("✓") { color: rgba(23, 23, 227, 0.6); }
+#icon_inputId5:contains("✓") { color: rgba(23, 23, 227, 0.6); }
+#icon_inputId6:contains("✓") { color: rgba(23, 23, 227, 0.6); }
 
 /* fallback: color icons via JS-rendered characters. We'll style both symbols similarly */
 #icon_inputId1 { color: rgba(255,255,255,0.9); }
