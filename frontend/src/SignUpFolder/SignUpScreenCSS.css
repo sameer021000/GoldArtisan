@@ -1,43 +1,64 @@
-/* SignUpScreenCSS.css - use only the ids from SignUpScreen.jsx */
+/* SignUpScreenCSS.css - dark theme to match SplashScreen
+   Uses only id selectors (no classes).
+*/
 
-/* Outer container for sign-up page */
+/* Ensure full-bleed dark background to match SplashScreen */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+  background: radial-gradient(1200px 600px at 10% 20%, rgba(255,255,255,0.02), transparent 6%),
+              linear-gradient(180deg, #000003 0%, #0b0910 100%) !important;
+  color: #eee;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Page root container — center horizontally and place content near the top */
 #divId1 {
   width: 100%;
-  min-height: calc(100vh - 36px);
+  min-height: 100vh;
   display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding-top: 20px;
-  padding-bottom: 28px;
+  flex-direction: column;
+  align-items: center;        /* center horizontally */
+  justify-content: flex-start;/* start from top so sign-up card sits near the top */
+  padding: 6vh 20px 28px 20px;
+  gap: 20px;
+  box-sizing: border-box;
+  position: relative;
+  overflow: auto;
 }
 
-/* The card that contains heading + form */
-#divId1 > #h2Id1,
-#formId1 {
-  max-width: 420px;
-  width: 100%;
-}
-
-/* Heading */
+/* Heading above form */
 #h2Id1 {
-  font-size: 22px;
-  margin: 0 0 12px 0;
-  color: #2b2130;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  text-align: left;           /* keep heading aligned left like a form */
+  font-size: clamp(18px, 2.6vw, 22px);
   font-weight: 700;
-  padding-left: 6px;
+  color: #ffffff;
+  padding-left: 8px;
+  letter-spacing: 0.2px;
 }
 
-/* Form card */
+/* Form card — dark, slightly translucent to match splash card */
 #formId1 {
-  background: linear-gradient(180deg, #fff, #fff);
-  border-radius: 16px;
-  padding: 14px;
-  box-shadow: 0 10px 24px rgba(12,12,20,0.06);
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  background: linear-gradient(180deg, rgba(18,18,22,0.94), rgba(12,12,16,0.80));
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.65), inset 0 2px 6px rgba(255,255,255,0.02);
   display: grid;
-  gap: 12px;
+  gap: 14px;
+  box-sizing: border-box;
 }
 
-/* Labels as stacked blocks */
+/* Labels (stacked) */
 #labelId1,
 #labelId2,
 #labelId3,
@@ -46,10 +67,11 @@
 #labelId6 {
   display: block;
   font-size: 13px;
-  color: var(--muted);
+  color: #cfc9d1; /* muted light text */
+  margin-bottom: 6px;
 }
 
-/* Input styling using only ids — target each input by its id */
+/* Inputs — dark but slightly lighter than card for good contrast */
 #inputId1,
 #inputId2,
 #inputId3,
@@ -57,55 +79,81 @@
 #inputId5,
 #inputId6 {
   display: block;
-  margin-top: 8px;
-  padding: 12px 12px;
+  width: 100%;
+  padding: 12px 14px;
   border-radius: 12px;
-  background: linear-gradient(180deg, rgba(243,243,246,1), rgba(255,255,255,1));
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
-  border: 1px solid rgba(18,18,24,0.06);
+  background: linear-gradient(180deg, rgba(28,28,32,0.9), rgba(24,24,28,0.85));
+  border: 1px solid rgba(255,255,255,0.04);
+  color: #fff;
   font-size: 15px;
-  color: #111;
+  outline: none;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+  transition: box-shadow .12s ease, border-color .12s ease, transform .08s ease;
 }
 
-/* Focus state for accessibility */
+/* Placeholder color for inputs */
+#inputId1::placeholder,
+#inputId2::placeholder,
+#inputId3::placeholder,
+#inputId4::placeholder,
+#inputId5::placeholder,
+#inputId6::placeholder {
+  color: rgba(255,255,255,0.45);
+}
+
+/* Input focus — purple accent like splash */
 #inputId1:focus,
 #inputId2:focus,
 #inputId3:focus,
 #inputId4:focus,
 #inputId5:focus,
 #inputId6:focus {
-  outline: 3px solid rgba(176,106,179,0.12);
-  border-color: rgba(176,106,179,0.28);
-  box-shadow: 0 6px 20px rgba(176,106,179,0.06);
+  border-color: rgba(93,96,244,0.9); /* #5d60f4 */
+  box-shadow: 0 8px 28px rgba(93,96,244,0.06), 0 0 0 4px rgba(93,96,244,0.06);
 }
 
-/* Submit button */
-#btnId1.signup-button {
-  margin-top: 6px;
+/* Submit button — gradient in splash accent */
+#btnId1 {
+  margin-top: 4px;
   width: 100%;
   padding: 14px 12px;
   border-radius: 12px;
-  font-weight: 600;
-  background: linear-gradient(90deg, var(--primary), var(--accent));
-  color: white;
-  box-shadow: 0 8px 22px rgba(176,106,179,0.14);
-  transition: transform .15s ease, box-shadow .15s ease, opacity .12s ease;
+  font-weight: 700;
+  font-size: 15px;
+  color: #fff;
+  background: linear-gradient(90deg, rgba(93,96,244,1), rgba(247,178,103,1));
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 12px 32px rgba(93,96,244,0.12);
+  transition: transform .12s ease, box-shadow .12s ease, opacity .08s ease;
 }
 
-/* Button press state */
-#btnId1.signup-button:active {
+/* Button active press */
+#btnId1:active {
   transform: translateY(2px) scale(.997);
-  box-shadow: 0 6px 14px rgba(16,16,24,0.08);
+  box-shadow: 0 8px 20px rgba(16,16,24,0.12);
 }
 
-/* Make the form visually lighter on tiny screens */
-@media (max-width: 360px) {
-  #formId1 { padding: 12px; border-radius: 12px; }
-  #inputId1, #inputId2, #inputId3, #inputId4, #inputId5, #inputId6 { padding: 10px; font-size: 15px; border-radius: 10px; }
-  #btnId1.signup-button { padding: 12px; border-radius: 10px; font-size: 15px; }
+/* Small helper: smaller vertical spacing for inputs inside label */
+#labelId1 input,
+#labelId2 input,
+#labelId3 input,
+#labelId4 input,
+#labelId5 input,
+#labelId6 input {
+  margin-top: 6px;
 }
 
-/* Accessibility: reduce motion for users preferring reduced motion */
+/* Responsive: make card narrower on tiny screens */
+@media (max-width: 480px) {
+  #divId1 { padding: 8vh 14px 24px 14px; }
+  #formId1 { padding: 16px; border-radius: 14px; max-width: 420px; }
+  #h2Id1 { font-size: 18px; padding-left: 6px; }
+  #inputId1,#inputId2,#inputId3,#inputId4,#inputId5,#inputId6 { padding: 12px; font-size: 15px; border-radius: 10px; }
+  #btnId1 { padding: 12px; font-size: 15px; border-radius: 10px; }
+}
+
+/* Accessibility: reduce motion if user prefers */
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
 }
