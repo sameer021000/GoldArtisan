@@ -31,16 +31,15 @@ html, body, #root {
   overflow: auto;
 }
 
-/* Heading above form */
+/* Heading above form - centered */
 #h2Id1 {
   width: 100%;
   max-width: 520px;
   margin: 0 auto;
-  text-align: left;           /* keep heading aligned left like a form */
+  text-align: center;         /* changed to center heading */
   font-size: clamp(18px, 2.6vw, 22px);
   font-weight: 700;
   color: #ffffff;
-  padding-left: 8px;
   letter-spacing: 0.2px;
 }
 
@@ -68,7 +67,6 @@ html, body, #root {
   display: block;
   font-size: 13px;
   color: #cfc9d1; /* muted light text */
-  margin-bottom: 6px;
 }
 
 /* Inputs — dark but slightly lighter than card for good contrast */
@@ -112,6 +110,40 @@ html, body, #root {
   box-shadow: 0 8px 28px rgba(93,96,244,0.06), 0 0 0 4px rgba(93,96,244,0.06);
 }
 
+/* Helper (hint) text under inputs */
+#help_inputId1,
+#help_inputId2,
+#help_inputId3,
+#help_inputId4,
+#help_inputId5,
+#help_inputId6,
+#pwStrength {
+  font-size: 12px;
+  color: rgba(207,201,209,0.9);
+  margin-top: 6px;
+}
+
+/* password strength visual styling */
+#pwStrength {
+  font-weight: 600;
+}
+#pwStrength:contains("Weak") { color: #ff7b7b; }   /* note: :contains is not widely supported; kept for clarity */
+#pwStrength:contains("Medium") { color: #ffd36b; }
+#pwStrength:contains("Strong") { color: #7ef08d; }
+
+/* Error messages under inputs */
+#err_inputId1,
+#err_inputId2,
+#err_inputId3,
+#err_inputId4,
+#err_inputId5,
+#err_inputId6 {
+  font-size: 13px;
+  color: #ff8a8a;
+  min-height: 18px; /* keep space so layout doesn't jump when errors appear */
+  margin-top: 6px;
+}
+
 /* Submit button — gradient in splash accent */
 #btnId1 {
   margin-top: 4px;
@@ -134,21 +166,11 @@ html, body, #root {
   box-shadow: 0 8px 20px rgba(16,16,24,0.12);
 }
 
-/* Small helper: smaller vertical spacing for inputs inside label */
-#labelId1 input,
-#labelId2 input,
-#labelId3 input,
-#labelId4 input,
-#labelId5 input,
-#labelId6 input {
-  margin-top: 6px;
-}
-
 /* Responsive: make card narrower on tiny screens */
 @media (max-width: 480px) {
   #divId1 { padding: 8vh 14px 24px 14px; }
   #formId1 { padding: 16px; border-radius: 14px; max-width: 420px; }
-  #h2Id1 { font-size: 18px; padding-left: 6px; }
+  #h2Id1 { font-size: 18px; }
   #inputId1,#inputId2,#inputId3,#inputId4,#inputId5,#inputId6 { padding: 12px; font-size: 15px; border-radius: 10px; }
   #btnId1 { padding: 12px; font-size: 15px; border-radius: 10px; }
 }
