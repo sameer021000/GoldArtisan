@@ -16,7 +16,7 @@ const SplashScreen = () => {
   return (
     <div id="divId1">
       <div id="divId2">
-        <h1 id="h1Id1">Welcome to COMer</h1>
+        <h1 id="h1Id1">Welcome COMer</h1>
 
         <div id="divId3" aria-hidden="true">
           <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
