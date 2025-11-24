@@ -1,68 +1,162 @@
 /* SplashScreenCSS.css - use only the ids from SplashScreen.jsx */
 
-/* Outer wrapper - full viewport center */
+/* Root / full viewport */
 #divId1 {
-  min-height: calc(100vh - 36px); /* account for global padding */
+  min-height: 100vh;
+  height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  background: linear-gradient(180deg, rgba(176,106,179,0.08) 0%, rgba(247,178,103,0.04) 100%);
-  padding-top: 12px;
-  padding-bottom: 12px;
+  justify-content: center; /* card centered vertically */
+  padding: 20px;
+  box-sizing: border-box;
+
+  /* DARK THEME background */
+  background: radial-gradient(1200px 600px at 10% 20%, rgba(255,255,255,0.02), transparent 6%),
+              linear-gradient(180deg, #0f0f13 0%, #0b0910 100%);
+  color: #eee;
+  position: relative;
+  overflow: hidden;
 }
 
 /* Inner card area */
 #divId2 {
   width: 100%;
-  max-width: 420px;
-  padding: 28px;
+  max-width: 480px;
+  padding: 28px 22px;
   border-radius: 18px;
-  backdrop-filter: blur(6px);
-  background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.80));
-  box-shadow: 0 12px 28px rgba(18, 18, 24, 0.08);
+  backdrop-filter: blur(8px);
+  background: linear-gradient(180deg, rgba(20,20,24,0.68), rgba(12,12,16,0.60));
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 2px 6px rgba(255,255,255,0.02) inset;
   text-align: center;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 12px;
+  align-items: start;
   transform-origin: center;
   animation: cardPop 700ms cubic-bezier(.2,.9,.3,1);
+  margin-bottom: 12px;
 }
 
-/* Headline */
+/* Headline at the top of the card */
 #h1Id1 {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
-  color: #2a1b2e;
-  margin-bottom: 8px;
+  color: #fff;
+  margin: 6px 0 4px 0;
   letter-spacing: 0.2px;
+  opacity: 0;
+  transform: translateY(6px);
+  animation: fadeInUp 600ms ease-out forwards;
+  animation-delay: 150ms; /* appears first */
 }
 
-/* Subtext */
-#pId1 {
+/* divId3 holds abbreviations and line below them */
+#divId3 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: fadeInUp 600ms ease-out forwards;
+  animation-delay: 650ms; /* group appears second (stagger inside) */
+  padding: 6px 0;
+}
+
+/* Abbreviations row styling: the three h4s (h4Id1..h4Id3) */
+#h4Id1, #h4Id2, #h4Id3 {
+  margin: 0;
   font-size: 14px;
-  color: var(--muted);
-  margin-top: 0;
+  font-weight: 700;
+  color: #ffdca3; /* warm accent */
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+  opacity: 0;
+  transform: translateY(6px);
 }
 
-/* subtle brand mark (using pseudo-element to avoid adding tags) */
+/* stagger individual abbrev reveals (using ids so no new selectors created) */
+#h4Id1 { animation: fadeInUp 520ms ease-out forwards; animation-delay: 720ms; }
+#h4Id2 { animation: fadeInUp 520ms ease-out forwards; animation-delay: 800ms; }
+#h4Id3 { animation: fadeInUp 520ms ease-out forwards; animation-delay: 880ms; }
+
+/* The explanatory line under abbreviations (still within divId3) */
+#h4Id4 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: #d6d0d6;
+  opacity: 0;
+  transform: translateY(6px);
+  animation: fadeInUp 520ms ease-out forwards;
+  animation-delay: 980ms; /* appears after the three abbrev lines */
+}
+
+/* Bottom line: fixed to bottom of viewport */
+#h3Id1 {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 24px;
+  text-align: center;
+  margin: 0 auto;
+  font-size: 15px;
+  font-weight: 600;
+  color: #cfc9d1;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: fadeInUp 600ms ease-out forwards;
+  animation-delay: 1250ms; /* appears last */
+  pointer-events: none;
+  width: 100%;
+  max-width: 720px;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+/* subtle brand mark (pseudo-element) */
 #divId2::before {
   content: "";
   display: block;
-  width: 72px;
-  height: 72px;
-  margin: 0 auto 14px auto;
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 12px auto;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  box-shadow: 0 6px 18px rgba(176,106,179,0.18);
+  background: linear-gradient(135deg, rgba(255,183,77,0.15), rgba(176,106,179,0.12));
+  box-shadow: 0 6px 18px rgba(176,106,179,0.08);
   transform: translateY(-6px);
+  border: 1px solid rgba(255,255,255,0.03);
 }
 
-/* small animation */
+/* small animation for the card */
 @keyframes cardPop {
   0% { opacity: 0; transform: translateY(8px) scale(.98); }
   60% { opacity: 1; transform: translateY(-4px) scale(1.02); }
   100% { transform: translateY(0) scale(1); }
 }
 
+/* Shared fade in & up animation */
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
 /* Make sure text scales nicely on very small screens */
-@media (max-width: 360px) {
+@media (max-width: 420px) {
+  #divId2 { padding: 20px; border-radius: 14px; max-width: 380px; }
+  #h1Id1 { font-size: 20px; }
+  #h4Id1, #h4Id2, #h4Id3 { font-size: 13px; padding: 5px 8px; }
+  #h4Id4 { font-size: 12px; }
+  #h3Id1 { font-size: 13px; bottom: 16px; }
+}
+
+/* Very small screens - ensure readability */
+@media (max-width: 340px) {
   #h1Id1 { font-size: 18px; }
-  #divId2 { padding: 20px; border-radius: 14px; }
+  #h4Id1, #h4Id2, #h4Id3 { font-size: 12px; }
+  #h3Id1 { font-size: 12px; }
 }
