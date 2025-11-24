@@ -17,16 +17,16 @@ html, body {
               linear-gradient(360deg, #070799 0%, #0b0910 100%);
   color: #eee;
   position: relative;           /* container for absolutely-positioned card + bottom text */
-  overflow: hidden;             /* hide any accidental page scrollbars */
+  overflow: visible;
 }
 
 /* Inner card area — compact and cannot exceed viewport minus reserved bottom space */
 #divId2 {
   position: absolute;
-  top: 56px;                    /* distance from top — adjust smaller/larger if desired */
+  top: 56px;                    /* distance from top — adjust if you want it higher/lower */
   left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 40px);     /* responsive width with side padding accounted for */
+  transform: translateX(-50%) translateY(0); /* keep X centering here */
+  width: calc(100% - 40px);
   max-width: 480px;
   padding: 18px 18px;
   border-radius: 18px;
@@ -38,11 +38,12 @@ html, body {
   grid-template-rows: auto 1fr auto;
   gap: 10px;
   transform-origin: center;
-  animation: cardPop 700ms cubic-bezier(.2,.9,.3,1);
-
-  /* keep the card compact and avoid pushing page height */
-  max-height: calc(100vh - 140px);  /* reserve enough space for bottom tagline */
-  overflow: auto;                    /* internal scroll only if card content overflows */
+  animation: cardPop 700ms cubic-bezier(.2,.9,.3,1) both;
+  /* prevent the card from growing tall enough to hide the bottom tagline */
+  margin: 6px 0 0 0;
+  flex: 0 0 auto;
+  max-height: calc(100vh - 160px); /* increased reserved space for bottom line */
+  overflow: auto;
   -webkit-overflow-scrolling: touch;
   z-index: 10;
 }
@@ -130,9 +131,17 @@ html, body {
 
 /* small animation for the card */
 @keyframes cardPop {
-  0% { opacity: 0; transform: translateY(8px) scale(.98); }
-  60% { opacity: 1; transform: translateY(-4px) scale(1.02); }
-  100% { transform: translateY(0) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(8px) scale(.98);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-4px) scale(1.02);
+  }
+  100% {
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
 }
 
 /* Shared fade in & up animation */
