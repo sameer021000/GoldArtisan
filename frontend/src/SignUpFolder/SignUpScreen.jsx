@@ -241,7 +241,7 @@ const SignUpScreen = () => {
               aria-label={showPw ? 'Hide password' : 'Show password'}
               onClick={() => setShowPw(s => !s)}
               >
-              {showPw ? '👁️' : '👁️'}
+              {showPw ? '👁️' : '👁️‍🗨️'}
             </button>
           </div>
         </label>
@@ -277,7 +277,7 @@ const SignUpScreen = () => {
               aria-label={showConfirmPw ? 'Hide password' : 'Show password'}
               onClick={() => setShowConfirmPw(s => !s)}
               >
-              {showConfirmPw ? '👁️' : '👁️'}
+              {showConfirmPw ? '👁️' : '👁️‍🗨️'}
             </button>
           </div>
         </label>
