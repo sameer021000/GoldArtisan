@@ -20,47 +20,54 @@ const SignUpScreen = () => {
     confirmPassword: ''
   });
 
-  const [pwStrength, setPwStrength] = useState(''); // 'Weak' | 'Medium' | 'Strong' | ''
+  const [pwStrength, setPwStrength] = useState(''); // '', 'Weak', 'Medium', 'Strong'
+  const [pwScore, setPwScore] = useState(0); // 0-4
+  const [showPw, setShowPw] = useState(false);
+  const [showConfirmPw, setShowConfirmPw] = useState(false);
 
-  // simple validators
+  // validators
   const validators = {
-    firstName: value => value.trim() ? '' : 'First name is required.',
-    lastName: value => value.trim() ? '' : 'Last name is required.',
-    phone: value => {
-      if (!value.trim()) return 'Phone number is required.';
-      const digits = value.replace(/\D/g, '');
+    firstName: v => v.trim() ? '' : 'First name is required.',
+    lastName: v => v.trim() ? '' : 'Last name is required.',
+    phone: v => {
+      if (!v.trim()) return 'Phone number is required.';
+      const digits = v.replace(/\D/g, '');
       if (digits.length < 7) return 'Enter a valid phone number.';
       return '';
     },
-    email: value => {
-      if (!value.trim()) return 'Email is required.';
-      // Basic email regex
+    email: v => {
+      if (!v.trim()) return 'Email is required.';
       const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return re.test(value) ? '' : 'Enter a valid email address.';
+      return re.test(v) ? '' : 'Enter a valid email address.';
     },
-    password: value => {
-      if (!value) return 'Password is required.';
-      if (value.length < 6) return 'Password must be at least 6 characters.';
+    password: v => {
+      if (!v) return 'Password is required.';
+      if (v.length < 6) return 'Password must be at least 6 characters.';
       return '';
     },
-    confirmPassword: (value, all) => {
-      if (!value) return 'Please confirm your password.';
-      if (value !== all.password) return "Passwords don't match.";
+    confirmPassword: (v, all) => {
+      if (!v) return 'Please confirm your password.';
+      if (v !== all.password) return "Passwords don't match.";
       return '';
     }
   };
 
-  // compute password strength
-  const assessPasswordStrength = (pw) => {
-    if (!pw) return '';
+  // asses password strength
+  const assessPassword = (pw) => {
+    if (!pw) {
+      setPwStrength('');
+      setPwScore(0);
+      return;
+    }
     let score = 0;
     if (pw.length >= 8) score++;
     if (/[A-Z]/.test(pw)) score++;
     if (/[0-9]/.test(pw)) score++;
     if (/[^A-Za-z0-9]/.test(pw)) score++;
-    if (score <= 1) return 'Weak';
-    if (score === 2 || score === 3) return 'Medium';
-    return 'Strong';
+    setPwScore(score);
+    if (score <= 1) setPwStrength('Weak');
+    else if (score <= 3) setPwStrength('Medium');
+    else setPwStrength('Strong');
   };
 
   const handleChange = (e) => {
@@ -68,53 +75,51 @@ const SignUpScreen = () => {
     const newForm = { ...form, [name]: value };
     setForm(newForm);
 
-    // Validate this field live
+    // live validation for this field
     const validator = validators[name];
     if (validator) {
-      const error = name === 'confirmPassword' ? validator(value, newForm) : validator(value);
-      setErrors(prev => ({ ...prev, [name]: error }));
+      const err = name === 'confirmPassword' ? validator(value, newForm) : validator(value);
+      setErrors(prev => ({ ...prev, [name]: err }));
     }
 
-    // update password strength if password changed
+    // update password strength and revalidate confirm password if needed
     if (name === 'password') {
-      setPwStrength(assessPasswordStrength(value));
-      // re-validate confirmPassword (in case user already filled it)
-      const confirmError = validators.confirmPassword(form.confirmPassword, { ...newForm, password: value });
-      setErrors(prev => ({ ...prev, confirmPassword: confirmError }));
+      assessPassword(value);
+      // revalidate confirm
+      const confirmErr = validators.confirmPassword(newForm.confirmPassword, newForm);
+      setErrors(prev => ({ ...prev, confirmPassword: confirmErr }));
     }
   };
 
   const validateAll = () => {
-    const newErrors = {};
+    const next = {};
     Object.keys(validators).forEach(key => {
-      const validator = validators[key];
-      newErrors[key] = key === 'confirmPassword'
-        ? validator(form.confirmPassword, form)
-        : validator(form[key]);
+      next[key] = key === 'confirmPassword'
+        ? validators[key](form.confirmPassword, form)
+        : validators[key](form[key]);
     });
-    setErrors(newErrors);
-    // return whether there is any error
-    return Object.values(newErrors).every(v => v === '');
+    setErrors(next);
+    return Object.values(next).every(v => v === '');
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validateAll()) {
-      // focus the first error field (optional)
-      const firstError = Object.keys(errors).find(k => errors[k]);
-      if (firstError) {
-        const el = document.querySelector(`#inputId${mapFieldToNumber(firstError)}`);
+      // focus first invalid input
+      const firstInvalid = Object.keys(errors).find(k => errors[k]);
+      if (firstInvalid) {
+        const id = `inputId${mapField(firstInvalid)}`;
+        const el = document.getElementById(id);
         if (el) el.focus();
       }
       return;
     }
-    // submit (placeholder)
+    // submit placeholder
     console.log('SignUp data:', form);
-    alert('Form submitted (check console)');
+    alert('Form submitted (check console).');
   };
 
-  // small helper to map field name to id number suffix used in JSX
-  const mapFieldToNumber = (field) => {
+  const mapField = (field) => {
     switch (field) {
       case 'firstName': return 1;
       case 'lastName': return 2;
@@ -126,12 +131,30 @@ const SignUpScreen = () => {
     }
   };
 
+  // helper to compute progress width and color
+  const pwPercent = Math.min(100, (pwScore / 4) * 100);
+  const pwColor = pwScore <= 1 ? '#ff7b7b' : (pwScore <= 3 ? '#ffd36b' : '#7ef08d');
+
+  // set aria-valid / aria-invalid attributes for inputs
+  const getValidityAttrs = (field) => {
+    const val = form[field];
+    const err = errors[field];
+    if (err && err.length) {
+      return { 'aria-invalid': 'true', 'aria-valid': 'false' };
+    }
+    if (val && !err) {
+      return { 'aria-invalid': 'false', 'aria-valid': 'true' };
+    }
+    return { 'aria-invalid': 'false', 'aria-valid': 'false' };
+  };
+
   return (
     <div id="divId1">
       <h2 id="h2Id1">Artisan Sign Up</h2>
 
       <form id="formId1" onSubmit={handleSubmit} noValidate>
-        {/* First name */}
+
+        {/* FIRST NAME */}
         <label id="labelId1">
           First name
           <input
@@ -139,12 +162,15 @@ const SignUpScreen = () => {
             name="firstName"
             value={form.firstName}
             onChange={handleChange}
-            placeholder="First name" />
+            placeholder="First name"
+            {...getValidityAttrs('firstName')}
+            />
         </label>
-        <div id="help_inputId1" aria-hidden="true">Enter your given name.</div>
+        <div id="help_inputId1">Enter your given name.</div>
         <div id="err_inputId1" role="alert" aria-live="polite">{errors.firstName}</div>
+        <span id="icon_inputId1" aria-hidden="true">{!errors.firstName && form.firstName ? '✓' : (errors.firstName ? '⚠' : '')}</span>
 
-        {/* Last name */}
+        {/* LAST NAME */}
         <label id="labelId2">
           Last name
           <input
@@ -152,12 +178,15 @@ const SignUpScreen = () => {
             name="lastName"
             value={form.lastName}
             onChange={handleChange}
-            placeholder="Last name" />
+            placeholder="Last name"
+            {...getValidityAttrs('lastName')}
+            />
         </label>
-        <div id="help_inputId2" aria-hidden="true">Enter your family name.</div>
+        <div id="help_inputId2">Enter your family name.</div>
         <div id="err_inputId2" role="alert" aria-live="polite">{errors.lastName}</div>
+        <span id="icon_inputId2" aria-hidden="true">{!errors.lastName && form.lastName ? '✓' : (errors.lastName ? '⚠' : '')}</span>
 
-        {/* Phone */}
+        {/* PHONE */}
         <label id="labelId3">
           Phone number
           <input
@@ -166,12 +195,15 @@ const SignUpScreen = () => {
             value={form.phone}
             onChange={handleChange}
             placeholder="Phone number"
-            inputMode="tel" />
+            inputMode="tel"
+            {...getValidityAttrs('phone')}
+            />
         </label>
-        <div id="help_inputId3" aria-hidden="true">Include country code if applicable.</div>
+        <div id="help_inputId3">Include country code if applicable.</div>
         <div id="err_inputId3" role="alert" aria-live="polite">{errors.phone}</div>
+        <span id="icon_inputId3" aria-hidden="true">{!errors.phone && form.phone ? '✓' : (errors.phone ? '⚠' : '')}</span>
 
-        {/* Email */}
+        {/* EMAIL */}
         <label id="labelId4">
           Email
           <input
@@ -180,39 +212,77 @@ const SignUpScreen = () => {
             value={form.email}
             onChange={handleChange}
             placeholder="Email"
-            type="email" />
+            type="email"
+            {...getValidityAttrs('email')}
+            />
         </label>
-        <div id="help_inputId4" aria-hidden="true">We'll send account-related emails to this address.</div>
+        <div id="help_inputId4">We'll send account-related emails to this address.</div>
         <div id="err_inputId4" role="alert" aria-live="polite">{errors.email}</div>
+        <span id="icon_inputId4" aria-hidden="true">{!errors.email && form.email ? '✓' : (errors.email ? '⚠' : '')}</span>
 
-        {/* Password */}
+        {/* PASSWORD */}
         <label id="labelId5">
           Password
-          <input
-            id="inputId5"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            placeholder="Password"
-            type="password" />
+          <div id="pwWrap" style={{ position: 'relative' }}>
+            <input
+              id="inputId5"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              placeholder="Password"
+              type={showPw ? 'text' : 'password'}
+              {...getValidityAttrs('password')}
+              />
+            {/* eye button */}
+            <button
+              type="button"
+              id="eyeId1"
+              aria-label={showPw ? 'Hide password' : 'Show password'}
+              onClick={() => setShowPw(s => !s)}
+              >
+              {showPw ? '👁️' : '👁️'}
+            </button>
+          </div>
         </label>
-        <div id="help_inputId5" aria-hidden="true">Min 6 characters. Use upper, numbers, symbols for stronger passwords.</div>
-        <div id="pwStrength" aria-hidden="true">{pwStrength ? `Strength: ${pwStrength}` : ''}</div>
-        <div id="err_inputId5" role="alert" aria-live="polite">{errors.password}</div>
+        <div id="help_inputId5">Min 6 characters. Use upper, numbers, symbols for stronger passwords.</div>
 
-        {/* Confirm password */}
+        {/* password strength meter */}
+        <div id="pwStrength" aria-live="polite">
+          {pwStrength ? `Strength: ${pwStrength}` : ''}
+        </div>
+        <div id="pwStrengthBarWrap" aria-hidden="true">
+          <div id="pwStrengthBar" style={{ width: `${pwPercent}%`, backgroundColor: pwColor }} />
+        </div>
+
+        <div id="err_inputId5" role="alert" aria-live="polite">{errors.password}</div>
+        <span id="icon_inputId5" aria-hidden="true">{!errors.password && form.password ? '✓' : (errors.password ? '⚠' : '')}</span>
+
+        {/* CONFIRM PASSWORD */}
         <label id="labelId6">
           Confirm password
-          <input
-            id="inputId6"
-            name="confirmPassword"
-            value={form.confirmPassword}
-            onChange={handleChange}
-            placeholder="Confirm password"
-            type="password" />
+          <div style={{ position: 'relative' }}>
+            <input
+              id="inputId6"
+              name="confirmPassword"
+              value={form.confirmPassword}
+              onChange={handleChange}
+              placeholder="Confirm password"
+              type={showConfirmPw ? 'text' : 'password'}
+              {...getValidityAttrs('confirmPassword')}
+              />
+            <button
+              type="button"
+              id="eyeId2"
+              aria-label={showConfirmPw ? 'Hide password' : 'Show password'}
+              onClick={() => setShowConfirmPw(s => !s)}
+              >
+              {showConfirmPw ? '👁️' : '👁️'}
+            </button>
+          </div>
         </label>
-        <div id="help_inputId6" aria-hidden="true">Re-type the password to confirm.</div>
+        <div id="help_inputId6">Re-type the password to confirm.</div>
         <div id="err_inputId6" role="alert" aria-live="polite">{errors.confirmPassword}</div>
+        <span id="icon_inputId6" aria-hidden="true">{!errors.confirmPassword && form.confirmPassword ? '✓' : (errors.confirmPassword ? '⚠' : '')}</span>
 
         <button id="btnId1" type="submit">Submit</button>
       </form>
