@@ -157,6 +157,7 @@ const SignUpScreen = () => {
         {/* FIRST NAME */}
         <label id="labelId1">
           First name
+          <span id="icon_inputId1" aria-hidden="true">{!errors.firstName && form.firstName ? '✓' : (errors.firstName ? '⚠' : '')}</span>
           <input
             id="inputId1"
             name="firstName"
@@ -168,11 +169,11 @@ const SignUpScreen = () => {
         </label>
         <div id="help_inputId1">Enter your given name.</div>
         <div id="err_inputId1" role="alert" aria-live="polite">{errors.firstName}</div>
-        <span id="icon_inputId1" aria-hidden="true">{!errors.firstName && form.firstName ? '✓' : (errors.firstName ? '⚠' : '')}</span>
 
         {/* LAST NAME */}
         <label id="labelId2">
           Last name
+          <span id="icon_inputId2" aria-hidden="true">{!errors.lastName && form.lastName ? '✓' : (errors.lastName ? '⚠' : '')}</span>
           <input
             id="inputId2"
             name="lastName"
@@ -184,11 +185,11 @@ const SignUpScreen = () => {
         </label>
         <div id="help_inputId2">Enter your family name.</div>
         <div id="err_inputId2" role="alert" aria-live="polite">{errors.lastName}</div>
-        <span id="icon_inputId2" aria-hidden="true">{!errors.lastName && form.lastName ? '✓' : (errors.lastName ? '⚠' : '')}</span>
 
         {/* PHONE */}
         <label id="labelId3">
           Phone number
+          <span id="icon_inputId3" aria-hidden="true">{!errors.phone && form.phone ? '✓' : (errors.phone ? '⚠' : '')}</span>
           <input
             id="inputId3"
             name="phone"
@@ -201,11 +202,11 @@ const SignUpScreen = () => {
         </label>
         <div id="help_inputId3">Include country code if applicable.</div>
         <div id="err_inputId3" role="alert" aria-live="polite">{errors.phone}</div>
-        <span id="icon_inputId3" aria-hidden="true">{!errors.phone && form.phone ? '✓' : (errors.phone ? '⚠' : '')}</span>
 
         {/* EMAIL */}
         <label id="labelId4">
           Email
+          <span id="icon_inputId4" aria-hidden="true">{!errors.email && form.email ? '✓' : (errors.email ? '⚠' : '')}</span>
           <input
             id="inputId4"
             name="email"
@@ -218,11 +219,11 @@ const SignUpScreen = () => {
         </label>
         <div id="help_inputId4">We'll send account-related emails to this address.</div>
         <div id="err_inputId4" role="alert" aria-live="polite">{errors.email}</div>
-        <span id="icon_inputId4" aria-hidden="true">{!errors.email && form.email ? '✓' : (errors.email ? '⚠' : '')}</span>
 
         {/* PASSWORD */}
         <label id="labelId5">
           Password
+          <span id="icon_inputId5" aria-hidden="true">{!errors.password && form.password ? '✓' : (errors.password ? '⚠' : '')}</span>
           <div id="pwWrap" style={{ position: 'relative' }}>
             <input
               id="inputId5"
@@ -255,11 +256,11 @@ const SignUpScreen = () => {
         </div>
 
         <div id="err_inputId5" role="alert" aria-live="polite">{errors.password}</div>
-        <span id="icon_inputId5" aria-hidden="true">{!errors.password && form.password ? '✓' : (errors.password ? '⚠' : '')}</span>
 
         {/* CONFIRM PASSWORD */}
         <label id="labelId6">
           Confirm password
+          <span id="icon_inputId6" aria-hidden="true">{!errors.confirmPassword && form.confirmPassword ? '✓' : (errors.confirmPassword ? '⚠' : '')}</span>
           <div style={{ position: 'relative' }}>
             <input
               id="inputId6"
@@ -282,7 +283,6 @@ const SignUpScreen = () => {
         </label>
         <div id="help_inputId6">Re-type the password to confirm.</div>
         <div id="err_inputId6" role="alert" aria-live="polite">{errors.confirmPassword}</div>
-        <span id="icon_inputId6" aria-hidden="true">{!errors.confirmPassword && form.confirmPassword ? '✓' : (errors.confirmPassword ? '⚠' : '')}</span>
 
         <button id="btnId1" type="submit">Submit</button>
       </form>
