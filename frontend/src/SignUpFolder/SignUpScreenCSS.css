@@ -140,8 +140,8 @@ html, body, #root {
 #err_inputId6 {
   font-size: 13px;
   color: #ff8a8a;
-  min-height: 18px; /* keep space so layout doesn't jump when errors appear */
-  margin-top: 2px;
+  min-height: 2px; /* keep space so layout doesn't jump when errors appear */
+  margin-top: 1px;
 }
 
 /* Submit button — gradient in splash accent */
