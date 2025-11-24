@@ -4,24 +4,24 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  padding: 20px;
+  justify-content: flex-start; /* put content starting from top */
+  padding: 30px 20px 20px 20px; /* extra top padding to push the card slightly down from top */
   box-sizing: border-box;
   background: radial-gradient(1200px 600px at 10% 20%, rgba(255,255,255,0.02), transparent 6%),
               linear-gradient(360deg, #070799 0%, #0b0910  100%);
   color: #eee;
   position: relative;
-  overflow: visible;
+  overflow: visible; /* allow bottom text to be visible */
 }
 
 /* Inner card area */
 #divId2 {
   width: 100%;
   max-width: 480px;
-  padding: 28px 22px;
+  padding: 24px 20px;         /* slightly reduced padding so the card is more compact */
   border-radius: 18px;
   backdrop-filter: blur(8px);
-  background: linear-gradient(180deg, rgba(20,20,24,0.68), rgba(12,12,16,0.60));
+  background: linear-gradient(180deg, rgba(20,20,24,0.78), rgba(12,12,16,0.65));
   box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 2px 6px rgba(255,255,255,0.02) inset;
   text-align: center;
   display: grid;
@@ -31,11 +31,11 @@
   transform-origin: center;
   animation: cardPop 700ms cubic-bezier(.2,.9,.3,1);
 
-  /* ensure the card never grows past viewport minus reserved space for bottom text */
+  /* make card sit up near top without growing to push bottom content */
+  margin: 8px 0 0 0;          /* small top offset, no bottom margin */
   flex: 0 0 auto;
-  max-height: calc(100vh - 140px); /* leaves room for top padding + bottom line */
-  overflow: auto; /* internal scroll only if content overflows the card */
-  margin: 0; /* remove extra bottom margin that could add to page height */
+  max-height: calc(100vh - 120px); /* keep it from growing taller than viewport minus reserved bottom space */
+  overflow: auto;             /* internal scroll only if card content overflows */
 }
 
 /* Headline at the top of the card */
