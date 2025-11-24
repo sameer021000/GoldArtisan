@@ -1,32 +1,30 @@
-/* SplashScreenCSS.css - splash layout: full-bleed dark background & centered card */
+/* SplashScreenCSS.css - splash layout: full-bleed background & centered card */
 
-/* Ensure reset */
+/* Reset + ensure full height */
 html, body, #root {
   height: 100%;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-/* IMPORTANT: override App.css body background on splash so background is full-bleed dark */
-html, body, #root {
+  /* force dark full-bleed background on splash */
   background: radial-gradient(1200px 600px at 10% 20%, rgba(255,255,255,0.02), transparent 6%),
               linear-gradient(180deg, #000003 0%, #0b0910 100%) !important;
 }
 
-/* Root container: full width so background covers left/right.
-   children are horizontally centered with align-items:center.
-   top spacing is responsive with padding-top using vh.
+/* Root container:
+   - background is on body so it's full-bleed
+   - content is horizontally centered using align-items:center
+   - top spacing uses viewport units so it feels right on all screens
 */
 #divId1 {
-  width: 100vw;                     /* full viewport width to avoid white sidebars */
+  width: 100%;
   min-height: 100vh;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;              /* horizontally center card + h3 */
-  justify-content: flex-start;      /* start from top so card sits near top */
-  padding: 6vh 20px 28px 20px;      /* responsive top spacing */
+  align-items: center;       /* horizontally center children */
+  justify-content: flex-start;
+  padding: 6vh 20px 28px 20px;
   gap: 18px;
   box-sizing: border-box;
   color: #eee;
@@ -34,10 +32,10 @@ html, body, #root {
   overflow: auto;
 }
 
-/* Card / main box */
+/* Card / main box (centered within the full-bleed area) */
 #divId2 {
   width: 100%;
-  max-width: 720px;                 /* center block width on large screens */
+  max-width: 720px;          /* constrain content width on large screens */
   padding: 22px;
   border-radius: 18px;
   backdrop-filter: blur(8px);
@@ -47,9 +45,8 @@ html, body, #root {
   display: grid;
   grid-template-rows: auto 1fr auto;
   gap: 12px;
-  transform-origin: center;
   animation: cardPop 640ms cubic-bezier(.2,.9,.3,1) both;
-  margin: 0 auto;                   /* ensures the card block is centered horizontally */
+  margin: 0 auto;            /* centers block horizontally */
 }
 
 /* Headline */
@@ -65,29 +62,57 @@ html, body, #root {
   animation-delay: 120ms;
 }
 
-/* Abbreviation group */
-#divId3 { display:flex; flex-direction:column; gap:12px; align-items:center; padding:6px 0;
-  opacity:0; transform:translateY(8px); animation:fadeInUp 520ms ease-out forwards; animation-delay:420ms; }
+/* Abbreviations group */
+#divId3 {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  padding: 6px 0;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: fadeInUp 520ms ease-out forwards;
+  animation-delay: 420ms;
+}
 
-#divId4 { display:flex; flex-direction:column; gap:10px; align-items:center; justify-content:center; }
+#divId4{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
 
-#h4Id1, #h4Id2, #h4Id3 {
-  margin:0; font-size:14px; font-weight:700; color:#e6e0ff;
-  padding:8px 12px; border-radius:10px;
+#h4Id1, #h4Id2, #h4Id3{
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #e6e0ff;
+  padding: 8px 12px;
+  border-radius: 10px;
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
   box-shadow: 0 6px 18px rgba(0,0,0,0.45);
-  opacity:0; transform:translateY(6px);
+  opacity: 0;
+  transform: translateY(6px);
 }
-#h4Id1 { animation: fadeInUp 460ms ease-out forwards; animation-delay:520ms; }
-#h4Id2 { animation: fadeInUp 460ms ease-out forwards; animation-delay:600ms; }
-#h4Id3 { animation: fadeInUp 460ms ease-out forwards; animation-delay:680ms; }
+#h4Id1 { animation: fadeInUp 460ms ease-out forwards; animation-delay: 520ms; }
+#h4Id2 { animation: fadeInUp 460ms ease-out forwards; animation-delay: 600ms; }
+#h4Id3 { animation: fadeInUp 460ms ease-out forwards; animation-delay: 680ms; }
 
-#h4Id4 { margin:0; font-size:13px; font-weight:500; color:#d6d0d6; opacity:0;
-  transform:translateY(6px); animation:fadeInUp 480ms ease-out forwards; animation-delay:760ms; }
+#h4Id4 {
+  margin:0;
+  font-size:13px;
+  font-weight:500;
+  color:#d6d0d6;
+  opacity:0;
+  transform:translateY(6px);
+  animation:fadeInUp 480ms ease-out forwards;
+  animation-delay:760ms;
+}
 
-/* Tagline directly below the card (normal flow) */
+/* Tagline directly below the card (normal flow) - horizontally centered */
 #h3Id1 {
-  margin: 0;
+  margin: 0 auto;
   font-size: 15px;
   font-weight: 600;
   color: #cfc9d1;
@@ -102,8 +127,15 @@ html, body, #root {
 }
 
 /* Animations */
-@keyframes cardPop { 0% { opacity:0; transform:translateY(8px) scale(.98);} 60%{ opacity:1; transform:translateY(-6px) scale(1.02);} 100%{ transform:translateY(0) scale(1);} }
-@keyframes fadeInUp { 0%{opacity:0; transform:translateY(8px);} 100%{opacity:1; transform:translateY(0);} }
+@keyframes cardPop {
+  0% { opacity: 0; transform: translateY(8px) scale(.98); }
+  60% { opacity: 1; transform: translateY(-6px) scale(1.02); }
+  100% { transform: translateY(0) scale(1); }
+}
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
 
 /* Responsive tuning */
 @media (max-width: 480px) {
