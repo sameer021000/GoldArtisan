@@ -1,24 +1,33 @@
+/* make sure document doesn't introduce extra scroll */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Root / full viewport */
 #divId1 {
   min-height: 100vh;
   height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* put content starting from top */
-  padding: 30px 20px 20px 20px; /* extra top padding to push the card slightly down from top */
+  justify-content: flex-start;           /* keep content starting from top */
+  padding: 12px 16px 16px 16px;          /* reduced top padding so card sits higher */
   box-sizing: border-box;
   background: radial-gradient(1200px 600px at 10% 20%, rgba(255,255,255,0.02), transparent 6%),
-              linear-gradient(360deg, #070799 0%, #0b0910  100%);
+              linear-gradient(360deg, #070799 0%, #0b0910 100%);
   color: #eee;
   position: relative;
-  overflow: visible; /* allow bottom text to be visible */
+  overflow: visible;                      /* allow absolutely-positioned bottom text to be visible */
 }
 
-/* Inner card area */
+/* Inner card area — compact and cannot exceed viewport minus reserved bottom space */
 #divId2 {
   width: 100%;
   max-width: 480px;
-  padding: 24px 20px;         /* slightly reduced padding so the card is more compact */
+  padding: 18px 18px;                     /* compact padding */
   border-radius: 18px;
   backdrop-filter: blur(8px);
   background: linear-gradient(180deg, rgba(20,20,24,0.78), rgba(12,12,16,0.65));
@@ -26,16 +35,17 @@
   text-align: center;
   display: grid;
   grid-template-rows: auto 1fr auto;
-  gap: 12px;
+  gap: 10px;
   align-items: start;
   transform-origin: center;
   animation: cardPop 700ms cubic-bezier(.2,.9,.3,1);
 
-  /* make card sit up near top without growing to push bottom content */
-  margin: 8px 0 0 0;          /* small top offset, no bottom margin */
+  /* This is the important safety: keep card from growing taller than viewport */
+  margin: 6px 0 0 0;                      /* small top offset, no bottom margin */
   flex: 0 0 auto;
-  max-height: calc(100vh - 120px); /* keep it from growing taller than viewport minus reserved bottom space */
-  overflow: auto;             /* internal scroll only if card content overflows */
+  max-height: calc(100vh - 110px);        /* reserve ~110px for spacing + bottom line */
+  overflow: auto;                         /* if content inside card exceeds this, it scrolls internally */
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Headline at the top of the card */
@@ -51,7 +61,7 @@
   animation-delay: 150ms; /* appears first */
 }
 
-/* divId3 holds abbreviations and line below them */
+/* Group and item styles left unchanged except for vertical flow */
 #divId3 {
   display: flex;
   flex-direction: column;
@@ -61,25 +71,24 @@
   opacity: 0;
   transform: translateY(8px);
   animation: fadeInUp 600ms ease-out forwards;
-  animation-delay: 650ms; /* group appears second (stagger inside) */
+  animation-delay: 650ms;
   padding: 6px 0;
 }
 
-#divId4
-{
+#divId4 {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* stacked vertically */
   gap: 10px;
   align-items: center;
   justify-content: center;
 }
 
-/* Abbreviations row styling: the three h4s (h4Id1..h4Id3) */
+/* Abbreviations */
 #h4Id1, #h4Id2, #h4Id3 {
   margin: 0;
   font-size: 14px;
   font-weight: 700;
-  color: #5353d4; /* warm accent */
+  color: #5353d4;
   padding: 6px 10px;
   border-radius: 10px;
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
@@ -87,13 +96,10 @@
   opacity: 0;
   transform: translateY(6px);
 }
-
-/* stagger individual abbrev reveals (using ids so no new selectors created) */
 #h4Id1 { animation: fadeInUp 520ms ease-out forwards; animation-delay: 720ms; }
 #h4Id2 { animation: fadeInUp 520ms ease-out forwards; animation-delay: 800ms; }
 #h4Id3 { animation: fadeInUp 520ms ease-out forwards; animation-delay: 880ms; }
 
-/* The explanatory line under abbreviations (still within divId3) */
 #h4Id4 {
   margin: 0;
   font-size: 13px;
@@ -102,15 +108,15 @@
   opacity: 0;
   transform: translateY(6px);
   animation: fadeInUp 520ms ease-out forwards;
-  animation-delay: 980ms; /* appears after the three abbrev lines */
+  animation-delay: 980ms;
 }
 
-/* Bottom line: fixed to bottom of viewport */
+/* Bottom line: fixed to bottom of viewport and always on top */
 #h3Id1 {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 24px;
+  bottom: 18px;                           /* slightly closer to bottom */
   text-align: center;
   margin: 0 auto;
   font-size: 15px;
@@ -126,22 +132,9 @@
   padding: 0 20px;
   box-sizing: border-box;
 
-  z-index: 30; /* keep it above the card */
-  background: linear-gradient(180deg, rgba(10,10,12,0.0), rgba(10,10,12,0.0)); /* transparent but keeps stacking sane */
-}
-
-/* subtle brand mark (pseudo-element) */
-#divId2::before {
-  content: "";
-  display: block;
-  width: 68px;
-  height: 68px;
-  margin: 0 auto 12px auto;
-  border-radius: 50%;
-  background: linear-gradient(135deg, rgba(255,183,77,0.15), rgba(176,106,179,0.12));
-  box-shadow: 0 6px 18px rgba(176,106,179,0.08);
-  transform: translateY(-6px);
-  border: 1px solid rgba(255,255,255,0.03);
+  z-index: 999;                           /* ensure always above the card */
+  background: transparent;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.6);
 }
 
 /* small animation for the card */
@@ -157,18 +150,18 @@
   100% { opacity: 1; transform: translateY(0); }
 }
 
-/* Make sure text scales nicely on very small screens */
+/* Responsive tweaks */
 @media (max-width: 420px) {
-  #divId2 { padding: 20px; border-radius: 14px; max-width: 380px; }
+  #divId2 { padding: 16px; border-radius: 14px; max-width: 380px; }
   #h1Id1 { font-size: 20px; }
   #h4Id1, #h4Id2, #h4Id3 { font-size: 13px; padding: 5px 8px; }
   #h4Id4 { font-size: 12px; }
-  #h3Id1 { font-size: 13px; bottom: 16px; }
+  #h3Id1 { font-size: 13px; bottom: 12px; }
 }
 
-/* Very small screens - ensure readability */
-@media (max-width: 340px) {
-  #h1Id1 { font-size: 18px; }
-  #h4Id1, #h4Id2, #h4Id3 { font-size: 12px; }
-  #h3Id1 { font-size: 12px; }
+/* On very short viewports reserve more space for bottom text */
+@media (max-height: 640px) {
+  #divId2 { max-height: calc(100vh - 140px); }
+  #divId1 { padding-top: 10px; }
+  #h3Id1 { bottom: 10px; }
 }
