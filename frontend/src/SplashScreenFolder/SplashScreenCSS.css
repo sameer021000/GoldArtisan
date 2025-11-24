@@ -1,49 +1,36 @@
-/* SplashScreenCSS.css - simplified, dark splash layout
-   Uses only ids present in SplashScreen.jsx
-*/
-
-/* Basic reset for this file */
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* Root / full viewport */
 #divId1 {
   min-height: 100vh;
   height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* content starts from top */
+  justify-content: space-between;
   padding: 20px;
-  gap: 18px;
   box-sizing: border-box;
   background: radial-gradient(1200px 600px at 10% 20%, rgba(255,255,255,0.02), transparent 6%),
-              linear-gradient(180deg, #070799 0%, #0b0910 100%);
+              linear-gradient(360deg, #070799 0%, #0b0910  100%);
   color: #eee;
   position: relative;
-  overflow: auto; /* allow natural page flow if small overflows occur */
+  overflow: visible;
 }
 
-/* Card / inner area */
+/* Inner card area */
 #divId2 {
   width: 100%;
   max-width: 480px;
-  padding: 20px;
+  padding: 28px 22px;
   border-radius: 18px;
   backdrop-filter: blur(8px);
-  background: linear-gradient(180deg, rgba(18,18,22,0.85), rgba(12,12,16,0.72));
-  box-shadow: 0 10px 30px rgba(0,0,0,0.6), inset 0 2px 6px rgba(255,255,255,0.02);
+  background: linear-gradient(180deg, rgba(20,20,24,0.68), rgba(12,12,16,0.60));
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 2px 6px rgba(255,255,255,0.02) inset;
   text-align: center;
   display: grid;
   grid-template-rows: auto 1fr auto;
   gap: 12px;
+  align-items: start;
   transform-origin: center;
-  animation: cardPop 700ms cubic-bezier(.2,.9,.3,1) both;
-  margin-top: 28px; /* push the card slightly down from the top */
+  animation: cardPop 700ms cubic-bezier(.2,.9,.3,1);
+  margin-bottom: 12px;
 }
 
 /* Headline at the top of the card */
@@ -51,44 +38,44 @@ html, body {
   font-size: 22px;
   font-weight: 700;
   color: #fff;
-  margin: 0;
+  margin: 6px 0 4px 0;
   letter-spacing: 0.2px;
   opacity: 0;
-  transform: translateY(8px);
+  transform: translateY(6px);
   animation: fadeInUp 600ms ease-out forwards;
-  animation-delay: 120ms; /* appears first */
+  animation-delay: 150ms; /* appears first */
 }
 
-/* Group holding abbreviations + explanatory line */
+/* divId3 holds abbreviations and line below them */
 #divId3 {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 12px;
-  padding: 6px 0;
   opacity: 0;
   transform: translateY(8px);
   animation: fadeInUp 600ms ease-out forwards;
-  animation-delay: 520ms; /* appears after headline */
+  animation-delay: 650ms; /* group appears second (stagger inside) */
+  padding: 6px 0;
 }
 
-/* stack the three abbreviation lines vertically */
-#divId4 {
+#divId4
+{
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   align-items: center;
   justify-content: center;
 }
 
-/* Abbreviation items */
+/* Abbreviations row styling: the three h4s (h4Id1..h4Id3) */
 #h4Id1, #h4Id2, #h4Id3 {
   margin: 0;
   font-size: 14px;
   font-weight: 700;
-  color: #e6d8ff; /* subtle light accent */
-  padding: 8px 12px;
+  color: #5353d4; /* warm accent */
+  padding: 6px 10px;
   border-radius: 10px;
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
   box-shadow: 0 6px 18px rgba(0,0,0,0.45);
@@ -96,12 +83,12 @@ html, body {
   transform: translateY(6px);
 }
 
-/* Staggered reveal for the three lines */
-#h4Id1 { animation: fadeInUp 480ms ease-out forwards; animation-delay: 620ms; }
-#h4Id2 { animation: fadeInUp 480ms ease-out forwards; animation-delay: 700ms; }
-#h4Id3 { animation: fadeInUp 480ms ease-out forwards; animation-delay: 780ms; }
+/* stagger individual abbrev reveals (using ids so no new selectors created) */
+#h4Id1 { animation: fadeInUp 520ms ease-out forwards; animation-delay: 720ms; }
+#h4Id2 { animation: fadeInUp 520ms ease-out forwards; animation-delay: 800ms; }
+#h4Id3 { animation: fadeInUp 520ms ease-out forwards; animation-delay: 880ms; }
 
-/* explanatory line below abbreviations */
+/* The explanatory line under abbreviations (still within divId3) */
 #h4Id4 {
   margin: 0;
   font-size: 13px;
@@ -109,63 +96,69 @@ html, body {
   color: #d6d0d6;
   opacity: 0;
   transform: translateY(6px);
-  animation: fadeInUp 480ms ease-out forwards;
-  animation-delay: 880ms; /* appears after the three lines */
+  animation: fadeInUp 520ms ease-out forwards;
+  animation-delay: 980ms; /* appears after the three abbrev lines */
 }
 
-/* The bottom tagline moved directly below the card (in normal flow) */
+/* Bottom line: fixed to bottom of viewport */
 #h3Id1 {
-  margin: 0;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 24px;
+  text-align: center;
+  margin: 0 auto;
   font-size: 15px;
   font-weight: 600;
   color: #cfc9d1;
-  text-align: center;
-  max-width: 720px;
-  padding: 6px 14px;
   opacity: 0;
   transform: translateY(8px);
   animation: fadeInUp 600ms ease-out forwards;
-  animation-delay: 1120ms; /* appears last */
+  animation-delay: 1250ms; /* appears last */
+  pointer-events: none;
   width: 100%;
+  max-width: 720px;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
-/* subtle brand mark using pseudo-element on the card (keeps DOM clean) */
+/* subtle brand mark (pseudo-element) */
 #divId2::before {
   content: "";
   display: block;
-  width: 64px;
-  height: 64px;
+  width: 68px;
+  height: 68px;
   margin: 0 auto 12px auto;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(176,106,179,0.18), rgba(247,178,103,0.12));
+  background: linear-gradient(135deg, rgba(255,183,77,0.15), rgba(176,106,179,0.12));
   box-shadow: 0 6px 18px rgba(176,106,179,0.08);
   transform: translateY(-6px);
   border: 1px solid rgba(255,255,255,0.03);
 }
 
-/* small animation for the card pop — vertical transform + scale */
+/* small animation for the card */
 @keyframes cardPop {
   0% { opacity: 0; transform: translateY(8px) scale(.98); }
-  60% { opacity: 1; transform: translateY(-6px) scale(1.02); }
+  60% { opacity: 1; transform: translateY(-4px) scale(1.02); }
   100% { transform: translateY(0) scale(1); }
 }
 
-/* Shared fade-in + translateY animation */
+/* Shared fade in & up animation */
 @keyframes fadeInUp {
   0% { opacity: 0; transform: translateY(8px); }
   100% { opacity: 1; transform: translateY(0); }
 }
 
-/* Responsive tweaks */
+/* Make sure text scales nicely on very small screens */
 @media (max-width: 420px) {
-  #divId2 { padding: 16px; border-radius: 14px; max-width: 380px; margin-top: 18px; }
+  #divId2 { padding: 20px; border-radius: 14px; max-width: 380px; }
   #h1Id1 { font-size: 20px; }
-  #h4Id1, #h4Id2, #h4Id3 { font-size: 13px; padding: 6px 10px; }
+  #h4Id1, #h4Id2, #h4Id3 { font-size: 13px; padding: 5px 8px; }
   #h4Id4 { font-size: 12px; }
-  #h3Id1 { font-size: 13px; padding: 8px 12px; }
+  #h3Id1 { font-size: 13px; bottom: 16px; }
 }
 
-/* Very small screens */
+/* Very small screens - ensure readability */
 @media (max-width: 340px) {
   #h1Id1 { font-size: 18px; }
   #h4Id1, #h4Id2, #h4Id3 { font-size: 12px; }
