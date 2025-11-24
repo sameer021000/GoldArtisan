@@ -13,7 +13,7 @@
 
   /* DARK THEME background */
   background: radial-gradient(1200px 600px at 10% 20%, rgba(255,255,255,0.02), transparent 6%),
-              linear-gradient(180deg, #2c2c97 0%, #0b0910  100%);
+              linear-gradient(360deg, #070799 0%, #0b0910  100%);
   color: #eee;
   position: relative;
   overflow: hidden;
