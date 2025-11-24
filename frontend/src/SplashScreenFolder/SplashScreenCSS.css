@@ -7,11 +7,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* card centered vertically */
+  justify-content: space-between; /* <-- changed */
   padding: 20px;
   box-sizing: border-box;
-
-  /* DARK THEME background */
   background: radial-gradient(1200px 600px at 10% 20%, rgba(255,255,255,0.02), transparent 6%),
               linear-gradient(360deg, #070799 0%, #0b0910  100%);
   color: #eee;
@@ -68,10 +66,10 @@
 #divId4
 {
   display: flex;
-  gap: 12px;
-  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
   align-items: center;
-  flex-wrap: wrap;
+  justify-content: center;
 }
 
 /* Abbreviations row styling: the three h4s (h4Id1..h4Id3) */
