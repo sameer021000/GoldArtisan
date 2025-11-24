@@ -8,7 +8,7 @@ const SplashScreen = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       navigate('/SignUpPath');
-    }, 3000); // 3000 ms = 3 seconds; change as you like
+    }, 10000); // 3000 ms = 3 seconds; change as you like
 
     return () => clearTimeout(timer);
   }, [navigate]);
@@ -16,7 +16,7 @@ const SplashScreen = () => {
   return (
     <div id="divId1">
       <div id="divId2">
-        <h1 id="h1Id1">Welcome to Customized Ornaments World</h1>
+        <h1 id="h1Id1">Welcome to COMer</h1>
         <p id="pId1">Crafting unique pieces — join as an artisan</p>
       </div>
     </div>
