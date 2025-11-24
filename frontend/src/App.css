@@ -16,7 +16,7 @@ html,body,#root { height: 100%; margin: 0; font-family: "Inter", "Segoe UI", Rob
 a { color: inherit; text-decoration: none; }
 
 /* Center the app and constrain width for mobile look */
-#divId1_App {
+#divId1_App, #divId1 {
   width: 100%;
   max-width: var(--max-width);
   margin: 0 auto;
