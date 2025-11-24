@@ -1,43 +1,43 @@
-/* SplashScreenCSS.css - splash screen layout (dark theme)
-   Uses only ids present in SplashScreen.jsx
-*/
+/* SplashScreenCSS.css - splash layout: full-bleed dark background & centered card */
 
-/* Basic reset for this file */
-html, body {
+/* Ensure reset */
+html, body, #root {
   height: 100%;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Root / full viewport
-   - content horizontally centered via align-items:center
-   - card placed slightly down from the top via padding-top
+/* IMPORTANT: override App.css body background on splash so background is full-bleed dark */
+html, body, #root {
+  background: radial-gradient(1200px 600px at 10% 20%, rgba(255,255,255,0.02), transparent 6%),
+              linear-gradient(180deg, #000003 0%, #0b0910 100%) !important;
+}
+
+/* Root container: full width so background covers left/right.
+   children are horizontally centered with align-items:center.
+   top spacing is responsive with padding-top using vh.
 */
 #divId1 {
+  width: 100vw;                     /* full viewport width to avoid white sidebars */
   min-height: 100vh;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;        /* horizontally center everything */
-  justify-content: flex-start;/* start from top so card sits near top */
-  padding: 6vh 20px 28px 20px;/* responsive top spacing using viewport height */
-  gap: 18px;                  /* space between card and h3 */
+  align-items: center;              /* horizontally center card + h3 */
+  justify-content: flex-start;      /* start from top so card sits near top */
+  padding: 6vh 20px 28px 20px;      /* responsive top spacing */
+  gap: 18px;
   box-sizing: border-box;
-  background: radial-gradient(1200px 600px at 10% 20%, rgba(255,255,255,0.02), transparent 6%),
-              linear-gradient(180deg, #000003 0%, #0b0910 100%);
   color: #eee;
   position: relative;
-  overflow: auto;             /* allow natural flow on tiny screens */
+  overflow: auto;
 }
 
-/* Card / main box
-   - constrained width but responsive
-   - horizontally centered because parent aligns items center
-*/
+/* Card / main box */
 #divId2 {
   width: 100%;
-  max-width: 520px;           /* slightly wider to look good on tablet/laptop */
+  max-width: 720px;                 /* center block width on large screens */
   padding: 22px;
   border-radius: 18px;
   backdrop-filter: blur(8px);
@@ -49,12 +49,12 @@ html, body {
   gap: 12px;
   transform-origin: center;
   animation: cardPop 640ms cubic-bezier(.2,.9,.3,1) both;
-  margin: 0;                   /* no extra margins that could change flow */
+  margin: 0 auto;                   /* ensures the card block is centered horizontally */
 }
 
-/* Headline at the top of the card */
+/* Headline */
 #h1Id1 {
-  font-size: clamp(18px, 2.4vw, 24px); /* scales across devices */
+  font-size: clamp(18px, 2.4vw, 28px);
   font-weight: 700;
   color: #fff;
   margin: 0;
@@ -62,71 +62,37 @@ html, body {
   opacity: 0;
   transform: translateY(8px);
   animation: fadeInUp 520ms ease-out forwards;
-  animation-delay: 120ms; /* appears first */
+  animation-delay: 120ms;
 }
 
-/* Group for abbreviations + explanatory line */
-#divId3 {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  padding: 6px 0;
-  opacity: 0;
-  transform: translateY(8px);
-  animation: fadeInUp 520ms ease-out forwards;
-  animation-delay: 420ms; /* after headline */
-}
+/* Abbreviation group */
+#divId3 { display:flex; flex-direction:column; gap:12px; align-items:center; padding:6px 0;
+  opacity:0; transform:translateY(8px); animation:fadeInUp 520ms ease-out forwards; animation-delay:420ms; }
 
-/* stack the three abbreviation lines vertically */
-#divId4{
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: center;
-  justify-content: center;
-}
+#divId4 { display:flex; flex-direction:column; gap:10px; align-items:center; justify-content:center; }
 
-/* Abbreviation items */
 #h4Id1, #h4Id2, #h4Id3 {
-  margin: 0;
-  font-size: 14px;
-  font-weight: 700;
-  color: #e6e0ff;       /* soft highlight on dark */
-  padding: 8px 12px;
-  border-radius: 10px;
+  margin:0; font-size:14px; font-weight:700; color:#e6e0ff;
+  padding:8px 12px; border-radius:10px;
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
   box-shadow: 0 6px 18px rgba(0,0,0,0.45);
-  opacity: 0;
-  transform: translateY(6px);
+  opacity:0; transform:translateY(6px);
 }
+#h4Id1 { animation: fadeInUp 460ms ease-out forwards; animation-delay:520ms; }
+#h4Id2 { animation: fadeInUp 460ms ease-out forwards; animation-delay:600ms; }
+#h4Id3 { animation: fadeInUp 460ms ease-out forwards; animation-delay:680ms; }
 
-/* Staggered reveal timing for the three lines */
-#h4Id1 { animation: fadeInUp 460ms ease-out forwards; animation-delay: 520ms; }
-#h4Id2 { animation: fadeInUp 460ms ease-out forwards; animation-delay: 600ms; }
-#h4Id3 { animation: fadeInUp 460ms ease-out forwards; animation-delay: 680ms; }
+#h4Id4 { margin:0; font-size:13px; font-weight:500; color:#d6d0d6; opacity:0;
+  transform:translateY(6px); animation:fadeInUp 480ms ease-out forwards; animation-delay:760ms; }
 
-/* The explanatory line under the abbreviations */
-#h4Id4 {
-  margin: 0;
-  font-size: 13px;
-  font-weight: 500;
-  color: #d6d0d6;
-  opacity: 0;
-  transform: translateY(6px);
-  animation: fadeInUp 480ms ease-out forwards;
-  animation-delay: 760ms;
-}
-
-/* The tagline placed below the card (normal flow) */
+/* Tagline directly below the card (normal flow) */
 #h3Id1 {
   margin: 0;
   font-size: 15px;
   font-weight: 600;
   color: #cfc9d1;
   text-align: center;
-  max-width: 820px;
+  max-width: 980px;
   padding: 6px 14px;
   opacity: 0;
   transform: translateY(8px);
@@ -136,47 +102,19 @@ html, body {
 }
 
 /* Animations */
-@keyframes cardPop {
-  0% { opacity: 0; transform: translateY(8px) scale(.98); }
-  60% { opacity: 1; transform: translateY(-6px) scale(1.02); }
-  100% { transform: translateY(0) scale(1); }
-}
-@keyframes fadeInUp {
-  0% { opacity: 0; transform: translateY(8px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
+@keyframes cardPop { 0% { opacity:0; transform:translateY(8px) scale(.98);} 60%{ opacity:1; transform:translateY(-6px) scale(1.02);} 100%{ transform:translateY(0) scale(1);} }
+@keyframes fadeInUp { 0%{opacity:0; transform:translateY(8px);} 100%{opacity:1; transform:translateY(0);} }
 
-/* Responsive tweaks */
+/* Responsive tuning */
 @media (max-width: 480px) {
   #divId1 { padding: 8vh 14px 28px 14px; }
   #divId2 { max-width: 420px; padding: 16px; border-radius: 14px; }
   #h1Id1 { font-size: 20px; }
-  #h4Id1,#h4Id2,#h4Id3 { font-size: 13px; padding: 6px 10px; }
-  #h3Id1 { font-size: 13px; padding: 8px 12px; }
+  #h4Id1,#h4Id2,#h4Id3 { font-size:13px; padding:6px 10px; }
+  #h3Id1 { font-size:13px; padding:8px 12px; }
 }
 @media (min-width: 900px) {
-  /* slightly center content block and reduce top gap on larger screens */
   #divId1 { padding-top: 8vh; }
   #divId2 { max-width: 640px; padding: 26px; }
   #h1Id1 { font-size: 24px; }
-}
-
-@media (min-width: 768px) {
-  #divId1 {
-    max-width: 720px;   /* tablet width */
-    margin-left: auto;
-    margin-right: auto;
-  }
-}
-
-@media (min-width: 1024px) {
-  #divId1 {
-    max-width: 900px;   /* laptop */
-  }
-}
-
-@media (min-width: 1440px) {
-  #divId1 {
-    max-width: 1100px;  /* large monitors */
-  }
 }
