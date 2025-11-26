@@ -20,7 +20,7 @@ const SignUpScreen = () => {
   });
 
   const [pwStrength, setPwStrength] = useState('');
-  const [pwScore, setPwScore] = useState(0);
+  const [pwScore, setPwScore] = useState(0); // 0-4 mapped to percent
   const [showPw, setShowPw] = useState(false);
   const [showConfirmPw, setShowConfirmPw] = useState(false);
 
@@ -48,6 +48,15 @@ const SignUpScreen = () => {
     password: v => {
       if (!v) return 'Password is required.';
       if (v.length < 6) return 'Password must be at least 6 characters.';
+      if (v.length > 15) return 'Password must be at most 15 characters.';
+      // required categories
+      const hasUpper = /[A-Z]/.test(v);
+      const hasLower = /[a-z]/.test(v);
+      const hasDigit = /[0-9]/.test(v);
+      const hasSpecial = /[^A-Za-z0-9]/.test(v);
+      if (!hasUpper || !hasLower || !hasDigit || !hasSpecial) {
+        return 'Password must include uppercase, lowercase, number and special character.';
+      }
       return '';
     },
     confirmPassword: (v, all) => {
@@ -57,21 +66,51 @@ const SignUpScreen = () => {
     }
   };
 
+  // assess password strength according to the rules you requested
   const assessPassword = (pw) => {
     if (!pw) {
       setPwStrength('');
       setPwScore(0);
       return;
     }
-    let score = 0;
-    if (pw.length >= 8) score++;
-    if (/[A-Z]/.test(pw)) score++;
-    if (/[0-9]/.test(pw)) score++;
-    if (/[^A-Za-z0-9]/.test(pw)) score++;
-    setPwScore(score);
-    if (score <= 1) setPwStrength('Weak');
-    else if (score <= 3) setPwStrength('Medium');
-    else setPwStrength('Strong');
+
+    const length = pw.length;
+    const hasUpper = /[A-Z]/.test(pw);
+    const hasLower = /[a-z]/.test(pw);
+    const hasDigit = /[0-9]/.test(pw);
+    const hasSpecial = /[^A-Za-z0-9]/.test(pw);
+
+    // If any required category missing or too short -> Weak
+    if (!hasUpper || !hasLower || !hasDigit || !hasSpecial || length < 6) {
+      setPwStrength('Weak');
+      setPwScore(1);
+      return;
+    }
+
+    // All categories present here; decide Medium/Strong/Very Strong by length
+    if (length === 6) {
+      setPwStrength('Medium');
+      setPwScore(2);
+      return;
+    }
+
+    // Interpret "Strong - >7<11" as length 7..10 (inclusive)
+    if (length >= 7 && length <= 10) {
+      setPwStrength('Strong');
+      setPwScore(3);
+      return;
+    }
+
+    // length 11..15 (max allowed) -> Very Strong
+    if (length >= 11 && length <= 15) {
+      setPwStrength('Very Strong');
+      setPwScore(4);
+      return;
+    }
+
+    // Fallback: treat anything else as Weak
+    setPwStrength('Weak');
+    setPwScore(1);
   };
 
   const handleChange = (e) => {
@@ -87,6 +126,7 @@ const SignUpScreen = () => {
 
     if (name === 'password') {
       assessPassword(value);
+      // revalidate confirm password as password changed
       const confirmErr = validators.confirmPassword(newForm.confirmPassword, newForm);
       setErrors(prev => ({ ...prev, confirmPassword: confirmErr }));
     }
@@ -106,6 +146,7 @@ const SignUpScreen = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validateAll()) {
+      // focus first invalid input using updated errors
       const firstInvalid = Object.keys(errors).find(k => errors[k]);
       if (firstInvalid) {
         const id = `inputId${mapField(firstInvalid)}`;
@@ -114,6 +155,7 @@ const SignUpScreen = () => {
       }
       return;
     }
+    // Prepare submission (note: backend might expect full +91 prefix — you can prepend on send)
     console.log('SignUp data:', form);
     alert('Form submitted (check console).');
   };
@@ -129,8 +171,9 @@ const SignUpScreen = () => {
     }
   };
 
+  // map pwScore [0..4] → percent and color
   const pwPercent = Math.min(100, (pwScore / 4) * 100);
-  const pwColor = pwScore <= 1 ? '#ff7b7b' : (pwScore <= 3 ? '#ffd36b' : '#7ef08d');
+  const pwColor = pwScore <= 1 ? '#ff7b7b' : (pwScore === 2 ? '#ffd36b' : (pwScore === 3 ? '#ffd36b' : '#7ef08d'));
 
   const getValidityAttrs = (field) => {
     const val = form[field];
@@ -214,6 +257,7 @@ const SignUpScreen = () => {
               onChange={handleChange}
               placeholder="Password"
               type={showPw ? 'text' : 'password'}
+              maxLength={15}
               {...getValidityAttrs('password')}
             />
             <button
@@ -226,9 +270,14 @@ const SignUpScreen = () => {
             </button>
           </div>
         </label>
-        <div id="help_inputId5">Min 6 characters. Use upper, numbers, symbols for stronger passwords.</div>
+        <div id="help_inputId5">
+          Password must be 6–15 chars and include uppercase, lowercase, a number and a special character.
+        </div>
 
-        <div id="pwStrength" aria-live="polite">{pwStrength ? `Strength: ${pwStrength}` : ''}</div>
+        {/* password strength meter */}
+        <div id="pwStrength" aria-live="polite">
+          {pwStrength ? `Strength: ${pwStrength}` : ''}
+        </div>
         <div id="pwStrengthBarWrap" aria-hidden="true">
           <div id="pwStrengthBar" style={{ width: `${pwPercent}%`, backgroundColor: pwColor }} />
         </div>
