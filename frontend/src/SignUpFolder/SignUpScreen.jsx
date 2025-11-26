@@ -201,23 +201,47 @@ const SignUpScreen = () => {
         <div id="help_inputId2">Enter your family name (letters only, single word — no spaces)</div>
         <div id="err_inputId2" role="alert" aria-live="polite">{errors.lastName}</div>
 
-        {/* PHONE */}
+        {/* PHONE with fixed +91 prefix */}
         <label id="labelId3">
           Phone number
           <span id="icon_inputId3" aria-hidden="true">{!errors.phone && form.phone ? '✓' : (errors.phone ? '⚠' : '')}</span>
-          <input
-            id="inputId3"
-            name="phone"
-            value={form.phone}
-            onChange={handleChange}
-            placeholder="Phone number"
-            inputMode="tel"
-            minLength={10}
-            maxLength={10}
-            {...getValidityAttrs('phone')}
+
+          {/* wrapper to place prefix and input inline */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
+            <span
+              aria-hidden="true"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '10px 12px',
+                borderRadius: 10,
+                background: 'linear-gradient(180deg, rgba(28,28,32,0.9), rgba(24,24,28,0.85))',
+                border: '1px solid rgba(255,255,255,0.04)',
+                color: '#fff',
+                fontSize: 14,
+                minWidth: 56,
+                boxSizing: 'border-box'
+              }}
+            >
+              +91
+            </span>
+
+            <input
+              id="inputId3"
+              name="phone"
+              value={form.phone}
+              onChange={handleChange}
+              placeholder="Phone number (10 digits)"
+              inputMode="tel"
+              minLength={10}
+              maxLength={10}
+              style={{ flex: 1 }}
+              {...getValidityAttrs('phone')}
             />
+          </div>
         </label>
-        <div id="help_inputId3">Do not include country code</div>
+        <div id="help_inputId3">Enter the 10-digit mobile number only (e.g. 9876543210)</div>
         <div id="err_inputId3" role="alert" aria-live="polite">{errors.phone}</div>
 
         {/* EMAIL */}
