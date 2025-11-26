@@ -7,7 +7,6 @@ const SignUpScreen = () => {
     firstName: '',
     lastName: '',
     phone: '',
-    email: '',
     password: '',
     confirmPassword: ''
   });
@@ -16,7 +15,6 @@ const SignUpScreen = () => {
     firstName: '',
     lastName: '',
     phone: '',
-    email: '',
     password: '',
     confirmPassword: ''
   });
@@ -46,11 +44,6 @@ const SignUpScreen = () => {
       const digits = v.replace(/\D/g, '');
       if (digits.length < 10) return 'Enter a valid phone number.';
       return '';
-    },
-    email: v => {
-      if (!v.trim()) return 'Email is required.';
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return re.test(v) ? '' : 'Enter a valid email address.';
     },
     password: v => {
       if (!v) return 'Password is required.';
@@ -130,7 +123,6 @@ const SignUpScreen = () => {
       case 'firstName': return 1;
       case 'lastName': return 2;
       case 'phone': return 3;
-      case 'email': return 4;
       case 'password': return 5;
       case 'confirmPassword': return 6;
       default: return '';
@@ -209,23 +201,6 @@ const SignUpScreen = () => {
         </label>
         <div id="help_inputId3">Enter the 10-digit mobile number only (do not type +91). Example: 9876543210</div>
         <div id="err_inputId3" role="alert" aria-live="polite">{errors.phone}</div>
-
-        {/* EMAIL */}
-        <label id="labelId4">
-          Email
-          <span id="icon_inputId4" aria-hidden="true">{!errors.email && form.email ? '✓' : (errors.email ? '⚠' : '')}</span>
-          <input
-            id="inputId4"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            placeholder="Email"
-            type="email"
-            {...getValidityAttrs('email')}
-          />
-        </label>
-        <div id="help_inputId4">We'll send account-related emails to this address.</div>
-        <div id="err_inputId4" role="alert" aria-live="polite">{errors.email}</div>
 
         {/* PASSWORD */}
         <label id="labelId5">

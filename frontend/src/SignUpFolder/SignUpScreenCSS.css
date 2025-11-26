@@ -54,14 +54,14 @@ html, body, #root {
 }
 
 /* Labels */
-#labelId1,#labelId2,#labelId3,#labelId4,#labelId5,#labelId6 {
+#labelId1,#labelId2,#labelId3,#labelId5,#labelId6 {
   display: block;
   font-size: 13px;
   color: #cfc9d1;
 }
 
 /* Input base */
-#inputId1,#inputId2,#inputId3,#inputId4,#inputId5,#inputId6 {
+#inputId1,#inputId2,#inputId3,#inputId5,#inputId6 {
   width: 100%;
   padding: 12px 14px;
   border-radius: 12px;
@@ -108,12 +108,12 @@ html, body, #root {
 }
 
 /* Reduce the gap between input and helper text */
-#inputId1, #inputId2, #inputId3, #inputId4, #inputId5, #inputId6 {
+#inputId1, #inputId2, #inputId3, #inputId5, #inputId6 {
   margin-bottom: 2px;
 }
 
 /* Helper text */
-#help_inputId1,#help_inputId2,#help_inputId3,#help_inputId4,#help_inputId5,#help_inputId6,#pwStrength{
+#help_inputId1,#help_inputId2,#help_inputId3,#help_inputId5,#help_inputId6,#pwStrength{
   font-size: 12px;
   color: rgba(207,201,209,0.9);
   margin-top: 0;
@@ -121,7 +121,7 @@ html, body, #root {
 }
 
 /* Error messages: initially hidden (animation) */
-#err_inputId1,#err_inputId2,#err_inputId3,#err_inputId4,#err_inputId5,#err_inputId6{
+#err_inputId1,#err_inputId2,#err_inputId3,#err_inputId5,#err_inputId6{
   font-size: 13px;
   color: #ff8a8a;
   margin-top: 0;
@@ -139,7 +139,6 @@ html, body, #root {
 #err_inputId1:not(:empty),
 #err_inputId2:not(:empty),
 #err_inputId3:not(:empty),
-#err_inputId4:not(:empty),
 #err_inputId5:not(:empty),
 #err_inputId6:not(:empty) {
   opacity: 1;
@@ -150,7 +149,6 @@ html, body, #root {
 #inputId1[aria-valid="true"],
 #inputId2[aria-valid="true"],
 #inputId3[aria-valid="true"],
-#inputId4[aria-valid="true"],
 #inputId5[aria-valid="true"],
 #inputId6[aria-valid="true"] {
   border-color: rgba(23, 23, 227, 0.6);
@@ -160,7 +158,6 @@ html, body, #root {
 #inputId1[aria-invalid="true"],
 #inputId2[aria-invalid="true"],
 #inputId3[aria-invalid="true"],
-#inputId4[aria-invalid="true"],
 #inputId5[aria-invalid="true"],
 #inputId6[aria-invalid="true"] {
   border-color: #ff5e5e;
@@ -168,7 +165,7 @@ html, body, #root {
 }
 
 /* Inline icons — we render icon text in span elements adjacent to the inputs */
-#icon_inputId1,#icon_inputId2,#icon_inputId3,#icon_inputId4,#icon_inputId5,#icon_inputId6 {
+#icon_inputId1,#icon_inputId2,#icon_inputId3,#icon_inputId5,#icon_inputId6 {
   position: relative; /* we'll position visually using transforms */
   display: inline-block;
   min-width: 18px;
@@ -183,7 +180,6 @@ html, body, #root {
 #icon_inputId1:empty,
 #icon_inputId2:empty,
 #icon_inputId3:empty,
-#icon_inputId4:empty,
 #icon_inputId5:empty,
 #icon_inputId6:empty {
   display: none;
@@ -191,7 +187,6 @@ html, body, #root {
 #icon_inputId1,
 #icon_inputId2,
 #icon_inputId3,
-#icon_inputId4,
 #icon_inputId5,
 #icon_inputId6 {
   font-size: 16px;
@@ -199,7 +194,6 @@ html, body, #root {
 #icon_inputId1:contains("✓") { color: rgba(23, 23, 227, 0.6); } /* not standard, fallback below */
 #icon_inputId2:contains("✓") { color: rgba(23, 23, 227, 0.6); }
 #icon_inputId3:contains("✓") { color: rgba(23, 23, 227, 0.6); }
-#icon_inputId4:contains("✓") { color: rgba(23, 23, 227, 0.6); }
 #icon_inputId5:contains("✓") { color: rgba(23, 23, 227, 0.6); }
 #icon_inputId6:contains("✓") { color: rgba(23, 23, 227, 0.6); }
 
@@ -207,7 +201,6 @@ html, body, #root {
 #icon_inputId1 { color: rgba(255,255,255,0.9); }
 #icon_inputId2 { color: rgba(255,255,255,0.9); }
 #icon_inputId3 { color: rgba(255,255,255,0.9); }
-#icon_inputId4 { color: rgba(255,255,255,0.9); }
 #icon_inputId5 { color: rgba(255,255,255,0.9); }
 #icon_inputId6 { color: rgba(255,255,255,0.9); }
 
@@ -280,7 +273,7 @@ html, body, #root {
   #divId1 { padding: 8vh 14px 24px 14px; }
   #formId1 { padding: 16px; border-radius: 14px; max-width: 420px; }
   #h2Id1 { font-size: 18px; }
-  #inputId1,#inputId2,#inputId3,#inputId4,#inputId5,#inputId6 { padding: 12px; font-size: 15px; border-radius: 10px; }
+  #inputId1,#inputId2,#inputId3,#inputId5,#inputId6 { padding: 12px; font-size: 15px; border-radius: 10px; }
   #btnId1 { padding: 12px; font-size: 15px; border-radius: 10px; }
   /* make eye icons visible and bigger on mobile */
   #eyeId1, #eyeId2 {
