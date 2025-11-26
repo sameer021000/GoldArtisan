@@ -1,3 +1,4 @@
+// SignUpScreen.jsx
 import './SignUpScreenCSS.css';
 import React, { useState } from 'react';
 
@@ -27,12 +28,26 @@ const SignUpScreen = () => {
 
   // validators
   const validators = {
-    firstName: v => v.trim() ? '' : 'First name is required.',
-    lastName: v => v.trim() ? '' : 'Last name is required.',
+    // Validate raw input: no whitespace anywhere, only ASCII letters, single word
+    firstName: v => {
+      const raw = v || '';
+      if (!raw) return 'First name is required.';
+      if (/\s/.test(raw)) return 'First name must be a single word with no spaces.';
+      // /^[A-Za-z]+$/ allows only English letters; change to /^\p{L}+$/u for unicode letters (accents)
+      if (!/^[A-Za-z]+$/.test(raw)) return 'First name must contain letters only (no digits/symbols).';
+      return '';
+    },
+    lastName: v => {
+      const raw = v || '';
+      if (!raw) return 'Last name is required.';
+      if (/\s/.test(raw)) return 'Last name must be a single word with no spaces.';
+      if (!/^[A-Za-z]+$/.test(raw)) return 'Last name must contain letters only (no digits/symbols).';
+      return '';
+    },
     phone: v => {
       if (!v.trim()) return 'Phone number is required.';
       const digits = v.replace(/\D/g, '');
-      if (digits.length < 7) return 'Enter a valid phone number.';
+      if (digits.length < 10) return 'Enter a valid phone number.';
       return '';
     },
     email: v => {
@@ -105,7 +120,7 @@ const SignUpScreen = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validateAll()) {
-      // focus first invalid input
+      // focus first invalid input (use current errors after validateAll)
       const firstInvalid = Object.keys(errors).find(k => errors[k]);
       if (firstInvalid) {
         const id = `inputId${mapField(firstInvalid)}`;
@@ -167,7 +182,7 @@ const SignUpScreen = () => {
             {...getValidityAttrs('firstName')}
             />
         </label>
-        <div id="help_inputId1">Enter your given name.</div>
+        <div id="help_inputId1">Enter your given name (letters only, single word — no spaces)</div>
         <div id="err_inputId1" role="alert" aria-live="polite">{errors.firstName}</div>
 
         {/* LAST NAME */}
@@ -183,7 +198,7 @@ const SignUpScreen = () => {
             {...getValidityAttrs('lastName')}
             />
         </label>
-        <div id="help_inputId2">Enter your family name.</div>
+        <div id="help_inputId2">Enter your family name (letters only, single word — no spaces)</div>
         <div id="err_inputId2" role="alert" aria-live="polite">{errors.lastName}</div>
 
         {/* PHONE */}
@@ -197,10 +212,12 @@ const SignUpScreen = () => {
             onChange={handleChange}
             placeholder="Phone number"
             inputMode="tel"
+            minLength={10}
+            maxLength={10}
             {...getValidityAttrs('phone')}
             />
         </label>
-        <div id="help_inputId3">Include country code if applicable.</div>
+        <div id="help_inputId3">Do not include country code</div>
         <div id="err_inputId3" role="alert" aria-live="polite">{errors.phone}</div>
 
         {/* EMAIL */}
