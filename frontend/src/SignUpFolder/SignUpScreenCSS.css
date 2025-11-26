@@ -76,6 +76,37 @@ html, body, #root {
   position: relative; /* to allow icons absolute via adjacent span */
 }
 
+#phoneWrapId {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  box-sizing: border-box;
+}
+
+/* the visible +91 badge */
+#phonePrefixId {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(28,28,32,0.9), rgba(24,24,28,0.85));
+  border: 1px solid rgba(255,255,255,0.04);
+  color: #fff;
+  font-size: 15px;
+  min-width: 56px;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+/* make the phone input expand to fill remaining space in the wrapper */
+#phoneWrapId #inputId3 {
+  flex: 1;
+  width: auto; /* override width:100% from base selector */
+  margin: 0; /* remove extra spacing from base styles */
+}
+
 /* Reduce the gap between input and helper text */
 #inputId1, #inputId2, #inputId3, #inputId4, #inputId5, #inputId6 {
   margin-bottom: 2px;
@@ -257,6 +288,12 @@ html, body, #root {
     right: 10px;
     padding: 4px;
     opacity: 1;
+  }
+  #phonePrefixId {
+    min-width: 48px;
+    padding: 10px 10px;
+    font-size: 14px;
+    border-radius: 10px;
   }
 }
 

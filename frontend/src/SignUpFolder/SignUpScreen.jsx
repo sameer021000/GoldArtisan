@@ -21,19 +21,16 @@ const SignUpScreen = () => {
     confirmPassword: ''
   });
 
-  const [pwStrength, setPwStrength] = useState(''); // '', 'Weak', 'Medium', 'Strong'
-  const [pwScore, setPwScore] = useState(0); // 0-4
+  const [pwStrength, setPwStrength] = useState('');
+  const [pwScore, setPwScore] = useState(0);
   const [showPw, setShowPw] = useState(false);
   const [showConfirmPw, setShowConfirmPw] = useState(false);
 
-  // validators
   const validators = {
-    // Validate raw input: no whitespace anywhere, only ASCII letters, single word
     firstName: v => {
       const raw = v || '';
       if (!raw) return 'First name is required.';
       if (/\s/.test(raw)) return 'First name must be a single word with no spaces.';
-      // /^[A-Za-z]+$/ allows only English letters; change to /^\p{L}+$/u for unicode letters (accents)
       if (!/^[A-Za-z]+$/.test(raw)) return 'First name must contain letters only (no digits/symbols).';
       return '';
     },
@@ -67,7 +64,6 @@ const SignUpScreen = () => {
     }
   };
 
-  // asses password strength
   const assessPassword = (pw) => {
     if (!pw) {
       setPwStrength('');
@@ -90,17 +86,14 @@ const SignUpScreen = () => {
     const newForm = { ...form, [name]: value };
     setForm(newForm);
 
-    // live validation for this field
     const validator = validators[name];
     if (validator) {
       const err = name === 'confirmPassword' ? validator(value, newForm) : validator(value);
       setErrors(prev => ({ ...prev, [name]: err }));
     }
 
-    // update password strength and revalidate confirm password if needed
     if (name === 'password') {
       assessPassword(value);
-      // revalidate confirm
       const confirmErr = validators.confirmPassword(newForm.confirmPassword, newForm);
       setErrors(prev => ({ ...prev, confirmPassword: confirmErr }));
     }
@@ -120,7 +113,6 @@ const SignUpScreen = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validateAll()) {
-      // focus first invalid input (use current errors after validateAll)
       const firstInvalid = Object.keys(errors).find(k => errors[k]);
       if (firstInvalid) {
         const id = `inputId${mapField(firstInvalid)}`;
@@ -129,7 +121,6 @@ const SignUpScreen = () => {
       }
       return;
     }
-    // submit placeholder
     console.log('SignUp data:', form);
     alert('Form submitted (check console).');
   };
@@ -146,20 +137,14 @@ const SignUpScreen = () => {
     }
   };
 
-  // helper to compute progress width and color
   const pwPercent = Math.min(100, (pwScore / 4) * 100);
   const pwColor = pwScore <= 1 ? '#ff7b7b' : (pwScore <= 3 ? '#ffd36b' : '#7ef08d');
 
-  // set aria-valid / aria-invalid attributes for inputs
   const getValidityAttrs = (field) => {
     const val = form[field];
     const err = errors[field];
-    if (err && err.length) {
-      return { 'aria-invalid': 'true', 'aria-valid': 'false' };
-    }
-    if (val && !err) {
-      return { 'aria-invalid': 'false', 'aria-valid': 'true' };
-    }
+    if (err && err.length) return { 'aria-invalid': 'true', 'aria-valid': 'false' };
+    if (val && !err) return { 'aria-invalid': 'false', 'aria-valid': 'true' };
     return { 'aria-invalid': 'false', 'aria-valid': 'false' };
   };
 
@@ -180,7 +165,7 @@ const SignUpScreen = () => {
             onChange={handleChange}
             placeholder="First name"
             {...getValidityAttrs('firstName')}
-            />
+          />
         </label>
         <div id="help_inputId1">Enter your given name (letters only, single word — no spaces)</div>
         <div id="err_inputId1" role="alert" aria-live="polite">{errors.firstName}</div>
@@ -196,7 +181,7 @@ const SignUpScreen = () => {
             onChange={handleChange}
             placeholder="Last name"
             {...getValidityAttrs('lastName')}
-            />
+          />
         </label>
         <div id="help_inputId2">Enter your family name (letters only, single word — no spaces)</div>
         <div id="err_inputId2" role="alert" aria-live="polite">{errors.lastName}</div>
@@ -206,26 +191,8 @@ const SignUpScreen = () => {
           Phone number
           <span id="icon_inputId3" aria-hidden="true">{!errors.phone && form.phone ? '✓' : (errors.phone ? '⚠' : '')}</span>
 
-          {/* wrapper to place prefix and input inline */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
-            <span
-              aria-hidden="true"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '10px 12px',
-                borderRadius: 10,
-                background: 'linear-gradient(180deg, rgba(28,28,32,0.9), rgba(24,24,28,0.85))',
-                border: '1px solid rgba(255,255,255,0.04)',
-                color: '#fff',
-                fontSize: 14,
-                minWidth: 56,
-                boxSizing: 'border-box'
-              }}
-            >
-              +91
-            </span>
+          <div id="phoneWrapId">
+            <span id="phonePrefixId" aria-hidden="true">+91</span>
 
             <input
               id="inputId3"
@@ -236,12 +203,11 @@ const SignUpScreen = () => {
               inputMode="tel"
               minLength={10}
               maxLength={10}
-              style={{ flex: 1 }}
               {...getValidityAttrs('phone')}
             />
           </div>
         </label>
-        <div id="help_inputId3">Enter the 10-digit mobile number only (e.g. 9876543210)</div>
+        <div id="help_inputId3">Enter the 10-digit mobile number only (do not type +91). Example: 9876543210</div>
         <div id="err_inputId3" role="alert" aria-live="polite">{errors.phone}</div>
 
         {/* EMAIL */}
@@ -256,7 +222,7 @@ const SignUpScreen = () => {
             placeholder="Email"
             type="email"
             {...getValidityAttrs('email')}
-            />
+          />
         </label>
         <div id="help_inputId4">We'll send account-related emails to this address.</div>
         <div id="err_inputId4" role="alert" aria-live="polite">{errors.email}</div>
@@ -274,28 +240,23 @@ const SignUpScreen = () => {
               placeholder="Password"
               type={showPw ? 'text' : 'password'}
               {...getValidityAttrs('password')}
-              />
-            {/* eye button */}
+            />
             <button
               type="button"
               id="eyeId1"
               aria-label={showPw ? 'Hide password' : 'Show password'}
               onClick={() => setShowPw(s => !s)}
-              >
+            >
               {showPw ? '👁️' : '👁️‍🗨️'}
             </button>
           </div>
         </label>
         <div id="help_inputId5">Min 6 characters. Use upper, numbers, symbols for stronger passwords.</div>
 
-        {/* password strength meter */}
-        <div id="pwStrength" aria-live="polite">
-          {pwStrength ? `Strength: ${pwStrength}` : ''}
-        </div>
+        <div id="pwStrength" aria-live="polite">{pwStrength ? `Strength: ${pwStrength}` : ''}</div>
         <div id="pwStrengthBarWrap" aria-hidden="true">
           <div id="pwStrengthBar" style={{ width: `${pwPercent}%`, backgroundColor: pwColor }} />
         </div>
-
         <div id="err_inputId5" role="alert" aria-live="polite">{errors.password}</div>
 
         {/* CONFIRM PASSWORD */}
@@ -311,13 +272,13 @@ const SignUpScreen = () => {
               placeholder="Confirm password"
               type={showConfirmPw ? 'text' : 'password'}
               {...getValidityAttrs('confirmPassword')}
-              />
+            />
             <button
               type="button"
               id="eyeId2"
               aria-label={showConfirmPw ? 'Hide password' : 'Show password'}
               onClick={() => setShowConfirmPw(s => !s)}
-              >
+            >
               {showConfirmPw ? '👁️' : '👁️‍🗨️'}
             </button>
           </div>
