@@ -1,8 +1,29 @@
 // SignUpScreen.jsx
 import './SignUpScreenCSS.css';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const SignUpScreen = () => {
+
+  const EyeOpenIcon = (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+    strokeLinecap="round" strokeLinejoin="round">
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path>
+    <circle cx="12" cy="12" r="3"></circle>
+  </svg>
+);
+
+  const EyeClosedIcon = (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+    strokeLinecap="round" strokeLinejoin="round">
+    <path d="M17.94 17.94A10.94 10.94 0 0112 20c-7 0-11-8-11-8a21.8 21.8 0 015.06-7.94"></path>
+    <path d="M1 1l22 22"></path>
+    <path d="M9.53 9.53a3 3 0 014.24 4.24"></path>
+  </svg>
+  );
+
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -49,7 +70,6 @@ const SignUpScreen = () => {
       if (!v) return 'Password is required.';
       if (v.length < 6) return 'Password must be at least 6 characters.';
       if (v.length > 15) return 'Password must be at most 15 characters.';
-      // required categories
       const hasUpper = /[A-Z]/.test(v);
       const hasLower = /[a-z]/.test(v);
       const hasDigit = /[0-9]/.test(v);
@@ -94,21 +114,21 @@ const SignUpScreen = () => {
       return;
     }
 
-    // Interpret "Strong - >7<11" as length 7..10 (inclusive)
+    // length 7..10 -> Strong
     if (length >= 7 && length <= 10) {
       setPwStrength('Strong');
       setPwScore(3);
       return;
     }
 
-    // length 11..15 (max allowed) -> Very Strong
+    // length 11..15 -> Very Strong
     if (length >= 11 && length <= 15) {
       setPwStrength('Very Strong');
       setPwScore(4);
       return;
     }
 
-    // Fallback: treat anything else as Weak
+    // Fallback
     setPwStrength('Weak');
     setPwScore(1);
   };
@@ -132,6 +152,7 @@ const SignUpScreen = () => {
     }
   };
 
+  // validateAll now returns the computed errors object and a boolean
   const validateAll = () => {
     const next = {};
     Object.keys(validators).forEach(key => {
@@ -140,14 +161,17 @@ const SignUpScreen = () => {
         : validators[key](form[key]);
     });
     setErrors(next);
-    return Object.values(next).every(v => v === '');
+    const isValid = Object.values(next).every(v => v === '');
+    return { isValid, next };
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!validateAll()) {
-      // focus first invalid input using updated errors
-      const firstInvalid = Object.keys(errors).find(k => errors[k]);
+    const { isValid, next } = validateAll();
+
+    if (!isValid) {
+      // focus first invalid input using freshly computed errors
+      const firstInvalid = Object.keys(next).find(k => next[k]);
       if (firstInvalid) {
         const id = `inputId${mapField(firstInvalid)}`;
         const el = document.getElementById(id);
@@ -155,9 +179,21 @@ const SignUpScreen = () => {
       }
       return;
     }
-    // Prepare submission (note: backend might expect full +91 prefix — you can prepend on send)
-    console.log('SignUp data:', form);
-    alert('Form submitted (check console).');
+
+    // Prepare submission (we'll send phone as digits and prepend +91 if backend wants full international format)
+    const digitsOnlyPhone = form.phone.replace(/\D/g, '');
+    const payload = {
+      firstName: form.firstName.trim(),
+      lastName: form.lastName.trim(),
+      phone: digitsOnlyPhone,        // keep as 10-digit for now
+      password: form.password
+    };
+
+    console.log('SignUp payload (to send):', payload);
+
+    // Navigation on successful signup/validation
+    // If you need to wait for backend response before navigating, call navigate() after successful API response.
+    navigate('/HomeScreen', { replace: true });
   };
 
   const mapField = (field) => {
@@ -265,8 +301,9 @@ const SignUpScreen = () => {
               id="eyeId1"
               aria-label={showPw ? 'Hide password' : 'Show password'}
               onClick={() => setShowPw(s => !s)}
+              className="pw-eye-btn"
             >
-              {showPw ? '👁️' : '👁️‍🗨️'}
+            {showPw ? EyeOpenIcon : EyeClosedIcon}
             </button>
           </div>
         </label>
@@ -302,9 +339,11 @@ const SignUpScreen = () => {
               id="eyeId2"
               aria-label={showConfirmPw ? 'Hide password' : 'Show password'}
               onClick={() => setShowConfirmPw(s => !s)}
+              className="pw-eye-btn"
             >
-              {showConfirmPw ? '👁️' : '👁️‍🗨️'}
+            {showConfirmPw ? EyeOpenIcon : EyeClosedIcon}
             </button>
+
           </div>
         </label>
         <div id="help_inputId6">Re-type the password to confirm.</div>
