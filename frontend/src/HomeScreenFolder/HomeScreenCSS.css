@@ -63,18 +63,16 @@
 }
 
 #pId1_Home {
-  margin-top: 4px;
+  margin-top: 8px;
 }
 
 #pId2_Home {
-  margin-top: 8px;
-  font-weight: 500;
-  color: #e0dce4;
+  margin-top: 16px;
 }
 
 /* Button matching SignUpScreen style */
 #btnId1_Home {
-  margin-top: 12px;
+  margin-top: 2px;
   width: 100%;
   max-width: 320px;
   padding: 14px 12px;

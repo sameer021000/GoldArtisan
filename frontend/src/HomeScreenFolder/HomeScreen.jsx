@@ -18,8 +18,8 @@ function HomeScreen() {
         <h2 id="h2Id1_Home">Welcome to Gold Artisan Module</h2>
 
         <p id="pId1_Home">
-          If you are a Ornament maker/Ornament Polisher/Ornament Design Cutter, then please complete your profile by
-          providing your details
+          If you are an Ornament maker/Ornament Polisher/Ornament Design Cutter, then 
+          complete your profile by providing your details
         </p>
 
         <p id="pId2_Home">Click on below button when you ready</p>
