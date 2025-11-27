@@ -97,6 +97,34 @@
   box-shadow: 0 8px 20px rgba(16, 16, 24, 0.12);
 }
 
+#pId3_Home {
+  width: 100%;
+  margin: 0;
+  margin-top: 2px;
+  font-size: clamp(13px, 1.6vw, 14px);
+  color: #cfc9d1;
+  line-height: 1.5;
+}
+
+#signOutLink_Home {
+  background: red;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: opacity 0.12s ease;
+}
+
+#signOutLink_Home:hover {
+  opacity: 0.8;
+}
+
+#signOutLink_Home:active {
+  opacity: 0.6;
+}
+
 /* Responsive - mobile adjustments */
 @media (max-width: 480px) {
   #divId1_Home {
@@ -126,6 +154,10 @@
     padding: 12px;
     font-size: 15px;
     border-radius: 10px;
+  }
+  
+  #pId3_Home {
+    font-size: 13px;
   }
 }
 

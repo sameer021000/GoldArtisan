@@ -10,6 +10,12 @@ function HomeScreen() {
     // navigate('/ProfilePath');
   }
 
+  const handleSignOut = () => {
+    console.log("[v0] SignOut link clicked")
+    // Add sign out logic here
+    // navigate('/SignUpPath');
+  }
+
   return (
     <div id="divId1_Home">
       <div id="contentWrap_Home">
@@ -27,6 +33,13 @@ function HomeScreen() {
         <button id="btnId1_Home" type="button" onClick={handleCompleteProfile}>
           Complete your profile
         </button>
+
+        <p id="pId3_Home">
+          Want to complete later?{" "}
+          <span id="signOutLink_Home" onClick={handleSignOut}>
+            SignOut
+          </span>
+        </p>
       </div>
     </div>
   )
