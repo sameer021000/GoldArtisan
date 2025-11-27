@@ -87,13 +87,15 @@ html, body, #root {
   margin: 0;
   font-size: 14px;
   font-weight: 700;
-  color: #5d60f4;
   padding: 8px 12px;
   border-radius: 10px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
   box-shadow: 0 6px 18px rgba(0,0,0,0.45);
   opacity: 0;
   transform: translateY(6px);
+  background: linear-gradient(90deg, rgba(93, 96, 244, 1), rgba(247, 178, 103, 1));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 #h4Id1 { animation: fadeInUp 460ms ease-out forwards; animation-delay: 520ms; }
 #h4Id2 { animation: fadeInUp 460ms ease-out forwards; animation-delay: 600ms; }
