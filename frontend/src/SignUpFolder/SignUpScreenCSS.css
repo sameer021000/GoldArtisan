@@ -51,6 +51,7 @@ html, body, #root {
   display: grid;
   gap: 1px; /* small gap between block rows */
   box-sizing: border-box;
+  margin-bottom: 40px !important;
 }
 
 /* Labels */
@@ -268,6 +269,44 @@ html, body, #root {
 /* Active state */
 #btnId1:active { transform: translateY(2px) scale(.997); box-shadow: 0 8px 20px rgba(16,16,24,0.12); }
 
+#signInHint {
+  max-width: 520px;
+  margin: 6px 0 4px 0;   /* very small space from button */
+  padding: 0 14px;
+  text-align: right;     /* aligns with end of button */
+  font-size: 13px;
+  color: rgba(207,201,209,0.9);
+  line-height: 1.1;
+  box-sizing: border-box;
+}
+
+/* SignIn word behaves like a link */
+#signInSpan {
+  display: inline-block;
+  font-weight: 500;
+  font-size: 15px;     /* slightly larger */
+  color: #4ade80;      /* green color */
+  margin-left: 4px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  appearance: none;
+}
+
+/* Hover effect */
+#signInSpan:hover {
+  text-decoration: underline;
+  opacity: 0.98;
+}
+
+/* Keyboard focus accessibility */
+#signInSpan:focus {
+  outline: 3px solid rgba(74,222,128,0.18);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
 #serverOutputId.server-msg {
   display: flex;
   align-items: center;
@@ -346,9 +385,14 @@ html, body, #root {
 }
 
 @media (max-width: 420px) {
-  #serverOutputId.server-msg {
+  #serverOutputId.server-msg
+  {
     padding: 10px;
     font-size: 13px;
     max-width: calc(100% - 28px);
+    margin: 12px auto 28px !important;
   }
+
+  #signInHint { margin-top: 4px; padding: 0 12px; font-size: 12.5px; }
+  #signInSpan { font-size: 14px; }
 }

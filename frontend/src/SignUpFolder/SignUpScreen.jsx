@@ -405,6 +405,19 @@ const SignUpScreen = () => {
           </button>
         </div>
 
+        <div id="signInHint">
+          Already have an account?&nbsp;
+          <button
+            id="signInSpan"
+            type="button"
+            onClick={() => navigate('/SignInScreen')}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigate('/SignInScreen'); }}
+            aria-label="Go to Sign In"
+          >
+            SignIn
+          </button>
+        </div>
+
         {/* server output */}
         {success !== null && (
           <div 
