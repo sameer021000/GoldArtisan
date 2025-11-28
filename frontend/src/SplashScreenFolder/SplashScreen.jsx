@@ -8,7 +8,7 @@ const SplashScreen = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       navigate('/SignUpPath');
-    }, 10000); // change timing if you like
+    }, 3000); // change timing if you like
 
     return () => clearTimeout(timer);
   }, [navigate]);
