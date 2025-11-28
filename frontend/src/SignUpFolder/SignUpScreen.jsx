@@ -2,24 +2,27 @@
 import './SignUpScreenCSS.css';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const SignUpScreen = () => {
+  // API base: set REACT_APP_API_BASE in Vercel env for production, fallback to localhost
+  const apiBase = process.env.REACT_APP_API_BASE || 'http://localhost:7000';
 
   const EyeOpenIcon = (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-    strokeLinecap="round" strokeLinejoin="round">
-    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path>
-    <circle cx="12" cy="12" r="3"></circle>
-  </svg>
-);
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+      strokeLinecap="round" strokeLinejoin="round">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path>
+      <circle cx="12" cy="12" r="3"></circle>
+    </svg>
+  );
 
   const EyeClosedIcon = (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-    strokeLinecap="round" strokeLinejoin="round">
-    <path d="M17.94 17.94A10.94 10.94 0 0112 20c-7 0-11-8-11-8a21.8 21.8 0 015.06-7.94"></path>
-    <path d="M1 1l22 22"></path>
-    <path d="M9.53 9.53a3 3 0 014.24 4.24"></path>
-  </svg>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+      strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17.94 17.94A10.94 10.94 0 0112 20c-7 0-11-8-11-8a21.8 21.8 0 015.06-7.94"></path>
+      <path d="M1 1l22 22"></path>
+      <path d="M9.53 9.53a3 3 0 014.24 4.24"></path>
+    </svg>
   );
 
   const navigate = useNavigate();
@@ -41,9 +44,15 @@ const SignUpScreen = () => {
   });
 
   const [pwStrength, setPwStrength] = useState('');
-  const [pwScore, setPwScore] = useState(0); // 0-4 mapped to percent
+  const [pwScore, setPwScore] = useState(0); // 0-4
   const [showPw, setShowPw] = useState(false);
   const [showConfirmPw, setShowConfirmPw] = useState(false);
+
+  // extra UI/submit states
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(null); // null | true | false
+  const [output, setOutput] = useState('');
+  const [savedData, setSavedData] = useState(null);
 
   const validators = {
     firstName: v => {
@@ -63,7 +72,8 @@ const SignUpScreen = () => {
     phone: v => {
       if (!v.trim()) return 'Phone number is required.';
       const digits = v.replace(/\D/g, '');
-      if (digits.length < 10) return 'Enter a valid phone number.';
+      if (digits.length < 10) return 'Enter a valid 10-digit phone number.';
+      if (digits.length > 10) return 'Enter only the 10-digit mobile number (do not include +91).';
       return '';
     },
     password: v => {
@@ -86,7 +96,7 @@ const SignUpScreen = () => {
     }
   };
 
-  // assess password strength according to the rules you requested
+  // assess password strength
   const assessPassword = (pw) => {
     if (!pw) {
       setPwStrength('');
@@ -100,35 +110,30 @@ const SignUpScreen = () => {
     const hasDigit = /[0-9]/.test(pw);
     const hasSpecial = /[^A-Za-z0-9]/.test(pw);
 
-    // If any required category missing or too short -> Weak
     if (!hasUpper || !hasLower || !hasDigit || !hasSpecial || length < 6) {
       setPwStrength('Weak');
       setPwScore(1);
       return;
     }
 
-    // All categories present here; decide Medium/Strong/Very Strong by length
     if (length === 6) {
       setPwStrength('Medium');
       setPwScore(2);
       return;
     }
 
-    // length 7..10 -> Strong
     if (length >= 7 && length <= 10) {
       setPwStrength('Strong');
       setPwScore(3);
       return;
     }
 
-    // length 11..15 -> Very Strong
     if (length >= 11 && length <= 15) {
       setPwStrength('Very Strong');
       setPwScore(4);
       return;
     }
 
-    // Fallback
     setPwStrength('Weak');
     setPwScore(1);
   };
@@ -152,7 +157,7 @@ const SignUpScreen = () => {
     }
   };
 
-  // validateAll now returns the computed errors object and a boolean
+  // validate all fields and return {isValid, next}
   const validateAll = () => {
     const next = {};
     Object.keys(validators).forEach(key => {
@@ -163,37 +168,6 @@ const SignUpScreen = () => {
     setErrors(next);
     const isValid = Object.values(next).every(v => v === '');
     return { isValid, next };
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const { isValid, next } = validateAll();
-
-    if (!isValid) {
-      // focus first invalid input using freshly computed errors
-      const firstInvalid = Object.keys(next).find(k => next[k]);
-      if (firstInvalid) {
-        const id = `inputId${mapField(firstInvalid)}`;
-        const el = document.getElementById(id);
-        if (el) el.focus();
-      }
-      return;
-    }
-
-    // Prepare submission (we'll send phone as digits and prepend +91 if backend wants full international format)
-    const digitsOnlyPhone = form.phone.replace(/\D/g, '');
-    const payload = {
-      firstName: form.firstName.trim(),
-      lastName: form.lastName.trim(),
-      phone: digitsOnlyPhone,        // keep as 10-digit for now
-      password: form.password
-    };
-
-    console.log('SignUp payload (to send):', payload);
-
-    // Navigation on successful signup/validation
-    // If you need to wait for backend response before navigating, call navigate() after successful API response.
-    navigate('/HomeScreen', { replace: true });
   };
 
   const mapField = (field) => {
@@ -207,9 +181,76 @@ const SignUpScreen = () => {
     }
   };
 
-  // map pwScore [0..4] → percent and color
-  const pwPercent = Math.min(100, (pwScore / 4) * 100);
-  const pwColor = pwScore <= 1 ? '#ff7b7b' : (pwScore === 2 ? '#ffd36b' : (pwScore === 3 ? '#ffd36b' : '#7ef08d'));
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setOutput('');
+    setSuccess(null);
+
+    const { isValid, next } = validateAll();
+
+    if (!isValid) {
+      // focus first invalid input
+      const firstInvalid = Object.keys(next).find(k => next[k]);
+      if (firstInvalid) {
+        const id = `inputId${mapField(firstInvalid)}`;
+        const el = document.getElementById(id);
+        if (el) el.focus();
+      }
+      return;
+    }
+
+    // prepare payload: phone as digits (10-digit)
+    const digitsOnlyPhone = form.phone.replace(/\D/g, '');
+    const payload = {
+      firstNameFFEnd: form.firstName.trim(),
+      lastNameFFEnd: form.lastName.trim(),
+      phoneNumberFFEnd: digitsOnlyPhone,
+      passwordFFEnd: form.password
+    };
+
+    setLoading(true);
+
+    try {
+      const response = await axios.post(`${apiBase}/Operations/unVerifiedGADetailsPath`, payload, {
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      if (response?.data?.success) {
+        setSuccess(true);
+        setOutput(response.data.message || 'Saved successfully.');
+        setSavedData(response.data.data || null);
+
+        // navigate after a short delay so user sees the success (optional)
+        setTimeout(() => {
+          navigate('/HomeScreen', { replace: true });
+        }, 700);
+      } else {
+        setSuccess(false);
+        setOutput(response?.data?.message || 'Operation failed.');
+      }
+    } catch (err) {
+      const serverMsg = err?.response?.data?.message;
+      if (serverMsg && serverMsg.includes('Phone Number already existed')) {
+        setSuccess(false);
+        setOutput(serverMsg);
+      } else if (err?.response) {
+        setSuccess(false);
+        setOutput(serverMsg || `Server error: ${err.response.status}`);
+      } else if (err?.request) {
+        setSuccess(false);
+        setOutput('No response from server. It may be sleeping or unreachable.');
+      } else {
+        setSuccess(false);
+        setOutput(err.message || 'An error occurred.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // pwScore -> display percent and color
+  const pwPercent = Math.round(Math.min(100, (pwScore / 4) * 100));
+  const pwColor = pwScore <= 1 ? '#ff7b7b' : (pwScore === 2 ? '#ffd36b' : (pwScore === 3 ? '#ffb36b' : '#7ef08d'));
 
   const getValidityAttrs = (field) => {
     const val = form[field];
@@ -220,15 +261,17 @@ const SignUpScreen = () => {
   };
 
   return (
-    <div id="divId1">
-      <h2 id="h2Id1">Artisan Sign Up</h2>
+    <div id="divId1" className="signup-wrap">
+      <h2 id="h2Id1" className="title">Artisan Sign Up</h2>
 
-      <form id="formId1" onSubmit={handleSubmit} noValidate>
+      <form id="formId1" onSubmit={handleSubmit} noValidate className="signup-form">
 
         {/* FIRST NAME */}
-        <label id="labelId1">
-          First name
-          <span id="icon_inputId1" aria-hidden="true">{!errors.firstName && form.firstName ? '✓' : (errors.firstName ? '⚠' : '')}</span>
+        <label id="labelId1" className="field-label">
+          <div className="label-row">
+            <span>First name</span>
+            <span className="field-icon" aria-hidden="true">{!errors.firstName && form.firstName ? '✓' : (errors.firstName ? '⚠' : '')}</span>
+          </div>
           <input
             id="inputId1"
             name="firstName"
@@ -236,15 +279,18 @@ const SignUpScreen = () => {
             onChange={handleChange}
             placeholder="First name"
             {...getValidityAttrs('firstName')}
+            className={errors.firstName ? 'input error' : 'input'}
           />
         </label>
-        <div id="help_inputId1">Enter your given name (letters only, single word — no spaces)</div>
-        <div id="err_inputId1" role="alert" aria-live="polite">{errors.firstName}</div>
+        <div id="help_inputId1" className="helper">Enter your given name (letters only, single word — no spaces)</div>
+        <div id="err_inputId1" className="err" role="alert" aria-live="polite">{errors.firstName}</div>
 
         {/* LAST NAME */}
-        <label id="labelId2">
-          Last name
-          <span id="icon_inputId2" aria-hidden="true">{!errors.lastName && form.lastName ? '✓' : (errors.lastName ? '⚠' : '')}</span>
+        <label id="labelId2" className="field-label">
+          <div className="label-row">
+            <span>Last name</span>
+            <span className="field-icon" aria-hidden="true">{!errors.lastName && form.lastName ? '✓' : (errors.lastName ? '⚠' : '')}</span>
+          </div>
           <input
             id="inputId2"
             name="lastName"
@@ -252,19 +298,21 @@ const SignUpScreen = () => {
             onChange={handleChange}
             placeholder="Last name"
             {...getValidityAttrs('lastName')}
+            className={errors.lastName ? 'input error' : 'input'}
           />
         </label>
-        <div id="help_inputId2">Enter your family name (letters only, single word — no spaces)</div>
-        <div id="err_inputId2" role="alert" aria-live="polite">{errors.lastName}</div>
+        <div id="help_inputId2" className="helper">Enter your family name (letters only, single word — no spaces)</div>
+        <div id="err_inputId2" className="err" role="alert" aria-live="polite">{errors.lastName}</div>
 
-        {/* PHONE with fixed +91 prefix */}
-        <label id="labelId3">
-          Phone number
-          <span id="icon_inputId3" aria-hidden="true">{!errors.phone && form.phone ? '✓' : (errors.phone ? '⚠' : '')}</span>
+        {/* PHONE with +91 prefix shown */}
+        <label id="labelId3" className="field-label">
+          <div className="label-row">
+            <span>Phone number</span>
+            <span className="field-icon" aria-hidden="true">{!errors.phone && form.phone ? '✓' : (errors.phone ? '⚠' : '')}</span>
+          </div>
 
-          <div id="phoneWrapId">
-            <span id="phonePrefixId" aria-hidden="true">+91</span>
-
+          <div id="phoneWrapId" className="phone-wrap">
+            <span id="phonePrefixId" className="phone-prefix" aria-hidden="true">+91</span>
             <input
               id="inputId3"
               name="phone"
@@ -275,17 +323,20 @@ const SignUpScreen = () => {
               minLength={10}
               maxLength={10}
               {...getValidityAttrs('phone')}
+              className={errors.phone ? 'input error' : 'input phone-input'}
             />
           </div>
         </label>
-        <div id="help_inputId3">Enter the 10-digit mobile number only (do not type +91). Example: 9876543210</div>
-        <div id="err_inputId3" role="alert" aria-live="polite">{errors.phone}</div>
+        <div id="help_inputId3" className="helper">Enter the 10-digit mobile number only (do not type +91). Example: 9876543210</div>
+        <div id="err_inputId3" className="err" role="alert" aria-live="polite">{errors.phone}</div>
 
         {/* PASSWORD */}
-        <label id="labelId5">
-          Password
-          <span id="icon_inputId5" aria-hidden="true">{!errors.password && form.password ? '✓' : (errors.password ? '⚠' : '')}</span>
-          <div id="pwWrap" style={{ position: 'relative' }}>
+        <label id="labelId5" className="field-label">
+          <div className="label-row">
+            <span>Password</span>
+            <span className="field-icon" aria-hidden="true">{!errors.password && form.password ? '✓' : (errors.password ? '⚠' : '')}</span>
+          </div>
+          <div id="pwWrap" className="pw-wrap">
             <input
               id="inputId5"
               name="password"
@@ -295,6 +346,7 @@ const SignUpScreen = () => {
               type={showPw ? 'text' : 'password'}
               maxLength={15}
               {...getValidityAttrs('password')}
+              className={errors.password ? 'input error' : 'input'}
             />
             <button
               type="button"
@@ -303,28 +355,26 @@ const SignUpScreen = () => {
               onClick={() => setShowPw(s => !s)}
               className="pw-eye-btn"
             >
-            {showPw ? EyeOpenIcon : EyeClosedIcon}
+              {showPw ? EyeOpenIcon : EyeClosedIcon}
             </button>
           </div>
         </label>
-        <div id="help_inputId5">
-          Password must be 6–15 chars and include uppercase, lowercase, a number and a special character.
-        </div>
+        <div id="help_inputId5" className="helper">Password must be 6–15 chars and include uppercase, lowercase, a number and a special character.</div>
 
-        {/* password strength meter */}
-        <div id="pwStrength" aria-live="polite">
-          {pwStrength ? `Strength: ${pwStrength}` : ''}
+        {/* password strength */}
+        <div id="pwStrength" className="pw-strength" aria-live="polite">{pwStrength ? `Strength: ${pwStrength}` : ''}</div>
+        <div id="pwStrengthBarWrap" className="pw-bar-wrap" aria-hidden="true">
+          <div id="pwStrengthBar" className="pw-bar" style={{ width: `${pwPercent}%`, backgroundColor: pwColor }} />
         </div>
-        <div id="pwStrengthBarWrap" aria-hidden="true">
-          <div id="pwStrengthBar" style={{ width: `${pwPercent}%`, backgroundColor: pwColor }} />
-        </div>
-        <div id="err_inputId5" role="alert" aria-live="polite">{errors.password}</div>
+        <div id="err_inputId5" className="err" role="alert" aria-live="polite">{errors.password}</div>
 
         {/* CONFIRM PASSWORD */}
-        <label id="labelId6">
-          Confirm password
-          <span id="icon_inputId6" aria-hidden="true">{!errors.confirmPassword && form.confirmPassword ? '✓' : (errors.confirmPassword ? '⚠' : '')}</span>
-          <div style={{ position: 'relative' }}>
+        <label id="labelId6" className="field-label">
+          <div className="label-row">
+            <span>Confirm password</span>
+            <span className="field-icon" aria-hidden="true">{!errors.confirmPassword && form.confirmPassword ? '✓' : (errors.confirmPassword ? '⚠' : '')}</span>
+          </div>
+          <div className="pw-wrap">
             <input
               id="inputId6"
               name="confirmPassword"
@@ -333,6 +383,7 @@ const SignUpScreen = () => {
               placeholder="Confirm password"
               type={showConfirmPw ? 'text' : 'password'}
               {...getValidityAttrs('confirmPassword')}
+              className={errors.confirmPassword ? 'input error' : 'input'}
             />
             <button
               type="button"
@@ -341,15 +392,25 @@ const SignUpScreen = () => {
               onClick={() => setShowConfirmPw(s => !s)}
               className="pw-eye-btn"
             >
-            {showConfirmPw ? EyeOpenIcon : EyeClosedIcon}
+              {showConfirmPw ? EyeOpenIcon : EyeClosedIcon}
             </button>
-
           </div>
         </label>
-        <div id="help_inputId6">Re-type the password to confirm.</div>
-        <div id="err_inputId6" role="alert" aria-live="polite">{errors.confirmPassword}</div>
+        <div id="help_inputId6" className="helper">Re-type the password to confirm.</div>
+        <div id="err_inputId6" className="err" role="alert" aria-live="polite">{errors.confirmPassword}</div>
 
-        <button id="btnId1" type="submit">Submit</button>
+        <div className="submit-row">
+          <button id="btnId1" type="submit" className="submit-btn" disabled={loading}>
+            {loading ? 'Submitting...' : 'Submit'}
+          </button>
+        </div>
+
+        {/* server output */}
+        {success !== null && (
+          <div className={`server-msg ${success ? 'success' : 'error'}`} role="status" aria-live="polite">
+            {output}
+          </div>
+        )}
       </form>
     </div>
   );
