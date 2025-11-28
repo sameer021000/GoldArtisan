@@ -407,7 +407,13 @@ const SignUpScreen = () => {
 
         {/* server output */}
         {success !== null && (
-          <div className={`server-msg ${success ? 'success' : 'error'}`} role="status" aria-live="polite">
+          <div 
+            id="serverOutputId"
+            className={`server-msg ${success ? 'success' : 'error'}`}
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+          >
             {output}
           </div>
         )}

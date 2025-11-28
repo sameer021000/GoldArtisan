@@ -268,6 +268,56 @@ html, body, #root {
 /* Active state */
 #btnId1:active { transform: translateY(2px) scale(.997); box-shadow: 0 8px 20px rgba(16,16,24,0.12); }
 
+#serverOutputId.server-msg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  max-width: 520px;      /* matches form width */
+  margin: 12px auto 0;   /* centered and spaced from form */
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.25;
+  box-sizing: border-box;
+  color: #fff;
+  /* subtle inner shadow like the card */
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+  word-break: break-word;
+  /* Ensure it sits visually separated from content below */
+  z-index: 2;
+}
+
+/* Success style */
+#serverOutputId.success {
+  background: linear-gradient(180deg, rgba(29,73,41,0.12), rgba(29,73,41,0.08));
+  border: 1px solid rgba(126,240,141,0.08);
+  color: #bff3c6;
+}
+
+/* Error style */
+#serverOutputId.error {
+  background: linear-gradient(180deg, rgba(84,20,20,0.12), rgba(84,20,20,0.08));
+  border: 1px solid rgba(255,123,123,0.08);
+  color: #ffb7b7;
+}
+
+/* small icon before the message using pseudo-element */
+#serverOutputId::before {
+  display: inline-block;
+  font-weight: 700;
+  line-height: 1;
+  font-size: 16px;
+  margin-right: 6px;
+  vertical-align: middle;
+  opacity: 0.95;
+}
+
+/* insert checkmark for success, warning triangle for error */
+#serverOutputId.success::before { content: "✔"; color: rgba(126,240,141,0.95); }
+#serverOutputId.error::before   { content: "⚠"; color: rgba(255,123,123,0.95); }
+
 /* Responsive */
 @media (max-width: 480px) {
   #divId1 { padding: 8vh 14px 24px 14px; }
@@ -293,4 +343,12 @@ html, body, #root {
 /* Reduced-motion support */
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
+}
+
+@media (max-width: 420px) {
+  #serverOutputId.server-msg {
+    padding: 10px;
+    font-size: 13px;
+    max-width: calc(100% - 28px);
+  }
 }
