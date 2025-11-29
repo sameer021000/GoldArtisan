@@ -211,7 +211,7 @@ const SignUpScreen = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(`${apiBase}/Operations/unVerifiedGADetailsPath`, payload, {
+      const response = await axios.post(`${apiBase}/Operations/unVerifiedGADetailsStoringPath`, payload, {
         headers: { 'Content-Type': 'application/json' }
       });
 
@@ -222,7 +222,7 @@ const SignUpScreen = () => {
 
         // navigate after a short delay so user sees the success (optional)
         setTimeout(() => {
-          navigate('/HomeScreen', { replace: true });
+          navigate('/HomeScreenPath', { replace: true });
         }, 700);
       } else {
         setSuccess(false);
@@ -327,7 +327,7 @@ const SignUpScreen = () => {
             />
           </div>
         </label>
-        <div id="help_inputId3" className="helper">Enter the 10-digit mobile number only (do not type +91). Example: 9876543210</div>
+        <div id="help_inputId3" className="helper">Enter the 10-digit mobile number only. Example: 9876543210</div>
         <div id="err_inputId3" className="err" role="alert" aria-live="polite">{errors.phone}</div>
 
         {/* PASSWORD */}
@@ -410,8 +410,8 @@ const SignUpScreen = () => {
           <button
             id="signInSpan"
             type="button"
-            onClick={() => navigate('/SignInScreen')}
-            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigate('/SignInScreen'); }}
+            onClick={() => navigate('/SignInPath')}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigate('/SignInPath'); }}
             aria-label="Go to Sign In"
           >
             SignIn
