@@ -126,15 +126,13 @@ const SignInScreen = () => {
 
     try {
       // endpoint is configurable; update path if your backend uses different route
-      const response = await axios.post(`${apiBase}/Operations/signInPath`, payload, {
+      const response = await axios.post(`${apiBase}/Operations/unVerifiedGASignInPath`, payload, {
         headers: { 'Content-Type': 'application/json' }
       });
 
       if (response?.data?.success) {
         setSuccess(true);
         setOutput(response.data.message || 'Signed in successfully.');
-        // optionally save token or data -> example: response.data.token
-        // navigate to home after a tiny delay so user sees the message
         setTimeout(() => navigate('/HomeScreenPath', { replace: true }), 600);
       } else {
         setSuccess(false);

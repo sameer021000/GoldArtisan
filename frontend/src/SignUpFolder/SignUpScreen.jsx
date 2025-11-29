@@ -211,7 +211,7 @@ const SignUpScreen = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(`${apiBase}/Operations/unVerifiedGADetailsStoringPath`, payload, {
+      const response = await axios.post(`${apiBase}/Operations/unVerifiedGASignUpPath`, payload, {
         headers: { 'Content-Type': 'application/json' }
       });
 

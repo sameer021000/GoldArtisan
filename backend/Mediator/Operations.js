@@ -1,12 +1,12 @@
 const express=require("express");
-const UnVerifiedSchema=require("../SchemaFolder/UnVerifiedSchema");
+const UnVerifiedGASchema=require("../SchemaFolder/UnVerifiedSchema");
 const router=express.Router();
-router.post("/unVerifiedGADetailsStoringPath", async(req, res)=>
+router.post("/unVerifiedGASignUpPath", async(req, res)=>
 {
     const {firstNameFFEnd, lastNameFFEnd, phoneNumberFFEnd, passwordFFEnd}=req.body;
     try
     {
-        const existingPhoneNumber=await UnVerifiedSchema.findOne({PhoneNumber : phoneNumberFFEnd});
+        const existingPhoneNumber=await UnVerifiedGASchema.findOne({PhoneNumber : phoneNumberFFEnd});
         if(existingPhoneNumber)
         {
             return res.status(400).json(
@@ -16,7 +16,7 @@ router.post("/unVerifiedGADetailsStoringPath", async(req, res)=>
             }
             );
         }
-        const newData=new UnVerifiedSchema(
+        const newData=new UnVerifiedGASchema(
         {
             FirstName : firstNameFFEnd, 
             LastName : lastNameFFEnd, 
@@ -47,6 +47,46 @@ router.post("/unVerifiedGADetailsStoringPath", async(req, res)=>
             message : "Server error while saving the data"
         }
         );
+    }
+});
+
+router.post('/unVerifiedGASignInPath', async (req, res) =>
+{
+    const {phoneNumberFFEnd, passwordFFEnd}=req.body;
+    try
+    {
+        const existingPhoneNumber=await UnVerifiedGASchema.findOne({PhoneNumber: phoneNumberFFEnd});
+        if(!existingPhoneNumber)
+        {
+            return res.status(400).json(
+            {
+                success: false,
+                message: "Account not registered with this phone number"
+            });
+        }
+        if(existingPhoneNumber.Password !== passwordFFEnd)
+        {
+            return res.status(400).json(
+            {
+                success: false,
+                message: "Invalid password"
+            });
+        }
+        return res.status(200).json(
+        {
+            success: true,
+            message: "Login successful"
+        });
+
+    }
+    catch(error)
+    {
+        return res.status(500).json(
+        {
+            success: false,
+            message: "Server error",
+            error: error.message
+        });
     }
 });
 
