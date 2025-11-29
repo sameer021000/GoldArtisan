@@ -7,8 +7,25 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/GoldArtisan';
 
 const app = express();
+const allowedOrigins = [
+  process.env.FRONTEND_URL,   // your deployed vercel site
+  "http://localhost:3000",    // local frontend
+  "http://127.0.0.1:3000"     // alternative localhost
+];
 
-app.use(cors({ origin: FRONTEND_URL }));
+app.use(cors({
+  origin: function (origin, callback) {
+    // allow tools like curl/Postman with no origin
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    console.log("❌ CORS BLOCKED Origin:", origin);
+    return callback(new Error("Not allowed by CORS"));
+  }
+}));
 app.use(express.json());
 app.use('/Operations', authRoute);
 
