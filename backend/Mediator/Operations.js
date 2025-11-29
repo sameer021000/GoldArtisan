@@ -1,7 +1,7 @@
 const express=require("express");
 const UnVerifiedSchema=require("../SchemaFolder/UnVerifiedSchema");
 const router=express.Router();
-router.post("/unVerifiedGADetailsPath", async(req, res)=>
+router.post("/unVerifiedGADetailsStoringPath", async(req, res)=>
 {
     const {firstNameFFEnd, lastNameFFEnd, phoneNumberFFEnd, passwordFFEnd}=req.body;
     try
