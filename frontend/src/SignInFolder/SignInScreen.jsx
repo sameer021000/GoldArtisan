@@ -4,9 +4,20 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const SignInScreen = () => {
+const SignInScreen = () =>
+{
   // API base: set REACT_APP_API_BASE in Vercel env for production, fallback to localhost
   const apiBase = process.env.REACT_APP_API_BASE || 'http://localhost:7000';
+
+  useEffect(() =>
+  {
+    // Check if token exists
+    const token = localStorage.getItem('GoldArtisanToken');
+    if (token)
+    {
+      navigate('/HomeScreenPath', { replace: true });
+    }
+  }, [navigate]);
 
   const EyeOpenIcon = (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
