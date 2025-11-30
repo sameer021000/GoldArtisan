@@ -130,9 +130,11 @@ const SignInScreen = () => {
         headers: { 'Content-Type': 'application/json' }
       });
 
-      if (response?.data?.success) {
+      if (response?.data?.success)
+      {
         setSuccess(true);
         setOutput(response.data.message || 'Signed in successfully.');
+        localStorage.setItem('GoldArtisanToken', response.data.token);
         setTimeout(() => navigate('/HomeScreenPath', { replace: true }), 600);
       } else {
         setSuccess(false);
