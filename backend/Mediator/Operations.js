@@ -1,6 +1,8 @@
 const express=require("express");
 const UnVerifiedGASchema=require("../SchemaFolder/UnVerifiedSchema");
 const router=express.Router();
+const AuthenticationController = require('../Authentication/AuthenticationController');
+const AuthService=require('../Authentication/AuthenticationService')
 router.post("/unVerifiedGASignUpPath", async(req, res)=>
 {
     const {firstNameFFEnd, lastNameFFEnd, phoneNumberFFEnd, passwordFFEnd}=req.body;
@@ -58,10 +60,12 @@ router.post('/unVerifiedGASignInPath', async (req, res) =>
         const existingPhoneNumber=await UnVerifiedGASchema.findOne({PhoneNumber: phoneNumberFFEnd});
         if(!existingPhoneNumber)
         {
+            const token = AuthService.createToken({PhoneNumber: existingPhoneNumber.PhoneNumber});
             return res.status(400).json(
             {
                 success: false,
-                message: "Account not registered with this phone number"
+                message: "Account not registered with this phone number",
+                token: token
             });
         }
         if(existingPhoneNumber.Password !== passwordFFEnd)
