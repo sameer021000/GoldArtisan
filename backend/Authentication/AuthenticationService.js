@@ -2,9 +2,9 @@ const JWT = require("jsonwebtoken");
 
 exports.createToken = (data) => {
     console.log("here we will create token");
-    var mysecretkey = "goldartisansecretkey";
+    var mysecretkey = process.env.JWT_SECRET;
     try {
-        var token = JWT.sign(data, mysecretkey);
+        var token = JWT.sign(data, mysecretkey, { expiresIn: '7d' });
         return token;
     } catch (e) {
         console.log("Error in signing data", e);
@@ -13,7 +13,7 @@ exports.createToken = (data) => {
 }
 
 exports.checkToken = function (token) {
-    var mysecretkey = "goldartisansecretkey";
+    var mysecretkey = process.env.JWT_SECRET;
     try {
         var result = JWT.verify(token, mysecretkey);
         return result;

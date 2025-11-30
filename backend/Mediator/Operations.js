@@ -60,12 +60,10 @@ router.post('/unVerifiedGASignInPath', async (req, res) =>
         const existingPhoneNumber=await UnVerifiedGASchema.findOne({PhoneNumber: phoneNumberFFEnd});
         if(!existingPhoneNumber)
         {
-            const token = AuthService.createToken({PhoneNumber: existingPhoneNumber.PhoneNumber});
             return res.status(400).json(
             {
                 success: false,
-                message: "Account not registered with this phone number",
-                token: token
+                message: "Account not registered with this phone number"
             });
         }
         if(existingPhoneNumber.Password !== passwordFFEnd)
@@ -76,10 +74,12 @@ router.post('/unVerifiedGASignInPath', async (req, res) =>
                 message: "Invalid password"
             });
         }
+        const token = AuthService.createToken({PhoneNumber: existingPhoneNumber.PhoneNumber});
         return res.status(200).json(
         {
             success: true,
-            message: "Login successful"
+            message: "Login successful",
+            token: token
         });
 
     }
