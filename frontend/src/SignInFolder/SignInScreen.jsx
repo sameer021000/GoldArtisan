@@ -6,8 +6,7 @@ import axios from 'axios';
 
 const SignInScreen = () =>
 {
-  // API base: set REACT_APP_API_BASE in Vercel env for production, fallback to localhost
-  const apiBase = process.env.REACT_APP_API_BASE || 'http://localhost:7000';
+  const navigate = useNavigate();
 
   useEffect(() =>
   {
@@ -18,6 +17,9 @@ const SignInScreen = () =>
       navigate('/HomeScreenPath', { replace: true });
     }
   }, [navigate]);
+
+  // API base: set REACT_APP_API_BASE in Vercel env for production, fallback to localhost
+  const apiBase = process.env.REACT_APP_API_BASE || 'http://localhost:7000';
 
   const EyeOpenIcon = (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
@@ -35,8 +37,6 @@ const SignInScreen = () =>
       <path d="M9.53 9.53a3 3 0 014.24 4.24"></path>
     </svg>
   );
-
-  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     phone: '',
