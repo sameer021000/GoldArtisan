@@ -16,7 +16,7 @@ function HomeScreen()
   {
     console.log("[v0] SignOut link clicked")
     localStorage.removeItem('GoldArtisanToken');
-    navigate('/', { replace: true });
+    navigate('/SignUpPath', { replace: true });
   }
 
   return (
