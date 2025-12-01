@@ -8,6 +8,8 @@ const SignUpScreen = () => {
   // API base: set REACT_APP_API_BASE in Vercel env for production, fallback to localhost
   const apiBase = process.env.REACT_APP_API_BASE || 'http://localhost:7000';
 
+  const navigate = useNavigate();
+
   useEffect(() =>
   {
     // Check if token exists
@@ -34,8 +36,6 @@ const SignUpScreen = () => {
       <path d="M9.53 9.53a3 3 0 014.24 4.24"></path>
     </svg>
   );
-
-  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     firstName: '',
