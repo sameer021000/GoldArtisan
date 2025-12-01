@@ -1,0 +1,189 @@
+#divId1_PictureUpload {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6vh 20px 28px 20px;
+  box-sizing: border-box;
+  background: radial-gradient(1200px 600px at 10% 20%, rgba(255, 255, 255, 0.02), transparent 6%),
+    linear-gradient(180deg, #000003 0%, #0b0910 100%);
+  color: #eee;
+}
+
+/* Card wrapper */
+#contentWrap_PictureUpload {
+  width: 100%;
+  max-width: 520px;
+  background: rgb(39, 37, 37);
+  border-radius: 18px;
+  padding: 28px 20px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65), inset 0 2px 6px rgba(255, 255, 255, 0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* Title & subtitle */
+#h1Id1_Picture {
+  margin: 0;
+  font-size: clamp(20px, 3.4vw, 24px);
+  font-weight: 700;
+  color: #ffffff;
+  text-align: left;
+}
+
+#pId1_Picture {
+  margin: 0;
+  color: #cfc9d1;
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Upload box (dashed rounded) */
+#uploadBox_Picture {
+  margin: 6px auto 0 auto;
+  width: 100%;
+  min-height: 200px;
+  border-radius: 14px;
+  border: 2px dashed #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 22px;
+  cursor: pointer;
+  background: linear-gradient(90deg, rgba(93, 96, 244, 1), rgba(247, 178, 103, 1));
+  transition: box-shadow .12s ease, transform .08s ease;
+  box-sizing: border-box;
+}
+
+/* Focus / hover */
+#uploadBox_Picture:focus,
+#uploadBox_Picture:hover {
+  box-shadow: 0 8px 30px #ffffff;
+  transform: translateY(-2px);
+  outline: none;
+}
+
+/* Icon circle */
+#uploadIcon_Picture {
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  background: rgba(240, 243, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(39, 37, 37);
+}
+
+/* Primary instruction */
+#tapText_Picture {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* helper text */
+#formatText_Picture {
+  font-size: 12px;
+  color: #cfc9d1;
+}
+
+/* OR separator row */
+#orRow_Picture {
+  width: 100%;
+  margin: 6px 0 0 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+}
+
+#sepLineLeft_Picture,
+#sepLineRight_Picture {
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(90deg, rgba(93, 96, 244, 1), rgba(247, 178, 103, 1));
+  border-radius: 1px;
+}
+
+#orText_Picture {
+  font-size: 12px;
+  color: #cfc9d1;
+  padding: 0 6px;
+}
+
+/* Open camera button (blue) */
+#openCameraBtn_Picture {
+  margin: 0 auto;
+  width: 160px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  background: linear-gradient(90deg, rgba(93, 96, 244, 1), rgba(247, 178, 103, 1));
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 12px 28px rgba(93, 96, 244, 0.12);
+  transition: transform .12s ease, box-shadow .12s ease, opacity .08s ease;
+}
+
+#openCameraBtn_Picture:hover { transform: translateY(-2px); }
+#openCameraBtn_Picture:active { transform: translateY(1px) scale(.998); }
+
+/* file name display */
+#fileInfo_Picture {
+  font-size: 13px;
+  color: #fff;
+  min-height: 18px;
+  margin-top: 4px;
+}
+
+/* Bottom row with upload button */
+#bottomRow_Picture {
+  margin-top: 6px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+#uploadIdBtn_Picture {
+  width: 100%;
+  max-width: 380px;
+  padding: 14px 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 15px;
+  color: #fff;
+  background: linear-gradient(90deg, rgba(93, 96, 244, 1), rgba(247, 178, 103, 1));
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 12px 32px rgba(93, 96, 244, 0.12);
+  transition: transform .12s ease, box-shadow .12s ease, opacity .08s ease;
+}
+
+/* Disabled style */
+#uploadIdBtn_Picture[disabled],
+#uploadIdBtn_Picture[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: saturate(.9);
+  transform: none;
+  box-shadow: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  #contentWrap_PictureUpload { padding: 20px 16px; border-radius: 14px; gap: 14px; }
+  #uploadBox_Picture { min-height: 180px; padding: 18px; border-radius: 12px; }
+  #uploadIcon_Picture { width: 58px; height: 58px; }
+  #openCameraBtn_Picture { width: 140px; padding: 10px; border-radius: 10px; }
+  #uploadIdBtn_Picture { padding: 12px; font-size: 15px; border-radius: 10px; }
+}
