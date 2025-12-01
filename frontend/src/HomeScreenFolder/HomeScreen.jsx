@@ -1,19 +1,22 @@
 import "./HomeScreenCSS.css"
 import { useNavigate } from "react-router-dom"
 
-function HomeScreen() {
+function HomeScreen()
+{
   const navigate = useNavigate()
 
-  const handleCompleteProfile = () => {
+  const handleCompleteProfile = () =>
+  {
     console.log("[v0] Complete Profile button clicked")
     // Navigate to profile completion page when ready
     // navigate('/ProfilePath');
   }
 
-  const handleSignOut = () => {
+  const handleSignOut = () =>
+  {
     console.log("[v0] SignOut link clicked")
-    // Add sign out logic here
-    // navigate('/SignUpPath');
+    localStorage.removeItem('GoldArtisanToken');
+    navigate('/', { replace: true });
   }
 
   return (
