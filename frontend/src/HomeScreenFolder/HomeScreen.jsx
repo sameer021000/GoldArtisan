@@ -8,8 +8,7 @@ function HomeScreen()
   const handleCompleteProfile = () =>
   {
     console.log("[v0] Complete Profile button clicked")
-    // Navigate to profile completion page when ready
-    // navigate('/ProfilePath');
+    navigate('/PictureUploadingPath');
   }
 
   const handleSignOut = () =>

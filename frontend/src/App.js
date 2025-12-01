@@ -4,6 +4,7 @@ import SplashScreen from './SplashScreenFolder/SplashScreen';
 import SignUpScreen from './SignUpFolder/SignUpScreen';
 import HomeScreen from './HomeScreenFolder/HomeScreen';
 import SignInScreen from './SignInFolder/SignInScreen';
+import PictureUploadingScreen from './PictureUploadingFolder/PictureUploadingScreen';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/SignUpPath" element={<SignUpScreen />} />
         <Route path="/SignInPath" element={<SignInScreen/>}/>
         <Route path="/HomeScreenPath" element={<HomeScreen/>}/>
+        <Route path="/PictureUploadingPath" element={<PictureUploadingScreen/>}/>
       </Routes>
     </Router>
   );
