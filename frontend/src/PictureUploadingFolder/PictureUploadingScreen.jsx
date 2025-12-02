@@ -10,6 +10,7 @@ function PictureUploadingScreen() {
   const [filePicked, setFilePicked] = useState(false);
   const [showCameraButton, setShowCameraButton] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [previewUrl, setPreviewUrl] = useState("");
 
   useEffect(() => {
     // Detect mobile/tablet devices
@@ -39,6 +40,10 @@ function PictureUploadingScreen() {
     if (fileInputRef.current) fileInputRef.current.value = "";
     setFileName("");
     setFilePicked(false);
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      setPreviewUrl("");
+    }
   };
 
   const handleTapUpload = () => {
@@ -56,11 +61,26 @@ function PictureUploadingScreen() {
       }
       setFileName(f.name);
       setFilePicked(true);
+
+      // set preview
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+      const url = URL.createObjectURL(f);
+      setPreviewUrl(url);
     } else {
       clearFileInput();
       setErrorMsg("");
     }
   };
+
+  // cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleOpenCamera = () => {
     if (fileInputRef.current) {
@@ -85,83 +105,107 @@ function PictureUploadingScreen() {
   return (
     <div id="divId1_PictureUpload">
       <div id="contentWrap_PictureUpload">
-        <h1 id="h1Id1_Picture">Upload Your Profile Photo</h1>
-        <p id="pId1_Picture">Upload a photo of yourself to showcase that as your profile</p>
+        {/* Left: Upload box */}
+        <div id="leftPane_Picture">
+          <h1 id="h1Id1_Picture">Upload Your Profile Photo</h1>
+          <p id="pId1_Picture">Upload a photo of yourself to showcase that as your profile</p>
 
-        {/* Upload box */}
-        <div
-          id="uploadBox_Picture"
-          role="button"
-          onClick={handleTapUpload}
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") handleTapUpload();
-          }}
-          aria-describedby="formatText_Picture fileInfo_Picture"
-        >
-          <div id="uploadIcon_Picture" aria-hidden="true">
-            <svg
-              width="44"
-              height="44"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M16 16l-4-4-4 4"></path>
-              <path d="M12 12v9"></path>
-              <path d="M20.39 18.39A5 5 0 0018 9h-1.26"></path>
-              <path d="M7 20a4 4 0 01-1-7.87"></path>
-            </svg>
-          </div>
-
-          <div id="tapText_Picture">Tap to upload photo</div>
-          <div id="formatText_Picture">PNG or JPG only</div>
-
-          {/* accept explicitly limited to PNG/JPG (extensions + MIME) */}
-          <input
-            id="fileInput_Picture"
-            ref={fileInputRef}
-            type="file"
-            accept=".png,.jpg,.jpeg,image/png,image/jpeg"
-            onChange={handleFileChange}
-            style={{ display: "none" }}
-          />
-        </div>
-
-        {/* Only show OR + Camera button on mobile/tablet */}
-        {showCameraButton && (
-          <>
-            <div id="orRow_Picture">
-              <div id="sepLineLeft_Picture" />
-              <div id="orText_Picture">OR</div>
-              <div id="sepLineRight_Picture" />
+          {/* Upload box */}
+          <div
+            id="uploadBox_Picture"
+            role="button"
+            onClick={handleTapUpload}
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") handleTapUpload();
+            }}
+            aria-describedby="formatText_Picture fileInfo_Picture"
+          >
+            <div id="uploadIcon_Picture" aria-hidden="true">
+              <svg
+                width="44"
+                height="44"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M16 16l-4-4-4 4"></path>
+                <path d="M12 12v9"></path>
+                <path d="M20.39 18.39A5 5 0 0018 9h-1.26"></path>
+                <path d="M7 20a4 4 0 01-1-7.87"></path>
+              </svg>
             </div>
 
-            <button id="openCameraBtn_Picture" type="button" onClick={handleOpenCamera}>
-              Camera
-            </button>
-          </>
-        )}
+            <div id="tapText_Picture">Tap to upload photo</div>
+            <div id="formatText_Picture">PNG or JPG only</div>
 
-        {/* File chosen name / error */}
-        <div id="fileInfo_Picture" aria-live="polite">
-          {errorMsg ? <span style={{ color: "#ffb3b3" }}>{errorMsg}</span> : filePicked ? fileName : ""}
+            {/* accept explicitly limited to PNG/JPG (extensions + MIME) */}
+            <input
+              id="fileInput_Picture"
+              ref={fileInputRef}
+              type="file"
+              accept=".png,.jpg,.jpeg,image/png,image/jpeg"
+              onChange={handleFileChange}
+              style={{ display: "none" }}
+            />
+          </div>
+
+          {/* Only show OR + Camera button on mobile/tablet */}
+          {showCameraButton && (
+            <>
+              <div id="orRow_Picture">
+                <div id="sepLineLeft_Picture" />
+                <div id="orText_Picture">OR</div>
+                <div id="sepLineRight_Picture" />
+              </div>
+
+              <button id="openCameraBtn_Picture" type="button" onClick={handleOpenCamera}>
+                Camera
+              </button>
+            </>
+          )}
+
+          {/* File chosen name / error */}
+          <div id="fileInfo_Picture" aria-live="polite">
+            {errorMsg ? <span style={{ color: "#ffb3b3" }}>{errorMsg}</span> : filePicked ? fileName : ""}
+          </div>
+
+          {/* Bottom Upload ID button */}
+          <div id="bottomRow_Picture">
+            <button
+              id="uploadIdBtn_Picture"
+              type="button"
+              onClick={handleUploadId}
+              disabled={!filePicked}
+              aria-disabled={!filePicked}
+            >
+              Upload
+            </button>
+          </div>
         </div>
 
-        {/* Bottom Upload ID button */}
-        <div id="bottomRow_Picture">
-          <button
-            id="uploadIdBtn_Picture"
-            type="button"
-            onClick={handleUploadId}
-            disabled={!filePicked}
-            aria-disabled={!filePicked}
-          >
-            Upload
-          </button>
+        {/* Right: Preview box (circle image + full name) */}
+        <div id="previewBox_Picture" aria-live="polite">
+          <div id="previewInner_Picture">
+            <div id="previewCircle_Picture" aria-hidden={!previewUrl}>
+              {previewUrl ? (
+                <img src={previewUrl} alt="Selected preview" id="previewImg_Picture" />
+              ) : (
+                <div id="previewPlaceholder_Picture" aria-hidden="true">
+                  {/* a simple icon / initials placeholder */}
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 12a4 4 0 100-8 4 4 0 000 8z" />
+                    <path d="M6 20c1.333-2 3.333-3 6-3s4.667 1 6 3" />
+                  </svg>
+                </div>
+              )}
+            </div>
+
+            <div id="fullName_Picture">Full Name</div>
+          </div>
         </div>
       </div>
     </div>
