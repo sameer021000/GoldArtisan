@@ -46,10 +46,10 @@
 #previewInner_Picture {
   width: 100%;
   max-width: 300px;
-  background: rgb(39, 37, 37); /* match card feel */
+  background: linear-gradient(90deg, rgba(93, 96, 244, 1), rgba(247, 178, 103, 1)); /* match card feel */
   border-radius: 14px;
   padding: 20px;
-  box-shadow: 0 10px 26px rgba(0,0,0,0.45);
+  box-shadow: 0 10px 26px black;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -62,12 +62,12 @@
   width: 140px;
   height: 140px;
   border-radius: 50%;
-  background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  background: rgb(39, 37, 37);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border: 6px solid rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.04);
 }
 
 /* preview img fits circle */
@@ -88,7 +88,7 @@
 /* Full name label below image */
 #fullName_Picture {
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 500;
   color: #fff;
   text-align: center;
 }
@@ -132,7 +132,7 @@
 /* Focus / hover */
 #uploadBox_Picture:focus,
 #uploadBox_Picture:hover {
-  box-shadow: 0 8px 30px #ffffff;
+  box-shadow: 0 8px 30px black;
   transform: translateY(-2px);
   outline: none;
 }
