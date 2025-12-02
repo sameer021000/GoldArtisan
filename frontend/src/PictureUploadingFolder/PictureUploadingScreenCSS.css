@@ -211,6 +211,8 @@
   color: #fff;
   min-height: 18px;
   margin-top: 4px;
+  text-align: center;
+  width: 100%;
 }
 
 /* Bottom row with upload button */
