@@ -141,7 +141,7 @@ function PictureUploadingScreen() {
             </div>
 
             <button id="openCameraBtn_Picture" type="button" onClick={handleOpenCamera}>
-              Open Camera
+              Camera
             </button>
           </>
         )}
