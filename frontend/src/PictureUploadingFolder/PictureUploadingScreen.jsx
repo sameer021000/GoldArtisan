@@ -9,6 +9,7 @@ function PictureUploadingScreen() {
   const [fileName, setFileName] = useState("");
   const [filePicked, setFilePicked] = useState(false);
   const [showCameraButton, setShowCameraButton] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
     // Detect mobile/tablet devices
@@ -20,26 +21,55 @@ function PictureUploadingScreen() {
     setShowCameraButton(Boolean(isTouchDevice));
   }, []);
 
+  // allowed extensions / mime types
+  const allowedExts = ["png", "jpg", "jpeg"];
+  const allowedMimes = ["image/png", "image/jpeg"];
+
+  const isValidImage = (file) => {
+    if (!file) return false;
+    const mimeOk = allowedMimes.includes(file.type);
+    const parts = file.name.split(".");
+    const ext = parts.length > 1 ? parts.pop().toLowerCase() : "";
+    const extOk = allowedExts.includes(ext);
+    return mimeOk || extOk;
+  };
+
+  const clearFileInput = () => {
+    // clear input
+    if (fileInputRef.current) fileInputRef.current.value = "";
+    setFileName("");
+    setFilePicked(false);
+  };
+
   const handleTapUpload = () => {
     if (fileInputRef.current) fileInputRef.current.click();
   };
 
   const handleFileChange = (e) => {
+    setErrorMsg("");
     const f = e.target.files && e.target.files[0];
     if (f) {
+      if (!isValidImage(f)) {
+        setErrorMsg("Invalid file type — only PNG or JPG allowed.");
+        clearFileInput();
+        return;
+      }
       setFileName(f.name);
       setFilePicked(true);
     } else {
-      setFileName("");
-      setFilePicked(false);
+      clearFileInput();
+      setErrorMsg("");
     }
   };
 
   const handleOpenCamera = () => {
     if (fileInputRef.current) {
+      // temporarily set capture to open camera
       fileInputRef.current.setAttribute("capture", "environment");
+      // ensure accept still restricts to images
       fileInputRef.current.click();
 
+      // remove capture after a short delay to avoid persistent capture attribute
       setTimeout(() => {
         if (fileInputRef.current) fileInputRef.current.removeAttribute("capture");
       }, 800);
@@ -47,6 +77,7 @@ function PictureUploadingScreen() {
   };
 
   const handleUploadId = () => {
+    if (!filePicked) return;
     console.log("Uploading file:", fileName);
     navigate("/WorkDetailsEnteringPath");
   };
@@ -54,7 +85,6 @@ function PictureUploadingScreen() {
   return (
     <div id="divId1_PictureUpload">
       <div id="contentWrap_PictureUpload">
-        
         <h1 id="h1Id1_Picture">Upload Your Profile Photo</h1>
         <p id="pId1_Picture">Upload a photo of yourself to showcase that as your profile</p>
 
@@ -67,6 +97,7 @@ function PictureUploadingScreen() {
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") handleTapUpload();
           }}
+          aria-describedby="formatText_Picture fileInfo_Picture"
         >
           <div id="uploadIcon_Picture" aria-hidden="true">
             <svg
@@ -89,11 +120,12 @@ function PictureUploadingScreen() {
           <div id="tapText_Picture">Tap to upload photo</div>
           <div id="formatText_Picture">PNG or JPG only</div>
 
+          {/* accept explicitly limited to PNG/JPG (extensions + MIME) */}
           <input
             id="fileInput_Picture"
             ref={fileInputRef}
             type="file"
-            accept="image/*"
+            accept=".png,.jpg,.jpeg,image/png,image/jpeg"
             onChange={handleFileChange}
             style={{ display: "none" }}
           />
@@ -114,9 +146,9 @@ function PictureUploadingScreen() {
           </>
         )}
 
-        {/* File chosen name */}
+        {/* File chosen name / error */}
         <div id="fileInfo_Picture" aria-live="polite">
-          {filePicked ? fileName : ""}
+          {errorMsg ? <span style={{ color: "#ffb3b3" }}>{errorMsg}</span> : filePicked ? fileName : ""}
         </div>
 
         {/* Bottom Upload ID button */}
