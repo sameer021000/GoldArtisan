@@ -160,7 +160,7 @@ function PictureUploadingScreen() {
             disabled={!filePicked}
             aria-disabled={!filePicked}
           >
-            Upload ID
+            Upload
           </button>
         </div>
       </div>
