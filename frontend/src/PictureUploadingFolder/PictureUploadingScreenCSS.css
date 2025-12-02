@@ -11,10 +11,10 @@
   color: #eee;
 }
 
-/* Card wrapper */
+/* Card wrapper - becomes a horizontal split on large screens */
 #contentWrap_PictureUpload {
   width: 100%;
-  max-width: 520px;
+  max-width: 1000px; /* increase to allow side-by-side */
   background: rgb(39, 37, 37);
   border-radius: 18px;
   padding: 28px 20px;
@@ -26,7 +26,74 @@
   text-align: center;
 }
 
-/* Title & subtitle */
+/* Left pane (upload) and right pane (preview) wrappers */
+#leftPane_Picture {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: left;
+}
+
+/* Preview box */
+#previewBox_Picture {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+/* inner preview card */
+#previewInner_Picture {
+  width: 100%;
+  max-width: 300px;
+  background: rgb(39, 37, 37); /* match card feel */
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.45);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* Circular preview area */
+#previewCircle_Picture {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 6px solid rgba(255,255,255,0.04);
+}
+
+/* preview img fits circle */
+#previewImg_Picture {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* placeholder in circle (when no image) */
+#previewPlaceholder_Picture svg {
+  width: 48px;
+  height: 48px;
+  color: #cfc9d1;
+}
+
+/* Full name label below image */
+#fullName_Picture {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+}
+
+/* Title & subtitle - keep original styling but ensure left align in left pane */
 #h1Id1_Picture {
   margin: 0;
   font-size: clamp(20px, 3.4vw, 24px);
@@ -43,7 +110,7 @@
   line-height: 1.4;
 }
 
-/* Upload box (dashed rounded) */
+/* Upload box (dashed rounded) - unchanged */
 #uploadBox_Picture {
   margin: 6px auto 0 auto;
   width: 100%;
@@ -179,11 +246,35 @@
   box-shadow: none;
 }
 
-/* Responsive adjustments */
-@media (max-width: 480px) {
-  #contentWrap_PictureUpload { padding: 20px 16px; border-radius: 14px; gap: 14px; }
+/* Responsive behavior */
+/* Mobile-first: stacked (upload above preview) */
+@media (max-width: 879px) {
+  #contentWrap_PictureUpload {
+    padding: 20px 16px;
+    border-radius: 14px;
+    gap: 14px;
+    flex-direction: column;
+    max-width: 520px;
+  }
   #uploadBox_Picture { min-height: 180px; padding: 18px; border-radius: 12px; }
   #uploadIcon_Picture { width: 58px; height: 58px; }
   #openCameraBtn_Picture { width: 140px; padding: 10px; border-radius: 10px; }
   #uploadIdBtn_Picture { padding: 12px; font-size: 15px; border-radius: 10px; }
+  #previewInner_Picture { max-width: 280px; margin: 0 auto; }
+}
+
+/* Desktop / Laptop: side-by-side */
+@media (min-width: 880px) {
+  #contentWrap_PictureUpload {
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 26px;
+    padding: 28px;
+  }
+  /* left pane takes ~60%, right pane ~35% */
+  #leftPane_Picture { flex: 1 1 60%; padding-right: 6px; }
+  #previewBox_Picture { flex: 0 0 36%; display: flex; align-items: center; justify-content: center; }
+  /* center preview card vertically */
+  #contentWrap_PictureUpload { align-items: center; }
 }
