@@ -33,7 +33,8 @@ async function fetchProfile() {
  * - options uses the object signature react-query expects (you can pass onSuccess/onError etc.)
  * - the query will only run when a token exists (enabled: !!token) unless overridden in options
  */
-export function useProfile(options = {}) {
+export function useProfile(options = {})
+{
   const token = typeof window !== 'undefined' ? localStorage.getItem('GoldArtisanToken') : null;
 
   return useQuery({
