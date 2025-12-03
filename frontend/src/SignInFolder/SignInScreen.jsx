@@ -3,10 +3,12 @@ import './SignInScreenCSS.css';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useQueryClient } from '@tanstack/react-query';
 
 const SignInScreen = () =>
 {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   useEffect(() =>
   {
@@ -146,6 +148,27 @@ const SignInScreen = () =>
         setSuccess(true);
         setOutput(response.data.message || 'Signed in successfully.');
         localStorage.setItem('GoldArtisanToken', response.data.token);
+
+        // --- PRIME PROFILE CACHE FOR REACT QUERY ---
+        // try fetching profile once and store in cache so Home/Picture screens show name instantly.
+        (async () => {
+          try {
+            const profileRes = await axios.get(`${apiBase}/Operations/getGAFullName`, {
+              headers: { Authorization: `Bearer ${response.data.token}` },
+            });
+
+            if (profileRes?.data?.success && profileRes.data.data) {
+              const { firstName = '', lastName = '' } = profileRes.data.data;
+              const fullName = `${firstName} ${lastName}`.trim() || 'COMer';
+              // set cached data for ['profile']
+              queryClient.setQueryData(['profile'], { fullName });
+            }
+          } catch (err) {
+            // ignore - the useProfile hook will fetch when needed
+            // console.warn('Could not prime profile cache', err);
+          }
+        })();
+
         setTimeout(() => navigate('/HomeScreenPath', { replace: true }), 600);
       } else {
         setSuccess(false);

@@ -1,6 +1,7 @@
 import "./HomeScreenCSS.css"
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useProfile } from "../queries/useProfile"; // <-- React Query hook (keep path if same)
 import axios from "axios";
 
 function HomeScreen()
@@ -13,86 +14,43 @@ function HomeScreen()
 
   const apiBase = process.env.REACT_APP_API_BASE || "http://localhost:7000";
 
-  useEffect(() =>
-  {
-    // Get the token from localStorage
-    const token = localStorage.getItem('GoldArtisanToken');
-    console.log("GoldArtisan's Token is : ", token);
-    if (!token)
-    {
-      setError("You are not authorized. Please sign in.");
-      setLoading(false);
-      return;
+  // useProfile returns the cached/fetched profile
+  const { data, isLoading, isError, error: rqError } = useProfile({
+    // note: default options are coming from QueryClient setup in App.js
+  });
+
+  // keep the original loading/error/fullName states for minimal changes to UI/structure
+  useEffect(() => {
+    setLoading(Boolean(isLoading));
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (data && data.fullName) {
+      setFullName(data.fullName || "COMer");
+      setError("");
     }
+  }, [data]);
 
-    const controller = new AbortController();
-    const signal = controller.signal;
-    const fetchProfile = async () =>
-    {
-      try
-      {
-        setLoading(true);
-        setError("");
+  useEffect(() => {
+    if (isError) {
+      // Map React Query error to the same messages/flow you expected
+      // rqError can be an axios error or a thrown object from useProfile's fetch
+      const respStatus = rqError?.response?.status || rqError?.status;
+      const serverMsg = rqError?.response?.data?.message || rqError?.message;
 
-        const res = await axios.get(`${apiBase}/Operations/getGAFullName`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-          signal,
-        });
-
-        if (res?.data?.success && res.data.data)
-        {
-          const { firstName, lastName } = res.data.data;
-          const name = `${firstName || ""} ${lastName || ""}`.trim();
-          setFullName(name || "COMer");
-        }
-        else
-        {
-          // Unexpected shape or token invalidated server-side
-          setError("Unable to fetch profile. Please sign in again.");
-          localStorage.removeItem("GoldArtisanToken");
-        }
+      if (respStatus === 401) {
+        setError("Session expired. Please sign in again.");
+        localStorage.removeItem("GoldArtisanToken");
+        // preserve previous behavior: navigate to sign-in
+        navigate('/SignInPath', { replace: true });
+      } else if (!localStorage.getItem('GoldArtisanToken')) {
+        setError("You are not authorized. Please sign in.");
+      } else {
+        setError(serverMsg || "Server error while fetching profile.");
       }
-      catch (err)
-      {
-        if (axios.isCancel(err))
-        {
-          // request was aborted
-          console.log("Profile request cancelled");
-        }
-        else if (err?.response)
-        {
-          // server responded with error code
-          if (err.response.status === 401)
-          {
-            setError("Session expired. Please sign in again.");
-            localStorage.removeItem("GoldArtisanToken");
-            navigate('/SignInPath', { replace: true });
-          }
-          else
-          {
-            setError(err.response.data?.message || "Server error while fetching profile.");
-          }
-        }
-        else if (err?.request)
-        {
-          setError("No response from server. It may be unreachable.");
-        }
-        else
-        {
-          setError(err.message || "An unexpected error occurred.");
-        }
-      }
-      finally
-      {
-        setLoading(false);
-      }
-    };
-    fetchProfile();
-
-    // cleanup: abort fetch if component unmounts
-    return () => controller.abort();
-  }, []);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isError, rqError]);
 
   const handleCompleteProfile = () =>
   {

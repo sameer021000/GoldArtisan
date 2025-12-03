@@ -2,6 +2,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import "./PictureUploadingScreenCSS.css";
 import { useNavigate } from "react-router-dom";
+import { useProfile } from "../queries/useProfile"; // <-- path to your hook
 
 function PictureUploadingScreen() {
   const navigate = useNavigate();
@@ -11,6 +12,9 @@ function PictureUploadingScreen() {
   const [showCameraButton, setShowCameraButton] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [previewUrl, setPreviewUrl] = useState("");
+
+  // get profile via React Query (cached)
+  const { data, isLoading } = useProfile();
 
   useEffect(() => {
     // Detect mobile/tablet devices
@@ -101,6 +105,8 @@ function PictureUploadingScreen() {
     console.log("Uploading file:", fileName);
     navigate("/WorkDetailsEnteringPath");
   };
+
+  const fullName = data?.fullName || "Full Name";
 
   return (
     <div id="divId1_PictureUpload">
@@ -204,7 +210,7 @@ function PictureUploadingScreen() {
               )}
             </div>
 
-            <div id="fullName_Picture">Full Name</div>
+            <div id="fullName_Picture">{isLoading ? '...' : fullName}</div>
           </div>
         </div>
       </div>
