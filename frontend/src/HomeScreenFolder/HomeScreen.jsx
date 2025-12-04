@@ -2,7 +2,6 @@ import "./HomeScreenCSS.css"
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useProfile } from "../queries/useProfile"; // <-- React Query hook (keep path if same)
-import axios from "axios";
 
 function HomeScreen()
 {
@@ -11,8 +10,6 @@ function HomeScreen()
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(""); // '' | error message
   const [fullName, setFullName] = useState("COMer");
-
-  const apiBase = process.env.REACT_APP_API_BASE || "http://localhost:7000";
 
   // useProfile returns the cached/fetched profile
   const { data, isLoading, isError, error: rqError } = useProfile({

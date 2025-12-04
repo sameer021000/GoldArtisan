@@ -1,6 +1,6 @@
 // SignUpScreen.jsx
 import './SignUpScreenCSS.css';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -62,7 +62,6 @@ const SignUpScreen = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(null); // null | true | false
   const [output, setOutput] = useState('');
-  const [savedData, setSavedData] = useState(null);
 
   const validators = {
     firstName: v => {
@@ -228,7 +227,6 @@ const SignUpScreen = () => {
       if (response?.data?.success) {
         setSuccess(true);
         setOutput(response.data.message || 'Saved successfully.');
-        setSavedData(response.data.data || null);
 
         // navigate after a short delay so user sees the success (optional)
         setTimeout(() => {
