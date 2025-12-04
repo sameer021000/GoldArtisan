@@ -4,6 +4,9 @@ import "./PictureUploadingScreenCSS.css";
 import { useNavigate } from "react-router-dom";
 import { useProfile } from "../queries/useProfile"; // <-- path to your hook
 
+// API base (use env var in production)
+const apiBase = process.env.REACT_APP_API_BASE || 'http://localhost:7000';
+
 function PictureUploadingScreen() {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
@@ -115,7 +118,7 @@ function PictureUploadingScreen() {
     }
   };
 
-  // Upload to backend using fetch + FormData
+  // robust fetch + response handling
   const handleUploadId = async () => {
     // if user hasn't selected a new local file, nothing to upload — just navigate forward
     if (!filePicked) {
@@ -144,7 +147,10 @@ function PictureUploadingScreen() {
         return;
       }
 
-      const res = await fetch("/Operations/uploadProfilePhoto", {
+      // IMPORTANT: use full backend URL so the request actually reaches your backend (not the React dev server)
+      const endpoint = `${apiBase}/Operations/uploadProfilePhoto`;
+
+      const res = await fetch(endpoint, {
         method: "POST",
         body: formData,
         headers: {
@@ -153,15 +159,25 @@ function PictureUploadingScreen() {
         }
       });
 
-      const payload = await res.json();
-      if (!res.ok) {
-        throw new Error(payload?.message || "Upload failed");
+      // check content-type before parsing JSON (some servers return HTML on error)
+      const contentType = res.headers.get("content-type") || "";
+      let payload;
+      if (contentType.includes("application/json")) {
+        payload = await res.json();
+      } else {
+        // if not JSON, read as text for debugging
+        const text = await res.text();
+        throw new Error(`Server returned non-JSON response: ${res.status} ${res.statusText} — ${text.slice(0, 200)}`);
       }
 
-      // On success, navigate to next screen (and optionally you may refetch profile elsewhere)
+      if (!res.ok) {
+        throw new Error(payload?.message || `Upload failed (${res.status})`);
+      }
+
+      // success
       navigate("/WorkDetailsEnteringPath");
     } catch (err) {
-      console.error(err);
+      console.error("Upload error:", err);
       setErrorMsg(err.message || "Upload error");
     } finally {
       setUploading(false);
