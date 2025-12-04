@@ -18,9 +18,10 @@ async function fetchProfile() {
   });
 
   if (res?.data?.success && res.data.data) {
-    const { firstName = '', lastName = '' } = res.data.data;
+    const { firstName = '', lastName = '', photoUrl = '' } = res.data.data;
     const fullName = `${firstName} ${lastName}`.trim() || 'COMer';
-    return { fullName };
+    const photoFullUrl = photoUrl ? `${apiBase}${photoUrl}` : "";
+    return { fullName, photoUrl: photoFullUrl };
   }
 
   const err = new Error('Unable to fetch profile');

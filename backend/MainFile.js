@@ -5,6 +5,7 @@ const cors = require('cors');
 const authRoute = require('./Mediator/Operations');
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/GoldArtisan';
+const path = require('path'); // added to serve uploads
 
 const app = express();
 const allowedOrigins = [
@@ -27,6 +28,10 @@ app.use(cors({
   }
 }));
 app.use(express.json());
+
+// serve uploaded files so frontend can request them at /uploads/<filename>
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 app.use('/Operations', authRoute);
 
 mongoose.connect(MONGODB_URI)

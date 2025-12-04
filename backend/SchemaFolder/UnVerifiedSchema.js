@@ -21,6 +21,12 @@ const unVerifiedSchemaStructure=new mongoose.Schema(
         {
             type : String,
             required : true
+        },
+        // new field to store profile photo path/URL (string)
+        PhotoUrl:
+        {
+            type: String,
+            default: ""
         }
     }
 );

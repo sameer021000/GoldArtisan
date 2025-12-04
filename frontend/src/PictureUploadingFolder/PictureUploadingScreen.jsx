@@ -12,6 +12,7 @@ function PictureUploadingScreen() {
   const [showCameraButton, setShowCameraButton] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [previewUrl, setPreviewUrl] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   // get profile via React Query (cached)
   const { data, isLoading } = useProfile();
@@ -25,6 +26,17 @@ function PictureUploadingScreen() {
 
     setShowCameraButton(Boolean(isTouchDevice));
   }, []);
+
+  // if profile has a photoUrl from server, show it as initial preview until user picks a local file
+  useEffect(() => {
+    // only set if there is no local preview (local previews are blob: urls)
+    if (data && data.photoUrl && !previewUrl) {
+      setPreviewUrl(data.photoUrl);
+      setFilePicked(false);
+      setFileName("");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   // allowed extensions / mime types
   const allowedExts = ["png", "jpg", "jpeg"];
@@ -44,10 +56,11 @@ function PictureUploadingScreen() {
     if (fileInputRef.current) fileInputRef.current.value = "";
     setFileName("");
     setFilePicked(false);
-    if (previewUrl) {
+    // revoke only local object URLs (blob:)
+    if (previewUrl && previewUrl.startsWith("blob:")) {
       URL.revokeObjectURL(previewUrl);
-      setPreviewUrl("");
     }
+    setPreviewUrl("");
   };
 
   const handleTapUpload = () => {
@@ -67,7 +80,7 @@ function PictureUploadingScreen() {
       setFilePicked(true);
 
       // set preview
-      if (previewUrl) {
+      if (previewUrl && previewUrl.startsWith("blob:")) {
         URL.revokeObjectURL(previewUrl);
       }
       const url = URL.createObjectURL(f);
@@ -78,10 +91,12 @@ function PictureUploadingScreen() {
     }
   };
 
-  // cleanup on unmount
+  // cleanup on unmount - only revoke blob: urls
   useEffect(() => {
     return () => {
-      if (previewUrl) URL.revokeObjectURL(previewUrl);
+      if (previewUrl && previewUrl.startsWith("blob:")) {
+        URL.revokeObjectURL(previewUrl);
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -100,10 +115,57 @@ function PictureUploadingScreen() {
     }
   };
 
-  const handleUploadId = () => {
-    if (!filePicked) return;
-    console.log("Uploading file:", fileName);
-    navigate("/WorkDetailsEnteringPath");
+  // Upload to backend using fetch + FormData
+  const handleUploadId = async () => {
+    // if user hasn't selected a new local file, nothing to upload — just navigate forward
+    if (!filePicked) {
+      navigate("/WorkDetailsEnteringPath");
+      return;
+    }
+
+    if (!fileInputRef.current || !fileInputRef.current.files || !fileInputRef.current.files[0]) {
+      setErrorMsg("No file selected.");
+      return;
+    }
+
+    const file = fileInputRef.current.files[0];
+
+    setErrorMsg("");
+    setUploading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("profilePhoto", file); // multer expects 'profilePhoto'
+
+      const token = localStorage.getItem("GoldArtisanToken");
+      if (!token) {
+        setErrorMsg("Missing auth token. Please sign in again.");
+        setUploading(false);
+        return;
+      }
+
+      const res = await fetch("/Operations/uploadProfilePhoto", {
+        method: "POST",
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${token}`
+          // do NOT set Content-Type here; browser will set the multipart boundary
+        }
+      });
+
+      const payload = await res.json();
+      if (!res.ok) {
+        throw new Error(payload?.message || "Upload failed");
+      }
+
+      // On success, navigate to next screen (and optionally you may refetch profile elsewhere)
+      navigate("/WorkDetailsEnteringPath");
+    } catch (err) {
+      console.error(err);
+      setErrorMsg(err.message || "Upload error");
+    } finally {
+      setUploading(false);
+    }
   };
 
   const fullName = data?.fullName || "Full Name";
@@ -185,10 +247,10 @@ function PictureUploadingScreen() {
               id="uploadIdBtn_Picture"
               type="button"
               onClick={handleUploadId}
-              disabled={!filePicked}
-              aria-disabled={!filePicked}
+              disabled={uploading}
+              aria-disabled={uploading}
             >
-              Upload
+              {uploading ? "Uploading..." : "Upload"}
             </button>
           </div>
         </div>
