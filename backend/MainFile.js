@@ -8,16 +8,6 @@ const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/GoldAr
 const path = require('path'); // added to serve uploads
 const app = express();
 
-const gaSignUpPath = require('./Paths/GASignUpPath');
-const gaSignInPath = require('./Paths/GASignInPath');
-const gaDetailsGettingPath = require('./Paths/GADetailsGettingPath');
-const gaProfilePhotoUploadingPath = require('./Paths/GAProfilePhotoUploadingPath');
-
-app.use('/GASignUpPath', gaSignUpPath);
-app.use('/GASignInPath', gaSignInPath);
-app.use('/GADetailsGettingPath', gaDetailsGettingPath);
-app.use('/GAProfilePhotoUploadingPath', gaProfilePhotoUploadingPath);
-
 const allowedOrigins = [
   process.env.FRONTEND_URL,   // your deployed vercel site
   "http://localhost:3000",    // local frontend
@@ -43,6 +33,16 @@ app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/Operations', authRoute);
+
+const gaSignUpPath = require('./Paths/GASignUpPath');
+const gaSignInPath = require('./Paths/GASignInPath');
+const gaDetailsGettingPath = require('./Paths/GADetailsGettingPath');
+const gaProfilePhotoUploadingPath = require('./Paths/GAProfilePhotoUploadingPath');
+
+app.use('/GASignUpPath', gaSignUpPath);
+app.use('/GASignInPath', gaSignInPath);
+app.use('/GADetailsGettingPath', gaDetailsGettingPath);
+app.use('/GAProfilePhotoUploadingPath', gaProfilePhotoUploadingPath);
 
 mongoose.connect(MONGODB_URI)
 .then(() =>
