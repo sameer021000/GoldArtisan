@@ -16,7 +16,7 @@ router.get('/getGoldArtisanDetails', AuthenticationController.isAuthenticated, a
     }
 
     // include PhotoUrl in the selected fields
-    const artisan = await UnVerifiedGASchema.findOne({ PhoneNumber: phoneNumber }).select('FirstName LastName PhoneNumber PhotoUrl').lean();
+    const artisan = await UnVerifiedGASchema.findOne({ PhoneNumber: phoneNumber }).select('FirstName LastName PhoneNumber ProfilePhotoUrl').lean();
 
     if (!artisan)
     {
