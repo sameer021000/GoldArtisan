@@ -6,6 +6,7 @@ const authRoute = require('./Paths/Operations');
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/GoldArtisan';
 const path = require('path'); // added to serve uploads
+const app = express();
 
 const gaSignUpPath = require('./Paths/GASignUpPath');
 const gaSignInPath = require('./Paths/GASignInPath');
@@ -17,7 +18,6 @@ app.use('/GASignInPath', gaSignInPath);
 app.use('/GADetailsGettingPath', gaDetailsGettingPath);
 app.use('/GAProfilePhotoUploadingPath', gaProfilePhotoUploadingPath);
 
-const app = express();
 const allowedOrigins = [
   process.env.FRONTEND_URL,   // your deployed vercel site
   "http://localhost:3000",    // local frontend
