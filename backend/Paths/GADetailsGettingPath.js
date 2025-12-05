@@ -30,7 +30,7 @@ router.get('/getGoldArtisanDetails', AuthenticationController.isAuthenticated, a
         firstName: artisan.FirstName,
         lastName: artisan.LastName,
         phoneNumber: artisan.PhoneNumber,
-        photoUrl: artisan.ProfilePhotoUrl || ""
+        profilePhotoUrl: artisan.ProfilePhotoUrl || ""
       }
     });
   }
