@@ -102,7 +102,7 @@ router.post('/unVerifiedGASignInPath', async (req, res) =>
 });
 
 // get full name AND photo URL
-router.get('/getGAFullName', AuthenticationController.isAuthenticated, async (req, res) =>
+router.get('/getGoldArtisanDetails', AuthenticationController.isAuthenticated, async (req, res) =>
 {
   try
   {
@@ -128,13 +128,13 @@ router.get('/getGAFullName', AuthenticationController.isAuthenticated, async (re
         firstName: artisan.FirstName,
         lastName: artisan.LastName,
         phoneNumber: artisan.PhoneNumber,
-        photoUrl: artisan.PhotoUrl || ""
+        photoUrl: artisan.ProfilePhotoUrl || ""
       }
     });
   }
   catch (err)
   {
-    console.error('Error in /getGAFullName:', err);
+    console.error('Error in /getGoldArtisanDetails:', err);
     return res.status(500).json({ success: false, message: 'Server error fetching profile' });
   }
 });
@@ -176,7 +176,7 @@ const upload = multer({
 });
 
 // POST /Operations/uploadProfilePhoto
-router.post('/uploadProfilePhoto', AuthenticationController.isAuthenticated, function (req, res, next) {
+router.post('/uploadGAProfilePhotoPath', AuthenticationController.isAuthenticated, function (req, res, next) {
   const singleUpload = upload.single('profilePhoto');
 
   singleUpload(req, res, async function (err) {
@@ -203,7 +203,7 @@ router.post('/uploadProfilePhoto', AuthenticationController.isAuthenticated, fun
         return res.status(404).json({ success: false, message: 'Artisan not found' });
       }
 
-      artisan.PhotoUrl = photoUrl;
+      artisan.ProfilePhotoUrl = photoUrl;
       await artisan.save();
 
       return res.status(200).json({
