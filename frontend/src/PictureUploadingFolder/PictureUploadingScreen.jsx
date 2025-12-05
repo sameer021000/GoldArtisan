@@ -148,7 +148,7 @@ function PictureUploadingScreen() {
       }
 
       // IMPORTANT: use full backend URL so the request actually reaches your backend (not the React dev server)
-      const endpoint = `${apiBase}/Operations/uploadGAProfilePhotoPath`;
+      const endpoint = `${apiBase}/GAProfilePhotoUploadingPath/uploadGAProfilePhotoPath`;
 
       const res = await fetch(endpoint, {
         method: "POST",

@@ -13,7 +13,7 @@ async function fetchProfile() {
     throw err;
   }
 
-  const res = await axios.get(`${apiBase}/Operations/getGoldArtisanDetails`, {
+  const res = await axios.get(`${apiBase}/GADetailsGettingPath/getGoldArtisanDetails`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 

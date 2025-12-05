@@ -139,7 +139,7 @@ const SignInScreen = () =>
 
     try {
       // endpoint is configurable; update path if your backend uses different route
-      const response = await axios.post(`${apiBase}/Operations/unVerifiedGASignInPath`, payload, {
+      const response = await axios.post(`${apiBase}/GASignInPath/unVerifiedGASignInPath`, payload, {
         headers: { 'Content-Type': 'application/json' }
       });
 
@@ -153,7 +153,7 @@ const SignInScreen = () =>
         // try fetching profile once and store in cache so Home/Picture screens show name instantly.
         (async () => {
           try {
-            const profileRes = await axios.get(`${apiBase}/Operations/getGAFullName`, {
+            const profileRes = await axios.get(`${apiBase}/GADetailsGettingPath/getGoldArtisanDetails`, {
               headers: { Authorization: `Bearer ${response.data.token}` },
             });
 
