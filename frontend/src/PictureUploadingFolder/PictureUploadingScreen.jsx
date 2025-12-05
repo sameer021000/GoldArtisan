@@ -276,7 +276,7 @@ function PictureUploadingScreen() {
           <div id="previewInner_Picture">
             <div id="previewCircle_Picture" aria-hidden={!previewUrl}>
               {previewUrl ? (
-                <img src={previewUrl} alt="Selected preview" id="previewImg_Picture" />
+                <img src={previewUrl} id="previewImg_Picture" />
               ) : (
                 <div id="previewPlaceholder_Picture" aria-hidden="true">
                   {/* a simple icon / initials placeholder */}
