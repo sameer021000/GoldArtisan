@@ -223,6 +223,15 @@
   width: 100%;
 }
 
+/* helper text shown when no file picked */
+#helperText_Picture {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #ffd6d6; /* light, visible warning color */
+  min-height: 18px;
+  text-align: center;
+}
+
 #uploadIdBtn_Picture {
   width: 100%;
   max-width: 380px;

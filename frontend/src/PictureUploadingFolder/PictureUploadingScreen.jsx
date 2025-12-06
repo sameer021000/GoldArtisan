@@ -276,6 +276,11 @@ function PictureUploadingScreen()
             {errorMsg ? <span style={{ color: "#ffb3b3" }}>{errorMsg}</span> : filePicked ? fileName : ""}
           </div>
 
+          {/* Helper text shown when no file picked */}
+          <div id="helperText_Picture" aria-live="polite">
+            {!filePicked && !uploading ? "You must upload a photo to continue" : ""}
+          </div>
+
           {/* Bottom Upload ID button */}
           <div id="bottomRow_Picture">
             <button
@@ -285,7 +290,7 @@ function PictureUploadingScreen()
               disabled={uploading || !filePicked} // <-- changed: prevent next navigation until a file is picked
               aria-disabled={uploading || !filePicked} // <-- changed: reflect that state for accessibility
             >
-              {uploading ? "Uploading..." : "Upload"}
+              {uploading ? "Uploading..." : !filePicked ? "Choose a photo" : "Upload"}
             </button>
           </div>
         </div>
