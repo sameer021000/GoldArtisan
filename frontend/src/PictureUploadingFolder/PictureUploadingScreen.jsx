@@ -2,7 +2,11 @@
 import React, { useRef, useState, useEffect } from "react";
 import "./PictureUploadingScreenCSS.css";
 import { useNavigate } from "react-router-dom";
-import { useProfile } from "../queries/useProfile"; // <-- path to your hook
+import { useProfile } from "../queries/useProfile";
+
+// PROGRESS BAR import
+import ProgressBar from "../ProgressBarFolder/ProgressBar";
+import "../ProgressBarFolder/ProgressBar.css";
 
 // API base (use env var in production)
 const apiBase = process.env.REACT_APP_API_BASE || 'http://localhost:7000';
@@ -17,6 +21,10 @@ function PictureUploadingScreen()
   const [errorMsg, setErrorMsg] = useState("");
   const [previewUrl, setPreviewUrl] = useState("");
   const [uploading, setUploading] = useState(false);
+
+  // PROGRESS state
+  const [progressVisible, setProgressVisible] = useState(false);
+  const [progressValue, setProgressValue] = useState(null);
 
   // get profile via React Query (cached)
   const { data, isLoading } = useProfile();
@@ -123,6 +131,42 @@ function PictureUploadingScreen()
       }, 800);
     }
   };
+
+  // helper: start simulated progress (runs while uploading true)
+  useEffect(() => {
+    let timer = null;
+    if (uploading) {
+      // start showing progress in indeterminate mode first (null)
+      setProgressVisible(true);
+      setProgressValue(null);
+
+      // after a short delay begin increasing simulated value towards ~90
+      let current = 0;
+      const start = Date.now();
+      timer = setInterval(() => {
+        // slowly increase; non-linear easing feel
+        const elapsed = Date.now() - start;
+        // formula to asymptote to 88-92% over time
+        const target = 92;
+        current = Math.min(target, Math.round((1 - Math.exp(-elapsed / 800)) * target));
+        setProgressValue(current);
+      }, 220);
+    } else {
+      // when uploading stops, jump to 100% then hide
+      if (progressVisible) {
+        setProgressValue(100);
+        // hide after a short delay so the user sees 100%
+        timer = setTimeout(() => {
+          setProgressVisible(false);
+          setProgressValue(null);
+        }, 450);
+      }
+    }
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [uploading]);
 
   // robust fetch + response handling
   const handleUploadId = async () =>
@@ -279,6 +323,11 @@ function PictureUploadingScreen()
           {/* Helper text shown when no file picked */}
           <div id="helperText_Picture" aria-live="polite">
             {!filePicked && !uploading ? "You must upload a photo to continue" : ""}
+          </div>
+
+          {/* PROGRESS BAR - inserted just above the button (new) */}
+          <div style={{ width: "100%", marginTop: 8 }}>
+            <ProgressBar visible={progressVisible} progress={progressValue} label={uploading ? "Uploading profile photo" : ""} />
           </div>
 
           {/* Bottom Upload ID button */}
