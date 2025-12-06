@@ -272,6 +272,7 @@
   font-size: 13px;
   font-weight: 500;
   color: #cfc9d1;
+  margin: 0 0 4px 0; /* Override global 10px margin, set to 4px for tighter spacing */
 }
 
 .required {
