@@ -1,0 +1,80 @@
+.progress-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: fadeIn 180ms ease-in;
+  box-sizing: border-box;
+}
+
+/* small label */
+.progress-text {
+  font-size: 13px;
+  color: #e8e6ef;
+  font-weight: 600;
+  text-align: left;
+}
+
+/* outer track */
+.progress-outer {
+  width: 100%;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.6);
+}
+
+/* determinate filled portion */
+.progress-inner {
+  height: 100%;
+  transition: width 320ms cubic-bezier(.2,.9,.2,1);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 8px;
+  box-sizing: border-box;
+
+  /* gradient for filled area (match your app's warm gradient) */
+  background: linear-gradient(90deg, rgba(93,96,244,1), rgba(247,178,103,1));
+}
+
+/* percentage label inside bar */
+.progress-label {
+  font-size: 11px;
+  color: rgba(8,8,8,0.95);
+  font-weight: 700;
+}
+
+/* indeterminate animated stripe for simulated progress */
+.progress-indeterminate {
+  position: absolute;
+  left: -40%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(93,96,244,0.95), rgba(247,178,103,0.95));
+  border-radius: 8px;
+  animation: indeterminate 1.1s linear infinite;
+  filter: drop-shadow(0 6px 18px rgba(93,96,244,0.12));
+}
+
+/* fade in */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* indeterminate animation slides across */
+@keyframes indeterminate {
+  0% { left: -40%; width: 40%; }
+  50% { left: 30%; width: 45%; }
+  100% { left: 110%; width: 40%; }
+}
+
+/* small responsive tweak */
+@media (max-width: 520px) {
+  .progress-text { font-size: 12px; }
+  .progress-outer { height: 12px; }
+  .progress-label { font-size: 10px; }
+}
