@@ -3,6 +3,7 @@ import React, { useRef, useState, useEffect } from "react";
 import "./PictureUploadingScreenCSS.css";
 import { useNavigate } from "react-router-dom";
 import { useProfile } from "../queries/useProfile";
+import axios from "axios"; // <-- added axios
 
 // PROGRESS BAR import
 import ProgressBar from "../ProgressBarFolder/ProgressBar";
@@ -140,14 +141,12 @@ function PictureUploadingScreen()
     }
   };
 
-  // helper: start simulated progress (runs while uploading true)
+  // helper: start simulated progress (runs while uploading true AND progressValue === null)
   useEffect(() => {
     let timer = null;
-    if (uploading) {
+    if (uploading && progressValue === null) {
       // start showing progress in indeterminate mode first (null)
       setProgressVisible(true);
-      setProgressValue(null);
-
       // after a short delay begin increasing simulated value towards ~90
       let current = 0;
       const start = Date.now();
@@ -160,9 +159,12 @@ function PictureUploadingScreen()
         setProgressValue(current);
       }, 220);
     } else {
-      // when uploading stops, jump to 100% then hide
-      if (progressVisible) {
-        setProgressValue(100);
+      // when uploading stops or when progressValue is set to a number, handle completion/hide
+      if (!uploading && progressVisible) {
+        // if we have a numeric value and it isn't 100, jump to 100 for UX
+        if (typeof progressValue === "number" && progressValue < 100) {
+          setProgressValue(100);
+        }
         // hide after a short delay so the user sees 100%
         timer = setTimeout(() => {
           setProgressVisible(false);
@@ -174,9 +176,9 @@ function PictureUploadingScreen()
       if (timer) clearInterval(timer);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [uploading]);
+  }, [uploading, progressValue]);
 
-  // robust fetch + response handling
+  // robust upload using axios to get real-time progress
   const handleUploadId = async () =>
   {
     // if user hasn't selected a new local file, nothing to upload — just navigate forward
@@ -197,6 +199,12 @@ function PictureUploadingScreen()
     setErrorMsg("");
     setUploading(true);
 
+    // Show progress UI and start from 0 — axios will update progressValue
+    setProgressVisible(true);
+    setProgressValue(0);
+
+    const controller = new AbortController();
+
     try
     {
       const formData = new FormData();
@@ -207,55 +215,91 @@ function PictureUploadingScreen()
       {
         setErrorMsg("Missing auth token. Please sign in again.");
         setUploading(false);
+        // hide progress shortly
+        setTimeout(() => {
+          setProgressVisible(false);
+          setProgressValue(null);
+        }, 350);
         return false;
       }
 
       const endpoint = `${apiBase}/GAProfilePhotoUploadingPath/uploadGAProfilePhotoPath`;
 
-      const res = await fetch(endpoint,
-      {
-        method: "POST",
-        body: formData,
-        headers:
-        {
-          Authorization: `Bearer ${token}`
-        }
+      const response = await axios.post(endpoint, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          // Do NOT set Content-Type here; browser/axios will set multipart boundary
+        },
+        onUploadProgress: (progressEvent) => {
+          try {
+            const { loaded, total } = progressEvent;
+            if (total && total > 0) {
+              const percent = Math.round((loaded * 100) / total);
+              setProgressValue(percent);
+            } else {
+              // total unknown (chunked) — leave progressValue as null to use simulated behaviour
+              // but only if it's currently null; otherwise keep current numeric value
+              if (progressValue === null) {
+                // keep indeterminate (simulated) — nothing to do here
+              }
+            }
+          } catch (e) {
+            // ignore progress parsing errors
+            // do not interrupt upload
+          }
+        },
+        signal: controller.signal,
+        validateStatus: () => true, // we'll handle status manually
       });
 
-      // check content-type before parsing JSON (some servers return HTML on error)
-      const contentType = res.headers.get("content-type") || "";
-      let payload;
-      if (contentType.includes("application/json"))
-      {
-        payload = await res.json();
-      }
-      else
-      {
-        // if not JSON, read as text for debugging
-        const text = await res.text();
-        throw new Error(`Server returned non-JSON response: ${res.status} ${res.statusText} — ${text.slice(0, 200)}`);
+      // determine content-type / response handling similar to fetch-based approach
+      const resStatus = response.status;
+      const resData = response.data;
+      const resHeaders = response.headers || {};
+      const contentTypeHeader = (resHeaders["content-type"] || resHeaders["Content-Type"] || "") + "";
+
+      if (!contentTypeHeader.includes("application/json")) {
+        // if server returned non-json, convert to string for error context
+        const text = typeof resData === "string" ? resData : JSON.stringify(resData);
+        throw new Error(`Server returned non-JSON response: ${resStatus} — ${text.slice(0, 200)}`);
       }
 
-      if (!res.ok)
-      {
-        throw new Error(payload?.message || `Upload failed (${res.status})`);
+      if (resStatus < 200 || resStatus >= 300) {
+        throw new Error(resData?.message || `Upload failed (${resStatus})`);
       }
 
-      // success — DO NOT NAVIGATE automatically
-      // mark uploaded so button becomes "Next"
-      setUploaded(true);
+      // success — show 100% briefly, set uploaded flag, but DO NOT auto-navigate
+      setProgressValue(100);
+      // small delay so user sees 100%
+      setTimeout(() => {
+        setUploading(false);
+        setUploaded(true);
+        // hide after short delay
+        setTimeout(() => {
+          setProgressVisible(false);
+          setProgressValue(null);
+        }, 420);
+      }, 220);
+
       return true;
     }
     catch (err)
     {
-      console.error("Upload error:", err);
-      setErrorMsg(err.message || "Upload error");
+      console.error("Upload error (axios):", err);
+      // If axios returned a response with message, prefer that
+      const serverMessage = err?.response?.data?.message || err?.message;
+      setErrorMsg(serverMessage || "Upload error");
+
+      // ensure progress UI hides after a short moment
+      setUploading(false);
+      setTimeout(() => {
+        setProgressVisible(false);
+        setProgressValue(null);
+      }, 600);
+
       return false;
     }
-    finally
-    {
-      setUploading(false);
-    }
+    // no explicit finally block for hiding here because we handle on success/fail above
   };
 
   // NEW: central handler for upload/next button
