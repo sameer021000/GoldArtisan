@@ -2,7 +2,6 @@ require('dotenv').config()
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/GoldArtisan';
 const path = require('path'); // added to serve uploads
 const app = express();
