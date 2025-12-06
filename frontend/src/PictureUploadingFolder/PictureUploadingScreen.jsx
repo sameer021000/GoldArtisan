@@ -7,7 +7,8 @@ import { useProfile } from "../queries/useProfile"; // <-- path to your hook
 // API base (use env var in production)
 const apiBase = process.env.REACT_APP_API_BASE || 'http://localhost:7000';
 
-function PictureUploadingScreen() {
+function PictureUploadingScreen()
+{
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState("");
@@ -20,7 +21,8 @@ function PictureUploadingScreen() {
   // get profile via React Query (cached)
   const { data, isLoading } = useProfile();
 
-  useEffect(() => {
+  useEffect(() =>
+  {
     // Detect mobile/tablet devices
     const isTouchDevice =
       (navigator.maxTouchPoints && navigator.maxTouchPoints > 0) ||
@@ -30,22 +32,12 @@ function PictureUploadingScreen() {
     setShowCameraButton(Boolean(isTouchDevice));
   }, []);
 
-  // if profile has a photoUrl from server, show it as initial preview until user picks a local file
-  useEffect(() => {
-    // only set if there is no local preview (local previews are blob: urls)
-    if (data && data.photoUrl && !previewUrl) {
-      setPreviewUrl(data.photoUrl);
-      setFilePicked(false);
-      setFileName("");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
-
   // allowed extensions / mime types
   const allowedExts = ["png", "jpg", "jpeg"];
   const allowedMimes = ["image/png", "image/jpeg"];
 
-  const isValidImage = (file) => {
+  const isValidImage = (file) =>
+  {
     if (!file) return false;
     const mimeOk = allowedMimes.includes(file.type);
     const parts = file.name.split(".");
@@ -54,27 +46,32 @@ function PictureUploadingScreen() {
     return mimeOk || extOk;
   };
 
-  const clearFileInput = () => {
+  const clearFileInput = () =>
+  {
     // clear input
     if (fileInputRef.current) fileInputRef.current.value = "";
     setFileName("");
     setFilePicked(false);
     // revoke only local object URLs (blob:)
-    if (previewUrl && previewUrl.startsWith("blob:")) {
+    if (previewUrl && previewUrl.startsWith("blob:"))
+    {
       URL.revokeObjectURL(previewUrl);
     }
     setPreviewUrl("");
   };
 
-  const handleTapUpload = () => {
+  const handleTapUpload = () =>
+  {
     if (fileInputRef.current) fileInputRef.current.click();
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = (e) =>
+  {
     setErrorMsg("");
     const f = e.target.files && e.target.files[0];
     if (f) {
-      if (!isValidImage(f)) {
+      if (!isValidImage(f))
+      {
         setErrorMsg("Invalid file type — only PNG or JPG allowed.");
         clearFileInput();
         return;
@@ -83,51 +80,63 @@ function PictureUploadingScreen() {
       setFilePicked(true);
 
       // set preview
-      if (previewUrl && previewUrl.startsWith("blob:")) {
+      if (previewUrl && previewUrl.startsWith("blob:"))
+      {
         URL.revokeObjectURL(previewUrl);
       }
       const url = URL.createObjectURL(f);
       setPreviewUrl(url);
-    } else {
+    }
+    else
+    {
       clearFileInput();
       setErrorMsg("");
     }
   };
 
   // cleanup on unmount - only revoke blob: urls
-  useEffect(() => {
-    return () => {
-      if (previewUrl && previewUrl.startsWith("blob:")) {
+  useEffect(() =>
+  {
+    return () =>
+    {
+      if (previewUrl && previewUrl.startsWith("blob:"))
+      {
         URL.revokeObjectURL(previewUrl);
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleOpenCamera = () => {
-    if (fileInputRef.current) {
+  const handleOpenCamera = () =>
+  {
+    if (fileInputRef.current)
+    {
       // temporarily set capture to open camera
       fileInputRef.current.setAttribute("capture", "environment");
       // ensure accept still restricts to images
       fileInputRef.current.click();
 
       // remove capture after a short delay to avoid persistent capture attribute
-      setTimeout(() => {
+      setTimeout(() =>
+      {
         if (fileInputRef.current) fileInputRef.current.removeAttribute("capture");
       }, 800);
     }
   };
 
   // robust fetch + response handling
-  const handleUploadId = async () => {
+  const handleUploadId = async () =>
+  {
     // if user hasn't selected a new local file, nothing to upload — just navigate forward
-    if (!filePicked) {
-      navigate("/WorkDetailsEnteringPath");
+    if (!filePicked)
+    {
+      setErrorMsg("Please select or take a profile photo before continuing");
       return;
     }
 
-    if (!fileInputRef.current || !fileInputRef.current.files || !fileInputRef.current.files[0]) {
-      setErrorMsg("No file selected.");
+    if (!fileInputRef.current || !fileInputRef.current.files || !fileInputRef.current.files[0])
+    {
+      setErrorMsg("No file selected");
       return;
     }
 
@@ -136,50 +145,60 @@ function PictureUploadingScreen() {
     setErrorMsg("");
     setUploading(true);
 
-    try {
+    try
+    {
       const formData = new FormData();
       formData.append("profilePhoto", file); // multer expects 'profilePhoto'
 
       const token = localStorage.getItem("GoldArtisanToken");
-      if (!token) {
+      if (!token)
+      {
         setErrorMsg("Missing auth token. Please sign in again.");
         setUploading(false);
         return;
       }
 
-      // IMPORTANT: use full backend URL so the request actually reaches your backend (not the React dev server)
       const endpoint = `${apiBase}/GAProfilePhotoUploadingPath/uploadGAProfilePhotoPath`;
 
-      const res = await fetch(endpoint, {
+      const res = await fetch(endpoint,
+      {
         method: "POST",
         body: formData,
-        headers: {
+        headers:
+        {
           Authorization: `Bearer ${token}`
-          // do NOT set Content-Type here; browser will set the multipart boundary
         }
       });
 
       // check content-type before parsing JSON (some servers return HTML on error)
       const contentType = res.headers.get("content-type") || "";
       let payload;
-      if (contentType.includes("application/json")) {
+      if (contentType.includes("application/json"))
+      {
         payload = await res.json();
-      } else {
+      }
+      else
+      {
         // if not JSON, read as text for debugging
         const text = await res.text();
         throw new Error(`Server returned non-JSON response: ${res.status} ${res.statusText} — ${text.slice(0, 200)}`);
       }
 
-      if (!res.ok) {
+      if (!res.ok)
+      {
         throw new Error(payload?.message || `Upload failed (${res.status})`);
       }
 
       // success
-      navigate("/WorkDetailsEnteringPath");
-    } catch (err) {
+      navigate("/AddressQuestionsPath");
+    }
+    catch (err)
+    {
       console.error("Upload error:", err);
       setErrorMsg(err.message || "Upload error");
-    } finally {
+    }
+    finally
+    {
       setUploading(false);
     }
   };
@@ -263,8 +282,8 @@ function PictureUploadingScreen() {
               id="uploadIdBtn_Picture"
               type="button"
               onClick={handleUploadId}
-              disabled={uploading}
-              aria-disabled={uploading}
+              disabled={uploading || !filePicked} // <-- changed: prevent next navigation until a file is picked
+              aria-disabled={uploading || !filePicked} // <-- changed: reflect that state for accessibility
             >
               {uploading ? "Uploading..." : "Upload"}
             </button>
