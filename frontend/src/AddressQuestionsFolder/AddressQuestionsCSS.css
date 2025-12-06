@@ -1,5 +1,4 @@
-#divId1_AddressQuestions
-{
+#divId1_AddressQuestions {
   width: 100%;
   min-height: 100vh;
   display: flex;
@@ -13,8 +12,7 @@
 }
 
 /* Main content wrapper - vertical stack of boxes */
-#contentWrap_AddressQuestions
-{
+#contentWrap_AddressQuestions {
   width: 100%;
   max-width: 680px;
   display: flex;
@@ -24,8 +22,7 @@
 }
 
 /* Top Box - Initial Question */
-#topBox_AddressQuestions
-{
+#topBox_AddressQuestions {
   width: 100%;
   background: rgb(39, 37, 37);
   border-radius: 18px;
@@ -38,8 +35,7 @@
 }
 
 /* Title & subtitle */
-#h1Id1_AddressQuestions
-{
+#h1Id1_AddressQuestions {
   margin: 0;
   font-size: clamp(22px, 3.4vw, 26px);
   font-weight: 700;
@@ -47,8 +43,7 @@
   text-align: left;
 }
 
-#pId1_AddressQuestions
-{
+#pId1_AddressQuestions {
   margin: 0;
   color: #cfc9d1;
   text-align: left;
@@ -56,8 +51,7 @@
   line-height: 1.5;
 }
 
-#questionTitle_AddressQuestions
-{
+#questionTitle_AddressQuestions {
   margin: 16px 0 0 0;
   font-size: clamp(17px, 2.8vw, 19px);
   font-weight: 600;
@@ -263,7 +257,7 @@
 #formGrid_AddressQuestions {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 18px;
+  gap: 1px;
   width: 100%;
 }
 
@@ -271,42 +265,57 @@
 .formGroup_AddressQuestions {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .formGroup_AddressQuestions label {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
-  color: #ffffff;
+  color: #cfc9d1;
 }
 
 .required {
   color: rgba(247, 178, 103, 1);
 }
 
-/* Custom Input */
+/* Custom Input with validation styles matching SignUpScreen */
 .customInput {
   width: 100%;
   padding: 12px 14px;
-  border-radius: 10px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(28, 28, 32, 0.9), rgba(24, 24, 28, 0.85));
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  color: #fff;
   font-size: 15px;
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  transition: all 0.2s ease;
+  outline: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+  transition: box-shadow .16s ease, border-color .16s ease, transform .08s ease;
   box-sizing: border-box;
   font-family: inherit;
+  margin-bottom: 2px;
 }
 
 .customInput::placeholder {
   color: #9a95a0;
 }
 
+/* Focus state matching SignUpScreen */
 .customInput:focus {
   outline: none;
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(93, 96, 244, 0.5);
-  box-shadow: 0 0 0 3px rgba(93, 96, 244, 0.1);
+  border-color: rgba(93, 96, 244, 0.6);
+  box-shadow: 0 0 10px rgba(93, 96, 244, 0.18);
+}
+
+/* Valid and invalid states matching SignUpScreen */
+.customInput[aria-valid="true"] {
+  border-color: rgba(23, 23, 227, 0.6);
+  box-shadow: 0 0 10px rgba(23, 23, 227, 0.6);
+}
+
+.customInput[aria-invalid="true"],
+.customInput.error {
+  border-color: #ff5e5e;
+  box-shadow: 0 0 10px rgba(255, 94, 94, 0.18);
 }
 
 /* Custom Select Wrapper */
@@ -315,29 +324,42 @@
   width: 100%;
 }
 
-/* Custom Select */
+/* Custom Select with validation styles matching SignUpScreen */
 .customSelect {
   width: 100%;
   padding: 12px 40px 12px 14px;
-  border-radius: 10px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(28, 28, 32, 0.9), rgba(24, 24, 28, 0.85));
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  color: #fff;
   font-size: 15px;
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  transition: all 0.2s ease;
+  outline: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+  transition: box-shadow .16s ease, border-color .16s ease, transform .08s ease;
   box-sizing: border-box;
   font-family: inherit;
   cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
+  margin-bottom: 2px;
 }
 
 .customSelect:focus {
   outline: none;
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(93, 96, 244, 0.5);
-  box-shadow: 0 0 0 3px rgba(93, 96, 244, 0.1);
+  border-color: rgba(93, 96, 244, 0.6);
+  box-shadow: 0 0 10px rgba(93, 96, 244, 0.18);
+}
+
+.customSelect[aria-valid="true"] {
+  border-color: rgba(23, 23, 227, 0.6);
+  box-shadow: 0 0 10px rgba(23, 23, 227, 0.6);
+}
+
+.customSelect[aria-invalid="true"],
+.customSelect.error {
+  border-color: #ff5e5e;
+  box-shadow: 0 0 10px rgba(255, 94, 94, 0.18);
 }
 
 .customSelect option {
@@ -354,6 +376,53 @@
   transform: translateY(-50%);
   pointer-events: none;
   color: #cfc9d1;
+}
+
+/* Helper text matching SignUpScreen spacing */
+#help_State,
+#help_District,
+#help_PinCode,
+#help_City,
+#help_Center,
+#help_Street,
+#help_Landmark,
+#help_DoorNo {
+  font-size: 12px;
+  color: rgba(207, 201, 209, 0.9);
+  margin-top: 0;
+  margin-bottom: 2px;
+}
+
+/* Error messages with animation matching SignUpScreen */
+#err_State,
+#err_District,
+#err_PinCode,
+#err_City,
+#err_Center,
+#err_Street,
+#err_Landmark,
+#err_DoorNo {
+  font-size: 13px;
+  color: #ff8a8a;
+  margin-top: 0;
+  min-height: 18px;
+  margin-bottom: 12px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity .25s ease, transform .25s ease;
+}
+
+/* Show error when it has content */
+#err_State:not(:empty),
+#err_District:not(:empty),
+#err_PinCode:not(:empty),
+#err_City:not(:empty),
+#err_Center:not(:empty),
+#err_Street:not(:empty),
+#err_Landmark:not(:empty),
+#err_DoorNo:not(:empty) {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Remove number input arrows */
@@ -425,7 +494,7 @@ input[type="number"] {
 @media (min-width: 640px) {
   #formGrid_AddressQuestions {
     grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
+    gap: 1px;
   }
 
   /* Full width fields on larger screens */
@@ -473,8 +542,15 @@ input[type="number"] {
     border-radius: 10px;
   }
 
-  #formGrid_AddressQuestions {
-    gap: 16px;
+  .customInput,
+  .customSelect {
+    padding: 12px 14px;
+    font-size: 15px;
+    border-radius: 10px;
+  }
+
+  .customSelect {
+    padding: 12px 36px 12px 14px;
   }
 }
 
@@ -499,5 +575,13 @@ input[type="number"] {
 
   #formGrid_AddressQuestions {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Reduced-motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
   }
 }
