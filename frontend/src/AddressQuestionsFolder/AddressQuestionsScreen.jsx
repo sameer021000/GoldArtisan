@@ -105,7 +105,9 @@ function AddressQuestionsScreen() {
       return ""
     },
     street: (v) => {
-      if (!v || !v.trim()) return "Street is required."
+      const raw = v || ""
+      if (!raw.trim()) return "Street is required."
+      if (!/^[A-Za-z]+$/.test(raw)) return "Street must contain letters only (no digits/symbols)."
       return ""
     },
     landmark: (v) => {
