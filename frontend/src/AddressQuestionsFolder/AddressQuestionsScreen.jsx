@@ -390,7 +390,7 @@ function AddressQuestionsScreen() {
                   {...getValidityAttrs("district")}
                 />
                 <div id="help_District" className="helper">
-                  Enter district name (letters only, single word — no spaces)
+                  Enter district name(letters only, single word—no spaces)
                 </div>
                 <div id="err_District" className="err" role="alert" aria-live="polite">
                   {errors.district}
@@ -458,7 +458,7 @@ function AddressQuestionsScreen() {
                   {...getValidityAttrs("center")}
                 />
                 <div id="help_Center" className="helper">
-                  Enter center name (letters only, single word — no spaces)
+                  Enter center name(letters only, single word—no spaces)
                 </div>
                 <div id="err_Center" className="err" role="alert" aria-live="polite">
                   {errors.center}
