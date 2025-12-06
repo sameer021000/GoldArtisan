@@ -26,6 +26,9 @@ function PictureUploadingScreen()
   const [progressVisible, setProgressVisible] = useState(false);
   const [progressValue, setProgressValue] = useState(null);
 
+  // NEW: whether upload has completed successfully (used to change button to "Next")
+  const [uploaded, setUploaded] = useState(false);
+
   // get profile via React Query (cached)
   const { data, isLoading } = useProfile();
 
@@ -66,6 +69,8 @@ function PictureUploadingScreen()
       URL.revokeObjectURL(previewUrl);
     }
     setPreviewUrl("");
+    // If user clears file after a successful upload, also reset uploaded flag
+    setUploaded(false);
   };
 
   const handleTapUpload = () =>
@@ -94,6 +99,9 @@ function PictureUploadingScreen()
       }
       const url = URL.createObjectURL(f);
       setPreviewUrl(url);
+
+      // picking a new file should clear any previous uploaded state
+      setUploaded(false);
     }
     else
     {
@@ -175,13 +183,13 @@ function PictureUploadingScreen()
     if (!filePicked)
     {
       setErrorMsg("Please select or take a profile photo before continuing");
-      return;
+      return false;
     }
 
     if (!fileInputRef.current || !fileInputRef.current.files || !fileInputRef.current.files[0])
     {
       setErrorMsg("No file selected");
-      return;
+      return false;
     }
 
     const file = fileInputRef.current.files[0];
@@ -199,7 +207,7 @@ function PictureUploadingScreen()
       {
         setErrorMsg("Missing auth token. Please sign in again.");
         setUploading(false);
-        return;
+        return false;
       }
 
       const endpoint = `${apiBase}/GAProfilePhotoUploadingPath/uploadGAProfilePhotoPath`;
@@ -233,18 +241,34 @@ function PictureUploadingScreen()
         throw new Error(payload?.message || `Upload failed (${res.status})`);
       }
 
-      // success
-      navigate("/AddressQuestionsPath");
+      // success — DO NOT NAVIGATE automatically
+      // mark uploaded so button becomes "Next"
+      setUploaded(true);
+      return true;
     }
     catch (err)
     {
       console.error("Upload error:", err);
       setErrorMsg(err.message || "Upload error");
+      return false;
     }
     finally
     {
       setUploading(false);
     }
+  };
+
+  // NEW: central handler for upload/next button
+  const handleButtonClick = async () => {
+    // If already uploaded successfully, this acts as "Next"
+    if (uploaded) {
+      navigate("/AddressQuestionsPath");
+      return;
+    }
+
+    // Otherwise perform the upload (same as previous behavior)
+    await handleUploadId();
+    // don't navigate here — handleUploadId sets uploaded = true on success
   };
 
   const fullName = data?.fullName || "Full Name";
@@ -325,21 +349,21 @@ function PictureUploadingScreen()
             {!filePicked && !uploading ? "You must upload a photo to continue" : ""}
           </div>
 
-          {/* PROGRESS BAR - inserted just above the button (new) */}
+          {/* PROGRESS BAR - inserted just above the button */}
           <div style={{ width: "100%", marginTop: 8 }}>
             <ProgressBar visible={progressVisible} progress={progressValue} label={uploading ? "Uploading profile photo" : ""} />
           </div>
 
-          {/* Bottom Upload ID button */}
+          {/* Bottom Upload ID / Next button */}
           <div id="bottomRow_Picture">
             <button
               id="uploadIdBtn_Picture"
               type="button"
-              onClick={handleUploadId}
-              disabled={uploading || !filePicked} // <-- changed: prevent next navigation until a file is picked
-              aria-disabled={uploading || !filePicked} // <-- changed: reflect that state for accessibility
+              onClick={handleButtonClick} // new handler
+              disabled={uploading || (!filePicked && !uploaded)} // allow click if uploaded === true
+              aria-disabled={uploading || (!filePicked && !uploaded)}
             >
-              {uploading ? "Uploading..." : !filePicked ? "Choose a photo" : "Upload"}
+              {uploading ? "Uploading..." : uploaded ? "Next" : !filePicked ? "Choose a photo" : "Upload"}
             </button>
           </div>
         </div>
