@@ -92,7 +92,9 @@ function AddressQuestionsScreen() {
       return ""
     },
     city: (v) => {
-      if (!v || !v.trim()) return "City is required."
+      const raw = v || ""
+      if (!raw.trim()) return "City is required."
+      if (!/^[A-Za-z]+$/.test(raw)) return "City must contain letters only (no digits/symbols)."
       return ""
     },
     center: (v) => {
