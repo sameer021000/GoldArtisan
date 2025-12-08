@@ -30,7 +30,7 @@
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65), inset 0 2px 6px rgba(255, 255, 255, 0.02);
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 18px;
   box-sizing: border-box;
 }
 
@@ -185,7 +185,7 @@
   justify-content: center;
   gap: 10px;
   transition: all 0.2s ease;
-  box-sizing: border-box;
+  box-sizing: border-sizing;
 }
 
 #yesBtn2_AddressQuestions:hover,
@@ -265,9 +265,10 @@
 .formGroup_AddressQuestions {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 4px; /* Reduced gap from 6px to 4px for tighter spacing between label and input */
 }
 
+/* Override App.css global label margin to reduce spacing */
 .formGroup_AddressQuestions label {
   font-size: 13px;
   font-weight: 500;
@@ -309,8 +310,8 @@
 
 /* Valid and invalid states matching SignUpScreen */
 .customInput[aria-valid="true"] {
-  border-color: rgba(93, 96, 244, 0.6);
-  box-shadow: 0 0 10px rgba(93, 96, 244, 0.6);
+  border-color: rgba(23, 23, 227, 0.6);
+  box-shadow: 0 0 10px rgba(23, 23, 227, 0.6);
 }
 
 .customInput[aria-invalid="true"],
@@ -325,6 +326,163 @@
   width: 100%;
 }
 
+/* Replaced select styles with custom dropdown button styles */
+.customDropdownButton {
+  width: 100%;
+  padding: 12px 40px 12px 14px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(28, 28, 32, 0.9), rgba(24, 24, 28, 0.85));
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  color: #fff;
+  font-size: 15px;
+  outline: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+  transition: box-shadow .16s ease, border-color .16s ease, transform .08s ease;
+  box-sizing: border-box;
+  font-family: inherit;
+  cursor: pointer;
+  margin-bottom: 2px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.customDropdownButton .placeholder {
+  color: #9a95a0;
+}
+
+.customDropdownButton:focus {
+  outline: none;
+  border-color: rgba(93, 96, 244, 0.6);
+  box-shadow: 0 0 10px rgba(93, 96, 244, 0.18);
+}
+
+.customDropdownButton[aria-valid="true"] {
+  border-color: rgba(93, 96, 244, 0.6);
+  box-shadow: 0 0 10px rgba(93, 96, 244, 0.6);
+}
+
+.customDropdownButton[aria-invalid="true"],
+.customDropdownButton.error {
+  border-color: #ff5e5e;
+  box-shadow: 0 0 10px rgba(255, 94, 94, 0.18);
+}
+
+/* Custom dropdown menu styles */
+.customDropdownMenu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: rgb(28, 28, 32);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  max-height: 320px;
+  display: flex;
+  flex-direction: column;
+  animation: dropdownSlide 0.2s ease-out;
+}
+
+@keyframes dropdownSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Search input in dropdown */
+.dropdownSearchWrapper {
+  padding: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dropdownSearch {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+  font-family: inherit;
+}
+
+.dropdownSearch:focus {
+  border-color: rgba(93, 96, 244, 0.6);
+  box-shadow: 0 0 8px rgba(93, 96, 244, 0.15);
+}
+
+.dropdownSearch::placeholder {
+  color: #9a95a0;
+}
+
+/* Dropdown options container */
+.dropdownOptions {
+  overflow-y: auto;
+  max-height: 260px;
+  padding: 4px;
+}
+
+.dropdownOptions::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dropdownOptions::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.dropdownOptions::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.dropdownOptions::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Individual dropdown option */
+.dropdownOption {
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  font-size: 15px;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.15s ease, color 0.15s ease;
+  font-family: inherit;
+}
+
+.dropdownOption:hover {
+  background: rgba(93, 96, 244, 0.15);
+  color: #ffffff;
+}
+
+.dropdownOption.selected {
+  background: linear-gradient(90deg, rgba(93, 96, 244, 0.25), rgba(247, 178, 103, 0.25));
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.dropdownNoResults {
+  padding: 16px 12px;
+  color: #9a95a0;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Custom Select with validation styles matching SignUpScreen */
 /* Custom Select with validation styles matching SignUpScreen */
 .customSelect {
   width: 100%;
@@ -344,6 +502,12 @@
   -webkit-appearance: none;
   -moz-appearance: none;
   margin-bottom: 2px;
+  /* Force custom styling on iOS and all mobile devices */
+  background-image: none;
+  -webkit-border-radius: 12px;
+  text-indent: 0.01px;
+  text-overflow: "";
+  display: none;
 }
 
 .customSelect:focus {
@@ -353,8 +517,8 @@
 }
 
 .customSelect[aria-valid="true"] {
-  border-color: rgba(93, 96, 244, 0.6);
-  box-shadow: 0 0 10px rgba(93, 96, 244, 0.6);
+  border-color: rgba(23, 23, 227, 0.6);
+  box-shadow: 0 0 10px rgba(23, 23, 227, 0.6);
 }
 
 .customSelect[aria-invalid="true"],
@@ -363,10 +527,25 @@
   box-shadow: 0 0 10px rgba(255, 94, 94, 0.18);
 }
 
+/* Enhanced option styling for better contrast and visibility */
 .customSelect option {
   background: rgb(39, 37, 37);
   color: #ffffff;
-  padding: 10px;
+  padding: 12px 14px;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+/* Style the first option (placeholder) differently */
+.customSelect option:first-child {
+  color: #9a95a0;
+}
+
+/* Selected option styling */
+.customSelect option:checked {
+  background: linear-gradient(90deg, rgba(93, 96, 244, 0.2), rgba(247, 178, 103, 0.2));
+  color: #ffffff;
+  font-weight: 500;
 }
 
 /* Select Arrow */
@@ -377,6 +556,14 @@
   transform: translateY(-50%);
   pointer-events: none;
   color: #cfc9d1;
+  /* Ensure arrow is always visible on mobile */
+  z-index: 1;
+  transition: transform 0.2s ease;
+}
+
+/* Rotate arrow when dropdown is open */
+.selectArrow.open {
+  transform: translateY(-50%) rotate(180deg);
 }
 
 /* Helper text matching SignUpScreen spacing */
@@ -548,10 +735,46 @@ input[type="number"] {
     padding: 12px 14px;
     font-size: 15px;
     border-radius: 10px;
+    /* Ensure consistent font size on mobile */
+    -webkit-text-size-adjust: 100%;
+  }
+
+  .customDropdownButton {
+    padding: 12px 36px 12px 14px;
+    font-size: 15px;
+    border-radius: 10px;
+  }
+
+  .customDropdownMenu {
+    max-height: 280px;
+    border-radius: 10px;
+  }
+
+  .dropdownOptions {
+    max-height: 220px;
+  }
+
+  .dropdownOption {
+    padding: 9px 12px;
+    font-size: 14px;
   }
 
   .customSelect {
     padding: 12px 36px 12px 14px;
+    /* Maintain custom styling on smaller screens */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+
+  /* Adjust arrow size for mobile */
+  .selectArrow {
+    right: 12px;
+  }
+
+  .selectArrow svg {
+    width: 14px;
+    height: 14px;
   }
 }
 
@@ -576,6 +799,34 @@ input[type="number"] {
 
   #formGrid_AddressQuestions {
     grid-template-columns: 1fr;
+  }
+
+  .customDropdownButton {
+    font-size: 15px;
+    padding: 12px 36px 12px 12px;
+  }
+
+  .customDropdownMenu {
+    max-height: 260px;
+  }
+
+  .dropdownOptions {
+    max-height: 200px;
+  }
+
+  /* Ensure select dropdown remains custom styled on very small screens */
+  .customSelect {
+    font-size: 15px;
+    padding: 12px 36px 12px 12px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: none;
+  }
+
+  .customSelect option {
+    font-size: 15px;
+    padding: 12px;
   }
 }
 
