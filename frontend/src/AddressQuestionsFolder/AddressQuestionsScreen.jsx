@@ -75,47 +75,52 @@ function AddressQuestionsScreen() {
 
   const validators = {
     state: (v) => {
-      if (!v || !v.trim()) return "State is required."
+      if (!v || !v.trim()) return "State is required"
       return ""
     },
     district: (v) => {
       const raw = v || ""
       if (!raw.trim()) return "District is required."
-      if (/\s/.test(raw)) return "District must be a single word with no spaces."
-      if (!/^[A-Za-z]+$/.test(raw)) return "District must contain letters only (no digits/symbols)."
+      if (raw.charAt(0) === " ") return "District cannot start with a space"
+      if (!/^[A-Za-z\s]+$/.test(raw)) return "District must contain letters only(no digits/symbols)"
       return ""
     },
     pinCode: (v) => {
-      if (!v || !v.trim()) return "PIN Code is required."
+      if (!v || !v.trim()) return "PIN Code is required"
       const digits = v.replace(/\D/g, "")
-      if (digits.length !== 6) return "PIN Code must be exactly 6 digits."
+      if (digits.length !== 6) return "PIN Code must be exactly 6 digits"
       return ""
     },
     city: (v) => {
       const raw = v || ""
-      if (!raw.trim()) return "City is required."
-      if (!/^[A-Za-z]+$/.test(raw)) return "City must contain letters only (no digits/symbols)."
+      if (raw.charAt(0) === " ") return "City cannot start with a space"
+      if (!/^[A-Za-z\s]+$/.test(raw)) return "City must contain letters only(no digits/symbols)"
       return ""
     },
     center: (v) => {
       const raw = v || ""
-      if (!raw.trim()) return "Center is required."
-      if (/\s/.test(raw)) return "Center must be a single word with no spaces."
-      if (!/^[A-Za-z]+$/.test(raw)) return "Center must contain letters only (no digits/symbols)."
+      if (!raw.trim()) return "Center is required"
+      if (raw.charAt(0) === " ") return "Center cannot start with a space"
+      if (!/^[A-Za-z\s]+$/.test(raw)) return "Center must contain letters only(no digits/symbols)"
       return ""
     },
     street: (v) => {
       const raw = v || ""
-      if (!raw.trim()) return "Street is required."
-      if (!/^[A-Za-z]+$/.test(raw)) return "Street must contain letters only (no digits/symbols)."
+      if (!raw.trim()) return "Street is required"
+      if (raw.charAt(0) === " ") return "Street cannot start with a space"
+      if (!/^[A-Za-z\s]+$/.test(raw)) return "Street must contain letters only(no digits/symbols)"
       return ""
     },
     landmark: (v) => {
-      if (!v || !v.trim()) return "Landmark is required."
+      const raw = v || ""
+      if (!raw.trim()) return "Landmark is required"
+      if (raw.charAt(0) === " ") return "Landmark cannot start with a space"
       return ""
     },
     doorNo: (v) => {
-      if (!v || !v.trim()) return "Door number is required."
+      const raw = v || ""
+      if (!raw.trim()) return "Door number is required"
+      if (raw.charAt(0) === " ") return "Door number cannot start with a space"
       return ""
     },
   }
