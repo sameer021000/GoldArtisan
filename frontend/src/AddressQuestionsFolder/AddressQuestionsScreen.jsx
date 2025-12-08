@@ -1,6 +1,4 @@
-"use client"
-
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import "./AddressQuestionsCSS.css"
 
 // All Indian states for the dropdown
@@ -64,6 +62,10 @@ function AddressQuestionsScreen() {
     landmark: "",
     doorNo: "",
   })
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
+  const dropdownRef = useRef(null)
 
   const validators = {
     state: (v) => {
@@ -206,6 +208,29 @@ function AddressQuestionsScreen() {
     return { "aria-invalid": "false", "aria-valid": "false" }
   }
 
+  const handleStateSelect = (state) => {
+    handleFormChange("state", state)
+    setIsDropdownOpen(false)
+    setSearchQuery("")
+  }
+
+  const filteredStates = INDIAN_STATES.filter((state) => state.toLowerCase()
+  .includes(searchQuery.toLowerCase()))
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false)
+        setSearchQuery("")
+      }
+    }
+
+    if (isDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside)
+      return () => document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [isDropdownOpen])
+
   return (
     <div id="divId1_AddressQuestions">
       <div id="contentWrap_AddressQuestions">
@@ -338,35 +363,63 @@ function AddressQuestionsScreen() {
                 <label id="label_State" htmlFor="input_State">
                   State <span className="required">*</span>
                 </label>
-                <div id="selectWrapper_State" className="customSelectWrapper">
-                  <select
+                <div id="selectWrapper_State" className="customSelectWrapper" ref={dropdownRef}>
+                  <button
                     id="input_State"
-                    value={addressForm.state}
-                    onChange={(e) => handleFormChange("state", e.target.value)}
-                    className={errors.state ? "customSelect error" : "customSelect"}
+                    type="button"
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    className={errors.state ? "customDropdownButton error" : "customDropdownButton"}
                     {...getValidityAttrs("state")}
                   >
-                    <option value="">Select a state</option>
-                    {INDIAN_STATES.map((state) => (
-                      <option key={state} value={state}>
-                        {state}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="selectArrow" aria-hidden="true">
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
-                  </div>
+                    <span className={addressForm.state ? "" : "placeholder"}>
+                      {addressForm.state || "Select a state"}
+                    </span>
+                    <div className={`selectArrow ${isDropdownOpen ? "open" : ""}`} aria-hidden="true">
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                    </div>
+                  </button>
+
+                  {isDropdownOpen && (
+                    <div className="customDropdownMenu">
+                      <div className="dropdownSearchWrapper">
+                        <input
+                          type="text"
+                          className="dropdownSearch"
+                          placeholder="Search states..."
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          autoFocus
+                        />
+                      </div>
+                      <div className="dropdownOptions">
+                        {filteredStates.length > 0 ? (
+                          filteredStates.map((state) => (
+                            <button
+                              key={state}
+                              type="button"
+                              className={`dropdownOption ${addressForm.state === state ? "selected" : ""}`}
+                              onClick={() => handleStateSelect(state)}
+                            >
+                              {state}
+                            </button>
+                          ))
+                        ) : (
+                          <div className="dropdownNoResults">No states found</div>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div id="help_State" className="helper">
                   Select your state from the dropdown
