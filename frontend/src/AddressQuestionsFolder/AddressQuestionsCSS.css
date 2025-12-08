@@ -30,7 +30,7 @@
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65), inset 0 2px 6px rgba(255, 255, 255, 0.02);
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 18px;
   box-sizing: border-box;
 }
 
@@ -185,7 +185,7 @@
   justify-content: center;
   gap: 10px;
   transition: all 0.2s ease;
-  box-sizing: border-box;
+  box-sizing: border-sizing;
 }
 
 #yesBtn2_AddressQuestions:hover,
@@ -265,9 +265,10 @@
 .formGroup_AddressQuestions {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 4px; /* Reduced gap from 6px to 4px for tighter spacing between label and input */
 }
 
+/* Override App.css global label margin to reduce spacing */
 .formGroup_AddressQuestions label {
   font-size: 13px;
   font-weight: 500;
@@ -309,8 +310,8 @@
 
 /* Valid and invalid states matching SignUpScreen */
 .customInput[aria-valid="true"] {
-  border-color: rgba(93, 96, 244, 0.6);
-  box-shadow: 0 0 10px rgba(93, 96, 244, 0.6);
+  border-color: rgba(23, 23, 227, 0.6);
+  box-shadow: 0 0 10px rgba(23, 23, 227, 0.6);
 }
 
 .customInput[aria-invalid="true"],
@@ -344,6 +345,11 @@
   -webkit-appearance: none;
   -moz-appearance: none;
   margin-bottom: 2px;
+  /* Force custom styling on iOS and all mobile devices */
+  background-image: none;
+  -webkit-border-radius: 12px;
+  text-indent: 0.01px;
+  text-overflow: "";
 }
 
 .customSelect:focus {
@@ -353,8 +359,8 @@
 }
 
 .customSelect[aria-valid="true"] {
-  border-color: rgba(93, 96, 244, 0.6);
-  box-shadow: 0 0 10px rgba(93, 96, 244, 0.6);
+  border-color: rgba(23, 23, 227, 0.6);
+  box-shadow: 0 0 10px rgba(23, 23, 227, 0.6);
 }
 
 .customSelect[aria-invalid="true"],
@@ -363,10 +369,25 @@
   box-shadow: 0 0 10px rgba(255, 94, 94, 0.18);
 }
 
+/* Enhanced option styling for better contrast and visibility */
 .customSelect option {
   background: rgb(39, 37, 37);
   color: #ffffff;
-  padding: 10px;
+  padding: 12px 14px;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+/* Style the first option (placeholder) differently */
+.customSelect option:first-child {
+  color: #9a95a0;
+}
+
+/* Selected option styling */
+.customSelect option:checked {
+  background: linear-gradient(90deg, rgba(93, 96, 244, 0.2), rgba(247, 178, 103, 0.2));
+  color: #ffffff;
+  font-weight: 500;
 }
 
 /* Select Arrow */
@@ -377,6 +398,8 @@
   transform: translateY(-50%);
   pointer-events: none;
   color: #cfc9d1;
+  /* Ensure arrow is always visible on mobile */
+  z-index: 1;
 }
 
 /* Helper text matching SignUpScreen spacing */
@@ -548,10 +571,26 @@ input[type="number"] {
     padding: 12px 14px;
     font-size: 15px;
     border-radius: 10px;
+    /* Ensure consistent font size on mobile */
+    -webkit-text-size-adjust: 100%;
   }
 
   .customSelect {
     padding: 12px 36px 12px 14px;
+    /* Maintain custom styling on smaller screens */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+
+  /* Adjust arrow size for mobile */
+  .selectArrow {
+    right: 12px;
+  }
+
+  .selectArrow svg {
+    width: 14px;
+    height: 14px;
   }
 }
 
@@ -576,6 +615,21 @@ input[type="number"] {
 
   #formGrid_AddressQuestions {
     grid-template-columns: 1fr;
+  }
+
+  /* Ensure select dropdown remains custom styled on very small screens */
+  .customSelect {
+    font-size: 15px;
+    padding: 12px 36px 12px 12px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: none;
+  }
+
+  .customSelect option {
+    font-size: 15px;
+    padding: 12px;
   }
 }
 
