@@ -793,8 +793,23 @@ input[type="number"] {
   #noBtn_AddressQuestions,
   #yesBtn2_AddressQuestions,
   #noBtn2_AddressQuestions {
-    max-width: none;
-    width: 100%;
+    /* reduce vertical padding to make buttons less tall */
+    padding: 10px 12px;
+    /* slightly smaller label text */
+    font-size: 14px;
+    /* reduce gap between icon and label */
+    gap: 8px;
+    /* slightly smaller corner radius for compact look */
+    border-radius: 10px;
+  }
+
+  /* reduce inline SVG size inside the icon circles so visual balance is kept */
+  #yesIcon_AddressQuestions svg,
+  #noIcon_AddressQuestions svg,
+  #yesIcon2_AddressQuestions svg,
+  #noIcon2_AddressQuestions svg {
+    width: 14px;
+    height: 14px;
   }
 
   #formGrid_AddressQuestions {
