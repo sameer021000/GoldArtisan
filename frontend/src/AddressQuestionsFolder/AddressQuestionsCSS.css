@@ -794,7 +794,6 @@ input[type="number"] {
   #yesBtn2_AddressQuestions,
   #noBtn2_AddressQuestions {
     /* reduce vertical padding to make buttons less tall */
-    padding: 10px 12px;
     /* slightly smaller label text */
     font-size: 14px;
     /* reduce gap between icon and label */
