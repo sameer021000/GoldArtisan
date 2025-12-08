@@ -798,63 +798,63 @@ input[type="number"] {
   }
 
   /* Stronger mobile overrides to actually reduce button height (keeps all other styles) */
-#buttonGroup_AddressQuestions > button,
-#buttonGroup2_AddressQuestions > button,
-#yesBtn_AddressQuestions,
-#noBtn_AddressQuestions,
-#yesBtn2_AddressQuestions,
-#noBtn2_AddressQuestions {
-  /* force a smaller height */
-  height: 40px !important;
-  min-height: 40px !important;
-  /* tighten vertical padding (some App.css may apply padding) */
-  padding-top: 6px !important;
-  padding-bottom: 6px !important;
-  padding-left: 12px !important;
-  padding-right: 12px !important;
-  /* smaller label text */
-  font-size: 14px !important;
-  line-height: 1 !important; /* prevents extra vertical space from line-height */
-  display: inline-flex !important;
-  align-items: center !important; /* vertically center icon + label */
-  justify-content: center !important;
-  gap: 8px !important;
-  border-radius: 10px !important;
-  box-sizing: border-box !important;
-}
-
-/* shrink icon container and svg */
-#yesIcon_AddressQuestions,
-#noIcon_AddressQuestions,
-#yesIcon2_AddressQuestions,
-#noIcon2_AddressQuestions {
-  width: 18px !important;
-  height: 18px !important;
-  min-width: 18px !important;
-  min-height: 18px !important;
-  border-radius: 50% !important;
-}
-
-/* shrink inline SVG inside icon circles */
-#yesIcon_AddressQuestions svg,
-#noIcon_AddressQuestions svg,
-#yesIcon2_AddressQuestions svg,
-#noIcon2_AddressQuestions svg {
-  width: 12px !important;
-  height: 12px !important;
-  display: block;
-}
-
-/* If App.css sets large min-width via the flex basis, limit it here */
-#yesBtn_AddressQuestions,
-#noBtn_AddressQuestions,
-#yesBtn2_AddressQuestions,
-#noBtn2_AddressQuestions {
-  flex-basis: auto !important;
-  min-width: 0 !important;
-  max-width: 100% !important;
-}
-
+  #buttonGroup_AddressQuestions > button,
+  #buttonGroup2_AddressQuestions > button,
+  #yesBtn_AddressQuestions,
+  #noBtn_AddressQuestions,
+  #yesBtn2_AddressQuestions,
+  #noBtn2_AddressQuestions {
+    /* force a smaller height */
+    height: 40px !important;
+    min-height: 40px !important;
+    /* tighten vertical padding (some App.css may apply padding) */
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    /* smaller label text */
+    font-size: 14px !important;
+    line-height: 1 !important; /* prevents extra vertical space from line-height */
+    display: inline-flex !important;
+    align-items: center !important; /* vertically center icon + label */
+    justify-content: center !important;
+    gap: 8px !important;
+    border-radius: 10px !important;
+    box-sizing: border-box !important;
+  }
+  
+  /* shrink icon container and svg */
+  #yesIcon_AddressQuestions,
+  #noIcon_AddressQuestions,
+  #yesIcon2_AddressQuestions,
+  #noIcon2_AddressQuestions {
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    min-height: 18px !important;
+    border-radius: 50% !important;
+  }
+  
+  /* shrink inline SVG inside icon circles */
+  #yesIcon_AddressQuestions svg,
+  #noIcon_AddressQuestions svg,
+  #yesIcon2_AddressQuestions svg,
+  #noIcon2_AddressQuestions svg {
+    width: 12px !important;
+    height: 12px !important;
+    display: block;
+  }
+  
+  /* If App.css sets large min-width via the flex basis, limit it here */
+  #yesBtn_AddressQuestions,
+  #noBtn_AddressQuestions,
+  #yesBtn2_AddressQuestions,
+  #noBtn2_AddressQuestions {
+    flex-basis: auto !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+  
 /* keep hover/active/selected visuals as-is; only sizing changed */
 
 
