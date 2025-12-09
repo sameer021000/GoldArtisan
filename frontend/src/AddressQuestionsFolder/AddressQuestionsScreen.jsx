@@ -618,19 +618,6 @@ function AddressQuestionsScreen() {
                     </div>
                   </div>
                 </div>
-
-                {/* Next Button inside form box */}
-                <div id="formBottomRow_AddressQuestions">
-                  <button
-                    id="nextBtn_AddressQuestions"
-                    type="button"
-                    onClick={handleNextClick}
-                    disabled={!isFormValid()}
-                    aria-disabled={!isFormValid()}
-                  >
-                    Next
-                  </button>
-                </div>
               </div>
             )}
           </div>
