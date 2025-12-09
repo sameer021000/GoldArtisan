@@ -666,11 +666,74 @@ input[type="number"] {
   box-shadow: none;
 }
 
+#formHeaderRow_AddressQuestions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0;
+}
+
+#formTitle_AddressQuestions {
+  margin: 0;
+  font-size: clamp(18px, 2.8vw, 20px);
+  font-weight: 600;
+  color: #ffffff;
+  text-align: left;
+}
+
+/* Toggle button */
+#toggleFormBtn_AddressQuestions {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.18s ease;
+  padding: 0;
+}
+#toggleFormBtn_AddressQuestions:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+#toggleFormBtn_AddressQuestions:active {
+  transform: translateY(0) scale(0.96);
+}
+#toggleFormBtn_AddressQuestions svg {
+  transition: transform 0.18s ease;
+}
+
+/* Collapsible content wrapper */
+#formContentWrapper_AddressQuestions {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: formExpand 0.28s ease-out;
+}
+
 /* Slide down animation */
 @keyframes slideDown {
   from {
     opacity: 0;
     transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes formExpand {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
   }
   to {
     opacity: 1;
@@ -775,6 +838,16 @@ input[type="number"] {
   .selectArrow svg {
     width: 14px;
     height: 14px;
+  }
+
+  #toggleFormBtn_AddressQuestions {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+  }
+  #toggleFormBtn_AddressQuestions svg {
+    width: 18px;
+    height: 18px;
   }
 }
 
