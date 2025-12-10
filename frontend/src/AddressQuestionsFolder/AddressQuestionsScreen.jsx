@@ -379,9 +379,9 @@ function AddressQuestionsScreen() {
                   strokeLinejoin="round"
                 >
                   {isFormMinimized ? (
-                    <polyline points="18 15 12 9 6 15"></polyline>
-                  ) : (
                     <polyline points="6 9 12 15 18 9"></polyline>
+                  ) : (
+                    <polyline points="18 15 12 9 6 15"></polyline>
                   )}
                 </svg>
               </button>
