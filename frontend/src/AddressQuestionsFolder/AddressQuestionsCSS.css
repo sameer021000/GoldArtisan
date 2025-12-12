@@ -232,7 +232,7 @@
 }
 
 /* Address Form Box */
-#addressFormBox_AddressQuestions {
+#addressFormBox_AddressQuestions, #permanentAddressFormBox_AddressQuestions {
   width: 100%;
   background: rgb(39, 37, 37);
   border-radius: 18px;
@@ -245,7 +245,7 @@
   animation: slideDown 0.3s ease-out;
 }
 
-#formTitle_AddressQuestions {
+#formTitle_AddressQuestions, #permanentFormTitle_AddressQuestions {
   margin: 0;
   font-size: clamp(18px, 2.8vw, 20px);
   font-weight: 600;
@@ -254,7 +254,7 @@
 }
 
 /* Form Grid */
-#formGrid_AddressQuestions {
+#formGrid_AddressQuestions, #permanentFormGrid_AddressQuestions {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1px;
@@ -567,7 +567,7 @@
 }
 
 /* Helper text matching SignUpScreen spacing */
-#help_State,
+#help_State, #permanentHelp_State
 #help_District,
 #help_PinCode,
 #help_City,
@@ -582,7 +582,7 @@
 }
 
 /* Error messages with animation matching SignUpScreen */
-#err_State,
+#err_State, #permanentErr_State,
 #err_District,
 #err_PinCode,
 #err_City,
@@ -601,7 +601,7 @@
 }
 
 /* Show error when it has content */
-#err_State:not(:empty),
+#err_State:not(:empty), #permanentErr_State:not(:empty),
 #err_District:not(:empty),
 #err_PinCode:not(:empty),
 #err_City:not(:empty),
@@ -666,7 +666,7 @@ input[type="number"] {
   box-shadow: none;
 }
 
-#formHeaderRow_AddressQuestions {
+#formHeaderRow_AddressQuestions, #permanentFormHeaderRow_AddressQuestions {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -674,16 +674,8 @@ input[type="number"] {
   margin: 0;
 }
 
-#formTitle_AddressQuestions {
-  margin: 0;
-  font-size: clamp(18px, 2.8vw, 20px);
-  font-weight: 600;
-  color: #ffffff;
-  text-align: left;
-}
-
 /* Toggle button */
-#toggleFormBtn_AddressQuestions {
+#toggleFormBtn_AddressQuestions, #togglePermanentFormBtn_AddressQuestions {
   width: 36px;
   height: 36px;
   min-width: 36px;
@@ -698,20 +690,20 @@ input[type="number"] {
   transition: all 0.18s ease;
   padding: 0;
 }
-#toggleFormBtn_AddressQuestions:hover {
+#toggleFormBtn_AddressQuestions:hover, #togglePermanentFormBtn_AddressQuestions:hover {
   background: rgba(255, 255, 255, 0.12);
   border-color: rgba(255, 255, 255, 0.2);
   transform: translateY(-1px);
 }
-#toggleFormBtn_AddressQuestions:active {
+#toggleFormBtn_AddressQuestions:active, #togglePermanentFormBtn_AddressQuestions:active {
   transform: translateY(0) scale(0.96);
 }
-#toggleFormBtn_AddressQuestions svg {
+#toggleFormBtn_AddressQuestions svg, #togglePermanentFormBtn_AddressQuestions svg {
   transition: transform 0.18s ease;
 }
 
 /* Collapsible content wrapper */
-#formContentWrapper_AddressQuestions {
+#formContentWrapper_AddressQuestions, #permanentFormContentWrapper_AddressQuestions {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -743,13 +735,13 @@ input[type="number"] {
 
 /* Responsive behavior */
 @media (min-width: 640px) {
-  #formGrid_AddressQuestions {
+  #formGrid_AddressQuestions, #permanentFormGrid_AddressQuestions {
     grid-template-columns: repeat(2, 1fr);
     gap: 1px;
   }
 
   /* Full width fields on larger screens */
-  #formGroup_State,
+  #formGroup_State, #permanentFormGroup_State,
   #formGroup_Street,
   #formGroup_Landmark {
     grid-column: span 2;
@@ -759,7 +751,8 @@ input[type="number"] {
 @media (max-width: 879px) {
   #topBox_AddressQuestions,
   #secondBox_AddressQuestions,
-  #addressFormBox_AddressQuestions {
+  #addressFormBox_AddressQuestions,
+  #permanentAddressFormBox_AddressQuestions {
     padding: 24px 18px;
     border-radius: 14px;
   }
@@ -840,12 +833,12 @@ input[type="number"] {
     height: 14px;
   }
 
-  #toggleFormBtn_AddressQuestions {
+  #toggleFormBtn_AddressQuestions, #togglePermanentFormBtn_AddressQuestions {
     width: 32px;
     height: 32px;
     min-width: 32px;
   }
-  #toggleFormBtn_AddressQuestions svg {
+  #toggleFormBtn_AddressQuestions svg, #togglePermanentFormBtn_AddressQuestions svg {
     width: 18px;
     height: 18px;
   }
@@ -931,7 +924,7 @@ input[type="number"] {
 /* keep hover/active/selected visuals as-is; only sizing changed */
 
 
-  #formGrid_AddressQuestions {
+  #formGrid_AddressQuestions, #permanentFormGrid_AddressQuestions {
     grid-template-columns: 1fr;
   }
 

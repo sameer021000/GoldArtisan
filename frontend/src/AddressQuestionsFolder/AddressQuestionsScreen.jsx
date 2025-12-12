@@ -63,12 +63,40 @@ function AddressQuestionsScreen() {
     doorNo: "",
   })
 
+  // State for permanent address form (shown when addressesSame === true)
+  const [permanentAddressForm, setPermanentAddressForm] = useState({
+    state: "",
+    district: "",
+    pinCode: "",
+    city: "",
+    center: "",
+    street: "",
+    landmark: "",
+    doorNo: "",
+  })
+
+  const [permanentErrors, setPermanentErrors] = useState({
+    state: "",
+    district: "",
+    pinCode: "",
+    city: "",
+    center: "",
+    street: "",
+    landmark: "",
+    doorNo: "",
+  })
+
+  // State for temporary address dropdown and minimize
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const dropdownRef = useRef(null)
-
-  // >>> NEW: minimize/maximize state for the address form box (only addition)
   const [isFormMinimized, setIsFormMinimized] = useState(false)
+
+  // State for permanent address dropdown and minimize
+  const [isPermanentDropdownOpen, setIsPermanentDropdownOpen] = useState(false)
+  const [permanentSearchQuery, setPermanentSearchQuery] = useState("")
+  const permanentDropdownRef = useRef(null)
+  const [isPermanentFormMinimized, setIsPermanentFormMinimized] = useState(false)
 
   const validators = {
     state: (v) => {
@@ -154,6 +182,21 @@ function AddressQuestionsScreen() {
     }
   }
 
+  // Handler for permanent address form changes
+  const handlePermanentFormChange = (field, value) => {
+    setPermanentAddressForm((prev) => ({
+      ...prev,
+      [field]: value,
+    }))
+
+    // Validate on change
+    const validator = validators[field]
+    if (validator) {
+      const err = validator(value)
+      setPermanentErrors((prev) => ({ ...prev, [field]: err }))
+    }
+  }
+
   const validateAll = () => {
     const next = {}
     Object.keys(validators).forEach((key) => {
@@ -162,24 +205,6 @@ function AddressQuestionsScreen() {
     setErrors(next)
     const isValid = Object.values(next).every((v) => v === "")
     return { isValid, next }
-  }
-
-  const handleNextClick = () => {
-    const { isValid, next } = validateAll()
-
-    if (!isValid) {
-      // Focus first invalid input
-      const firstInvalid = Object.keys(next).find((k) => next[k])
-      if (firstInvalid) {
-        const id = `input_${firstInvalid.charAt(0).toUpperCase() + firstInvalid.slice(1)}`
-        const el = document.getElementById(id)
-        if (el) el.focus()
-      }
-      return
-    }
-
-    console.log("[v0] Address form submitted:", addressForm)
-    // Add your navigation or submission logic here
   }
 
   const isFormValid = () => {
@@ -211,14 +236,35 @@ function AddressQuestionsScreen() {
     return { "aria-invalid": "false", "aria-valid": "false" }
   }
 
+  // Validity attrs getter for permanent form
+  const getPermanentValidityAttrs = (field) => {
+    const val = permanentAddressForm[field]
+    const err = permanentErrors[field]
+    if (err && err.length) return { "aria-invalid": "true", "aria-valid": "false" }
+    if (val && !err) return { "aria-invalid": "false", "aria-valid": "true" }
+    return { "aria-invalid": "false", "aria-valid": "false" }
+  }
+
   const handleStateSelect = (state) => {
     handleFormChange("state", state)
     setIsDropdownOpen(false)
     setSearchQuery("")
   }
 
+  // Handler for permanent address state select
+  const handlePermanentStateSelect = (state) => {
+    handlePermanentFormChange("state", state)
+    setIsPermanentDropdownOpen(false)
+    setPermanentSearchQuery("")
+  }
+
   const filteredStates = INDIAN_STATES.filter((state) => state.toLowerCase()
     .includes(searchQuery.toLowerCase()))
+
+    // Filtered states for permanent address
+  const filteredPermanentStates = INDIAN_STATES.filter((state) =>
+    state.toLowerCase().includes(permanentSearchQuery.toLowerCase()),
+  )
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -233,6 +279,21 @@ function AddressQuestionsScreen() {
       return () => document.removeEventListener("mousedown", handleClickOutside)
     }
   }, [isDropdownOpen])
+
+  // Click outside handler for permanent address dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (permanentDropdownRef.current && !permanentDropdownRef.current.contains(event.target)) {
+        setIsPermanentDropdownOpen(false)
+        setPermanentSearchQuery("")
+      }
+    }
+
+    if (isPermanentDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside)
+      return () => document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [isPermanentDropdownOpen])
 
   return (
     <div id="divId1_AddressQuestions">
@@ -387,7 +448,6 @@ function AddressQuestionsScreen() {
               </button>
             </div>
 
-            {/* >>> NEW: collapse wrapper. existing form content moved inside this wrapper (only addition) */}
             {!isFormMinimized && (
               <div id="formContentWrapper_AddressQuestions">
                 <div id="formGrid_AddressQuestions">
@@ -615,6 +675,271 @@ function AddressQuestionsScreen() {
                     </div>
                     <div id="err_DoorNo" className="err" role="alert" aria-live="polite">
                       {errors.doorNo}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {addressesSame === true && (
+          <div id="permanentAddressFormBox_AddressQuestions">
+            <div id="permanentFormHeaderRow_AddressQuestions">
+              <h2 id="permanentFormTitle_AddressQuestions">Enter your permanent address details</h2>
+              <button
+                id="togglePermanentFormBtn_AddressQuestions"
+                type="button"
+                onClick={() => setIsPermanentFormMinimized(!isPermanentFormMinimized)}
+                aria-label={isPermanentFormMinimized ? "Maximize form" : "Minimize form"}
+                aria-expanded={!isPermanentFormMinimized}
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  {isPermanentFormMinimized ? (
+                    <polyline points="18 15 12 9 6 15"></polyline>
+                  ) : (
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  )}
+                </svg>
+              </button>
+            </div>
+
+            {!isPermanentFormMinimized && (
+              <div id="permanentFormContentWrapper_AddressQuestions">
+                <div id="permanentFormGrid_AddressQuestions">
+                  {/* State Dropdown */}
+                  <div id="permanentFormGroup_State" className="formGroup_AddressQuestions">
+                    <label id="permanentLabel_State" htmlFor="permanentInput_State">
+                      State <span className="required">*</span>
+                    </label>
+                    <div id="permanentSelectWrapper_State" className="customSelectWrapper" ref={permanentDropdownRef}>
+                      <button
+                        id="permanentInput_State"
+                        type="button"
+                        onClick={() => setIsPermanentDropdownOpen(!isPermanentDropdownOpen)}
+                        className={permanentErrors.state ? "customDropdownButton error" : "customDropdownButton"}
+                        {...getPermanentValidityAttrs("state")}
+                      >
+                        <span className={permanentAddressForm.state ? "" : "placeholder"}>
+                          {permanentAddressForm.state || "Select a state"}
+                        </span>
+                        <div className={`selectArrow ${isPermanentDropdownOpen ? "open" : ""}`} aria-hidden="true">
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                          </svg>
+                        </div>
+                      </button>
+
+                      {isPermanentDropdownOpen && (
+                        <div className="customDropdownMenu">
+                          <div className="dropdownSearchWrapper">
+                            <input
+                              type="text"
+                              className="dropdownSearch"
+                              placeholder="Search states..."
+                              value={permanentSearchQuery}
+                              onChange={(e) => setPermanentSearchQuery(e.target.value)}
+                              autoFocus
+                            />
+                          </div>
+                          <div className="dropdownOptions">
+                            {filteredPermanentStates.length > 0 ? (
+                              filteredPermanentStates.map((state) => (
+                                <button
+                                  key={state}
+                                  type="button"
+                                  className={`dropdownOption ${permanentAddressForm.state === state ? "selected" : ""}`}
+                                  onClick={() => handlePermanentStateSelect(state)}
+                                >
+                                  {state}
+                                </button>
+                              ))
+                            ) : (
+                              <div className="dropdownNoResults">No states found</div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div id="permanentHelp_State" className="helper">
+                      Select your state from the dropdown
+                    </div>
+                    <div id="permanentErr_State" className="err" role="alert" aria-live="polite">
+                      {permanentErrors.state}
+                    </div>
+                  </div>
+
+                  {/* District */}
+                  <div id="permanentFormGroup_District" className="formGroup_AddressQuestions">
+                    <label id="permanentLabel_District" htmlFor="permanentInput_District">
+                      District <span className="required">*</span>
+                    </label>
+                    <input
+                      id="permanentInput_District"
+                      type="text"
+                      placeholder="Enter district"
+                      value={permanentAddressForm.district}
+                      onChange={(e) => handlePermanentFormChange("district", e.target.value)}
+                      className={permanentErrors.district ? "customInput error" : "customInput"}
+                      {...getPermanentValidityAttrs("district")}
+                    />
+                    <div id="permanentHelp_District" className="helper">
+                      Enter district name (letters only, cannot start with space)
+                    </div>
+                    <div id="permanentErr_District" className="err" role="alert" aria-live="polite">
+                      {permanentErrors.district}
+                    </div>
+                  </div>
+
+                  {/* PIN Code */}
+                  <div id="permanentFormGroup_PinCode" className="formGroup_AddressQuestions">
+                    <label id="permanentLabel_PinCode" htmlFor="permanentInput_PinCode">
+                      PIN Code <span className="required">*</span>
+                    </label>
+                    <input
+                      id="permanentInput_PinCode"
+                      type="text"
+                      inputMode="numeric"
+                      placeholder="Enter PIN code"
+                      maxLength={6}
+                      value={permanentAddressForm.pinCode}
+                      onChange={(e) => handlePermanentFormChange("pinCode", e.target.value)}
+                      className={permanentErrors.pinCode ? "customInput error" : "customInput"}
+                      {...getPermanentValidityAttrs("pinCode")}
+                    />
+                    <div id="permanentHelp_PinCode" className="helper">
+                      Enter 6-digit PIN code
+                    </div>
+                    <div id="permanentErr_PinCode" className="err" role="alert" aria-live="polite">
+                      {permanentErrors.pinCode}
+                    </div>
+                  </div>
+
+                  {/* City */}
+                  <div id="permanentFormGroup_City" className="formGroup_AddressQuestions">
+                    <label id="permanentLabel_City" htmlFor="permanentInput_City">
+                      City <span className="required">*</span>
+                    </label>
+                    <input
+                      id="permanentInput_City"
+                      type="text"
+                      placeholder="Enter city"
+                      value={permanentAddressForm.city}
+                      onChange={(e) => handlePermanentFormChange("city", e.target.value)}
+                      className={permanentErrors.city ? "customInput error" : "customInput"}
+                      {...getPermanentValidityAttrs("city")}
+                    />
+                    <div id="permanentHelp_City" className="helper">
+                      Enter your city name (letters only, cannot start with space)
+                    </div>
+                    <div id="permanentErr_City" className="err" role="alert" aria-live="polite">
+                      {permanentErrors.city}
+                    </div>
+                  </div>
+
+                  {/* Center */}
+                  <div id="permanentFormGroup_Center" className="formGroup_AddressQuestions">
+                    <label id="permanentLabel_Center" htmlFor="permanentInput_Center">
+                      Center <span className="required">*</span>
+                    </label>
+                    <input
+                      id="permanentInput_Center"
+                      type="text"
+                      placeholder="Enter center"
+                      value={permanentAddressForm.center}
+                      onChange={(e) => handlePermanentFormChange("center", e.target.value)}
+                      className={permanentErrors.center ? "customInput error" : "customInput"}
+                      {...getPermanentValidityAttrs("center")}
+                    />
+                    <div id="permanentHelp_Center" className="helper">
+                      Enter center name (letters only, cannot start with space)
+                    </div>
+                    <div id="permanentErr_Center" className="err" role="alert" aria-live="polite">
+                      {permanentErrors.center}
+                    </div>
+                  </div>
+
+                  {/* Street */}
+                  <div id="permanentFormGroup_Street" className="formGroup_AddressQuestions">
+                    <label id="permanentLabel_Street" htmlFor="permanentInput_Street">
+                      Street <span className="required">*</span>
+                    </label>
+                    <input
+                      id="permanentInput_Street"
+                      type="text"
+                      placeholder="Enter street"
+                      value={permanentAddressForm.street}
+                      onChange={(e) => handlePermanentFormChange("street", e.target.value)}
+                      className={permanentErrors.street ? "customInput error" : "customInput"}
+                      {...getPermanentValidityAttrs("street")}
+                    />
+                    <div id="permanentHelp_Street" className="helper">
+                      Enter your street name (letters only, cannot start with space)
+                    </div>
+                    <div id="permanentErr_Street" className="err" role="alert" aria-live="polite">
+                      {permanentErrors.street}
+                    </div>
+                  </div>
+
+                  {/* Landmark */}
+                  <div id="permanentFormGroup_Landmark" className="formGroup_AddressQuestions">
+                    <label id="permanentLabel_Landmark" htmlFor="permanentInput_Landmark">
+                      Landmark <span className="required">*</span>
+                    </label>
+                    <input
+                      id="permanentInput_Landmark"
+                      type="text"
+                      placeholder="Enter landmark"
+                      value={permanentAddressForm.landmark}
+                      onChange={(e) => handlePermanentFormChange("landmark", e.target.value)}
+                      className={permanentErrors.landmark ? "customInput error" : "customInput"}
+                      {...getPermanentValidityAttrs("landmark")}
+                    />
+                    <div id="permanentHelp_Landmark" className="helper">
+                      Enter a nearby landmark (cannot start with space)
+                    </div>
+                    <div id="permanentErr_Landmark" className="err" role="alert" aria-live="polite">
+                      {permanentErrors.landmark}
+                    </div>
+                  </div>
+
+                  {/* Door Number */}
+                  <div id="permanentFormGroup_DoorNo" className="formGroup_AddressQuestions">
+                    <label id="permanentLabel_DoorNo" htmlFor="permanentInput_DoorNo">
+                      D.No <span className="required">*</span>
+                    </label>
+                    <input
+                      id="permanentInput_DoorNo"
+                      type="text"
+                      placeholder="Enter door number"
+                      value={permanentAddressForm.doorNo}
+                      onChange={(e) => handlePermanentFormChange("doorNo", e.target.value)}
+                      className={permanentErrors.doorNo ? "customInput error" : "customInput"}
+                      {...getPermanentValidityAttrs("doorNo")}
+                    />
+                    <div id="permanentHelp_DoorNo" className="helper">
+                      Enter door/house number (cannot start with space)
+                    </div>
+                    <div id="permanentErr_DoorNo" className="err" role="alert" aria-live="polite">
+                      {permanentErrors.doorNo}
                     </div>
                   </div>
                 </div>
