@@ -360,7 +360,7 @@ function AddressQuestionsScreen() {
           <div id="addressFormBox_AddressQuestions">
             {/* >>> NEW: header row with toggle button (only addition) */}
             <div id="formHeaderRow_AddressQuestions">
-              <h2 id="formTitle_AddressQuestions">Enter your address details</h2>
+              <h2 id="formTitle_AddressQuestions">Temporary Address Details</h2>
               <button
                 id="toggleFormBtn_AddressQuestions"
                 type="button"
