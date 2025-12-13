@@ -567,14 +567,22 @@
 }
 
 /* Helper text matching SignUpScreen spacing */
-#help_State, #permanentHelp_State
+#help_State,
 #help_District,
 #help_PinCode,
 #help_City,
 #help_Center,
 #help_Street,
 #help_Landmark,
-#help_DoorNo {
+#help_DoorNo,
+#permanentHelp_State,
+#permanentHelp_District,
+#permanentHelp_PinCode,
+#permanentHelp_City,
+#permanentHelp_Center,
+#permanentHelp_Street,
+#permanentHelp_Landmark,
+#permanentHelp_DoorNo {
   font-size: 12px;
   color: rgba(207, 201, 209, 0.9);
   margin-top: 0;
@@ -582,14 +590,22 @@
 }
 
 /* Error messages with animation matching SignUpScreen */
-#err_State, #permanentErr_State,
+#err_State,
 #err_District,
 #err_PinCode,
 #err_City,
 #err_Center,
 #err_Street,
 #err_Landmark,
-#err_DoorNo {
+#err_DoorNo,
+#permanentErr_State,
+#permanentErr_District,
+#permanentErr_PinCode,
+#permanentErr_City,
+#permanentErr_Center,
+#permanentErr_Street,
+#permanentErr_Landmark,
+#permanentErr_DoorNo {
   font-size: 13px;
   color: #ff8a8a;
   margin-top: 0;
@@ -601,14 +617,22 @@
 }
 
 /* Show error when it has content */
-#err_State:not(:empty), #permanentErr_State:not(:empty),
+#err_State:not(:empty),
 #err_District:not(:empty),
 #err_PinCode:not(:empty),
 #err_City:not(:empty),
 #err_Center:not(:empty),
 #err_Street:not(:empty),
 #err_Landmark:not(:empty),
-#err_DoorNo:not(:empty) {
+#err_DoorNo:not(:empty),
+#permanentErr_State:not(:empty),
+#permanentErr_District:not(:empty),
+#permanentErr_PinCode:not(:empty),
+#permanentErr_City:not(:empty),
+#permanentErr_Center:not(:empty),
+#permanentErr_Street:not(:empty),
+#permanentErr_Landmark:not(:empty),
+#permanentErr_DoorNo:not(:empty) {
   opacity: 1;
   transform: translateY(0);
 }
