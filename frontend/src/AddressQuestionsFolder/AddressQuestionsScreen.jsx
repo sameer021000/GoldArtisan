@@ -686,7 +686,7 @@ function AddressQuestionsScreen() {
         {addressesSame === true && (
           <div id="permanentAddressFormBox_AddressQuestions">
             <div id="permanentFormHeaderRow_AddressQuestions">
-              <h2 id="permanentFormTitle_AddressQuestions">Enter your permanent address details</h2>
+              <h2 id="permanentFormTitle_AddressQuestions">Permanent Address Details</h2>
               <button
                 id="togglePermanentFormBtn_AddressQuestions"
                 type="button"
@@ -705,9 +705,9 @@ function AddressQuestionsScreen() {
                   strokeLinejoin="round"
                 >
                   {isPermanentFormMinimized ? (
-                    <polyline points="18 15 12 9 6 15"></polyline>
-                  ) : (
                     <polyline points="6 9 12 15 18 9"></polyline>
+                  ) : (
+                    <polyline points="18 15 12 9 6 15"></polyline>
                   )}
                 </svg>
               </button>
