@@ -38,7 +38,10 @@ function PermanentAddressBox({
         </div>
   
         {!isPermanentFormMinimized && (
-          <div id="permanentFormContentWrapper_AddressQuestions">
+          <div id="permanentFormContentWrapper_AddressQuestions"
+            className={isPermanentFormMinimized ? "formCollapsed" : "formExpanded"}
+            aria-hidden={isPermanentFormMinimized}
+          >
             <div id="permanentFormGrid_AddressQuestions">
                 {/* State Dropdown */}
                 <div id="permanentFormGroup_State" className="formGroup_AddressQuestions">

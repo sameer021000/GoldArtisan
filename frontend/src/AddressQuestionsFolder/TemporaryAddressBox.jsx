@@ -35,7 +35,10 @@ function TemporaryAddressBox({
         </div>
   
         {!isFormMinimized && (
-          <div id="formContentWrapper_AddressQuestions">
+          <div id="formContentWrapper_AddressQuestions"
+            className={isFormMinimized ? "formCollapsed" : "formExpanded"}
+            aria-hidden={isFormMinimized}
+          >
             <div id="formGrid_AddressQuestions">
                 {/* State Dropdown */}
                 <div id="formGroup_State" className="formGroup_AddressQuestions">
