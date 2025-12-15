@@ -723,7 +723,14 @@ input[type="number"] {
   transform: translateY(0) scale(0.96);
 }
 #toggleFormBtn_AddressQuestions svg, #togglePermanentFormBtn_AddressQuestions svg {
-  transition: transform 0.18s ease;
+  transition: transform 0.25s ease;
+  transform: rotate(0deg);
+}
+
+/* minimized → arrow points down */
+#toggleFormBtn_AddressQuestions[aria-expanded="false"] svg,
+#togglePermanentFormBtn_AddressQuestions[aria-expanded="false"] svg {
+  transform: rotate(180deg);
 }
 
 /* Collapsible content wrapper */
@@ -731,7 +738,31 @@ input[type="number"] {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  animation: formExpand 0.28s ease-out;
+  animation: formExpand 0.28s ease forwards;
+  overflow: hidden;
+}
+
+@keyframes formOpen {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* smooth closing effect */
+@keyframes formClose {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
 }
 
 /* Slide down animation */
