@@ -648,15 +648,16 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
-/* Form Bottom Row with Next Button */
-#formBottomRow_AddressQuestions {
-  margin-top: 12px;
+/* Submit Button Container */
+#submitButtonContainer_AddressQuestions {
+  width: 100%;
   display: flex;
   justify-content: center;
-  width: 100%;
+  margin-top: 8px;
+  animation: slideDown 0.3s ease-out;
 }
 
-#nextBtn_AddressQuestions {
+#submitBtn_AddressQuestions {
   width: 100%;
   max-width: 380px;
   padding: 14px 12px;
@@ -671,18 +672,18 @@ input[type="number"] {
   transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.08s ease;
 }
 
-#nextBtn_AddressQuestions:hover {
+#submitBtn_AddressQuestions:hover:not([disabled]) {
   transform: translateY(-2px);
   box-shadow: 0 16px 38px rgba(93, 96, 244, 0.18);
 }
 
-#nextBtn_AddressQuestions:active {
+#submitBtn_AddressQuestions:active:not([disabled]) {
   transform: translateY(1px) scale(0.998);
 }
 
 /* Disabled style */
-#nextBtn_AddressQuestions[disabled],
-#nextBtn_AddressQuestions[aria-disabled="true"] {
+#submitBtn_AddressQuestions[disabled],
+#submitBtn_AddressQuestions[aria-disabled="true"] {
   opacity: 0.5;
   cursor: not-allowed;
   filter: saturate(0.9);
@@ -784,6 +785,12 @@ input[type="number"] {
   #buttonGroup_AddressQuestions,
   #buttonGroup2_AddressQuestions {
     gap: 12px;
+  }
+
+  #submitBtn_AddressQuestions {
+    padding: 12px;
+    font-size: 15px;
+    border-radius: 10px;
   }
 
   #yesBtn_AddressQuestions,

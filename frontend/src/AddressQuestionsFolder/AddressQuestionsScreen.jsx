@@ -4,6 +4,7 @@ import TopQuestionBox from "./TopQuestionBox"
 import AddressSameQuestionBox from "./AddressSameQuestionBox"
 import TemporaryAddressBox from "./TemporaryAddressBox"
 import PermanentAddressBox from "./PermanentAddressBox"
+import AddressSubmissionButton from "./AddressSubmissionButton"
 
 // All Indian states for the dropdown
 const INDIAN_STATES = [
@@ -355,6 +356,10 @@ function AddressQuestionsScreen() {
           handlePermanentStateSelect={handlePermanentStateSelect}
         />
       )}
+
+      <AddressSubmissionButton
+          isVisible={hasPermanentAddress !== null && (hasPermanentAddress === false || addressesSame !== null)}
+      />
 
       </div>
     </div>
