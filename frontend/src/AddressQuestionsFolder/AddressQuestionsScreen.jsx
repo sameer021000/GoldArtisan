@@ -316,8 +316,11 @@ function AddressQuestionsScreen() {
         />
       )}
 
-      {hasPermanentAddress === false && (
-        <TemporaryAddressBox
+      {(
+        hasPermanentAddress === false ||
+        (hasPermanentAddress === true && addressesSame === false)
+      ) && (
+      <TemporaryAddressBox
         isFormMinimized={isFormMinimized}
         setIsFormMinimized={setIsFormMinimized}
         addressForm={addressForm}
@@ -334,23 +337,25 @@ function AddressQuestionsScreen() {
       />
       )}
 
-      {addressesSame === true && (
+
+      {hasPermanentAddress === true && addressesSame !== null && (
         <PermanentAddressBox
-        isPermanentFormMinimized={isPermanentFormMinimized}
-        setIsPermanentFormMinimized={setIsPermanentFormMinimized}
-        permanentAddressForm={permanentAddressForm}
-        permanentErrors={permanentErrors}
-        getPermanentValidityAttrs={getPermanentValidityAttrs}
-        handlePermanentFormChange={handlePermanentFormChange}
-        permanentDropdownRef={permanentDropdownRef}
-        isPermanentDropdownOpen={isPermanentDropdownOpen}
-        setIsPermanentDropdownOpen={setIsPermanentDropdownOpen}
-        permanentSearchQuery={permanentSearchQuery}
-        setPermanentSearchQuery={setPermanentSearchQuery}
-        filteredPermanentStates={filteredPermanentStates}
-        handlePermanentStateSelect={handlePermanentStateSelect}
-      />
+          isPermanentFormMinimized={isPermanentFormMinimized}
+          setIsPermanentFormMinimized={setIsPermanentFormMinimized}
+          permanentAddressForm={permanentAddressForm}
+          permanentErrors={permanentErrors}
+          getPermanentValidityAttrs={getPermanentValidityAttrs}
+          handlePermanentFormChange={handlePermanentFormChange}
+          permanentDropdownRef={permanentDropdownRef}
+          isPermanentDropdownOpen={isPermanentDropdownOpen}
+          setIsPermanentDropdownOpen={setIsPermanentDropdownOpen}
+          permanentSearchQuery={permanentSearchQuery}
+          setPermanentSearchQuery={setPermanentSearchQuery}
+          filteredPermanentStates={filteredPermanentStates}
+          handlePermanentStateSelect={handlePermanentStateSelect}
+        />
       )}
+
       </div>
     </div>
   )
