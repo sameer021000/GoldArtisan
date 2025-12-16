@@ -5,6 +5,8 @@ import AddressSameQuestionBox from "./AddressSameQuestionBox"
 import TemporaryAddressBox from "./TemporaryAddressBox"
 import PermanentAddressBox from "./PermanentAddressBox"
 import AddressSubmissionButton from "./AddressSubmissionButton"
+import axios from "axios"
+import { useNavigate } from "react-router-dom"
 
 // All Indian states for the dropdown
 const INDIAN_STATES = [
@@ -38,7 +40,11 @@ const INDIAN_STATES = [
   "West Bengal",
 ]
 
+const apiBase = process.env.REACT_APP_API_BASE || "http://localhost:7000"
+
 function AddressQuestionsScreen() {
+  const navigate = useNavigate()
+
   // State for first question
   const [hasPermanentAddress, setHasPermanentAddress] = useState(null)
 
@@ -102,6 +108,10 @@ function AddressQuestionsScreen() {
   const [permanentSearchQuery, setPermanentSearchQuery] = useState("")
   const permanentDropdownRef = useRef(null)
   const [isPermanentFormMinimized, setIsPermanentFormMinimized] = useState(false)
+
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState("")
+  const [submitSuccess, setSubmitSuccess] = useState(false)
 
   const validators = {
     state: (v) => {
@@ -212,6 +222,16 @@ function AddressQuestionsScreen() {
     return { isValid, next }
   }
 
+  const validatePermanentAll = () => {
+  const next = {}
+  Object.keys(validators).forEach((key) => {
+    next[key] = validators[key](permanentAddressForm[key])
+  })
+  setPermanentErrors(next)
+  const isValid = Object.values(next).every((v) => v === "")
+  return isValid
+}
+
   const isFormValid = () => {
     return (
       addressForm.state &&
@@ -268,8 +288,84 @@ function AddressQuestionsScreen() {
 
     // Filtered states for permanent address
   const filteredPermanentStates = INDIAN_STATES.filter((state) =>
-    state.toLowerCase().includes(permanentSearchQuery.toLowerCase()),
-  )
+    state.toLowerCase().includes(permanentSearchQuery.toLowerCase()),)
+
+  const handleSubmitAddresses = async () => {
+    setSubmitError("")
+    setSubmitSuccess(false)
+
+    // Temporary address validation (when applicable)
+  if (
+    hasPermanentAddress === false ||
+    (hasPermanentAddress === true && addressesSame === false)
+  ) {
+    const { isValid } = validateAll()
+    if (!isValid) {
+      setSubmitError("Please correct the highlighted temporary address fields.")
+      return
+    }
+  }
+
+  // Permanent address validation (when applicable)
+  if (hasPermanentAddress === true && addressesSame !== null) {
+    const isPermanentValid = validatePermanentAll()
+    if (!isPermanentValid) {
+      setSubmitError("Please correct the highlighted permanent address fields.")
+      return
+    }
+  }
+
+    const token = localStorage.getItem("GoldArtisanToken")
+    if (!token) {
+      setSubmitError("Missing authentication token. Please sign in again.")
+      return
+    }
+
+    const payload = {
+      hasPermanentAddress,
+      addressesSame: hasPermanentAddress === true ? addressesSame : null,
+    }
+
+    if (hasPermanentAddress === false || (hasPermanentAddress === true && addressesSame === false)) {
+      payload.temporaryAddress = { ...addressForm }
+    }
+
+    if (hasPermanentAddress === true && addressesSame !== null) {
+      payload.permanentAddress = { ...permanentAddressForm }
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      const response = await axios.post(`${apiBase}/GAAddressPath/saveAddressDetails`, payload, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      if (response?.data?.success) {
+        setSubmitSuccess(true)
+        setTimeout(() => {
+          navigate("/HomeScreenPath")
+        }, 600)
+      } else {
+        setSubmitError(response?.data?.message || "Failed to save address details")
+      }
+    } catch (err) {
+      console.error("Address submission error:", err)
+      const serverMsg = err?.response?.data?.message
+      if (err?.response) {
+        setSubmitError(serverMsg || `Server error: ${err.response.status}`)
+      } else if (err?.request) {
+        setSubmitError("No response from server. It may be sleeping or unreachable.")
+      } else {
+        setSubmitError(err.message || "An error occurred while saving address details.")
+      }
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -359,6 +455,10 @@ function AddressQuestionsScreen() {
 
       <AddressSubmissionButton
           isVisible={hasPermanentAddress !== null && (hasPermanentAddress === false || addressesSame !== null)}
+          onSubmit={handleSubmitAddresses}
+          isSubmitting={isSubmitting}
+          submitError={submitError}
+          submitSuccess={submitSuccess}
       />
 
       </div>

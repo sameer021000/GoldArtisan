@@ -652,7 +652,9 @@ input[type="number"] {
 #submitButtonContainer_AddressQuestions {
   width: 100%;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
   margin-top: 8px;
   animation: slideDown 0.3s ease-out;
 }
@@ -689,6 +691,31 @@ input[type="number"] {
   filter: saturate(0.9);
   transform: none;
   box-shadow: none;
+}
+
+/* Error and success messages positioned below button without affecting layout */
+.submit-message {
+  width: 100%;
+  max-width: 380px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  animation: slideDown 0.3s ease-out;
+  margin-top: 0; /* Added this property */
+}
+
+.submit-message.error {
+  background: rgba(255, 94, 94, 0.15);
+  color: #ff8a8a;
+  border: 1px solid rgba(255, 94, 94, 0.3);
+}
+
+.submit-message.success {
+  background: rgba(93, 244, 159, 0.15);
+  color: #5df49f;
+  border: 1px solid rgba(93, 244, 159, 0.3);
 }
 
 #formHeaderRow_AddressQuestions, #permanentFormHeaderRow_AddressQuestions {
