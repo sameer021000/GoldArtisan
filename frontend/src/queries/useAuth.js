@@ -1,6 +1,6 @@
 import { useProfile } from "./useProfile";
 
-export function reactQueryArtisanData() {
+export function useAuth() {
   const { data, isLoading, isError } = useProfile();
 
   return {
