@@ -322,15 +322,25 @@ function AddressQuestionsScreen() {
     }
 
     const payload = {
-      hasPermanentAddress,
-      addressesSame: hasPermanentAddress === true ? addressesSame : null,
+    hasPermanentAddress,
+    addressesSame: hasPermanentAddress === true ? addressesSame : null,
+    temporaryAddress: null,
+    permanentAddress: null,
     }
 
-    if (hasPermanentAddress === false || (hasPermanentAddress === true && addressesSame === false)) {
+    if (hasPermanentAddress === false) {
+      // Only temporary address exists
       payload.temporaryAddress = { ...addressForm }
     }
-
-    if (hasPermanentAddress === true && addressesSame !== null) {
+    
+    if (hasPermanentAddress === true && addressesSame === true) {
+      // Same address → only permanent
+      payload.permanentAddress = { ...permanentAddressForm }
+    }
+    
+    if (hasPermanentAddress === true && addressesSame === false) {
+      // Both addresses exist
+      payload.temporaryAddress = { ...addressForm }
       payload.permanentAddress = { ...permanentAddressForm }
     }
 
