@@ -302,6 +302,10 @@ function AddressQuestionsScreen() {
       setSubmitError("Missing authentication token. Please sign in again.")
       return
     }
+    if (!phoneNumber) {
+      setSubmitError("Profile data is still loading. Please try again in a moment.");
+      return;
+    }
 
     const payload = {
       phoneNumber,
