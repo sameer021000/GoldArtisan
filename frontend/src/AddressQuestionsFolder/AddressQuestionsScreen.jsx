@@ -5,6 +5,7 @@ import AddressSameQuestionBox from "./AddressSameQuestionBox"
 import TemporaryAddressBox from "./TemporaryAddressBox"
 import PermanentAddressBox from "./PermanentAddressBox"
 import AddressSubmissionButton from "./AddressSubmissionButton"
+import { useProfile } from "../queries/useProfile";
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 
@@ -44,6 +45,8 @@ const apiBase = process.env.REACT_APP_API_BASE || "http://localhost:7000"
 
 function AddressQuestionsScreen() {
   const navigate = useNavigate()
+
+  const { data: profileData } = useProfile();
 
   // State for first question
   const [hasPermanentAddress, setHasPermanentAddress] = useState(null)
@@ -321,23 +324,25 @@ function AddressQuestionsScreen() {
       return
     }
 
+    const phoneNumber = profileData?.phoneNumber || null;
     const payload = {
-    hasPermanentAddress,
-    addressesSame: hasPermanentAddress === true ? addressesSame : null,
-    temporaryAddress: null,
-    permanentAddress: null,
+      phoneNumber,
+      hasPermanentAddress,
+      addressesSame: hasPermanentAddress === true ? addressesSame : null,
+      temporaryAddress: null,
+      permanentAddress: null,
     }
 
     if (hasPermanentAddress === false) {
       // Only temporary address exists
       payload.temporaryAddress = { ...addressForm }
     }
-    
+
     if (hasPermanentAddress === true && addressesSame === true) {
       // Same address → only permanent
       payload.permanentAddress = { ...permanentAddressForm }
     }
-    
+
     if (hasPermanentAddress === true && addressesSame === false) {
       // Both addresses exist
       payload.temporaryAddress = { ...addressForm }
