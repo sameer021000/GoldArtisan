@@ -5,9 +5,9 @@ import AddressSameQuestionBox from "./AddressSameQuestionBox"
 import TemporaryAddressBox from "./TemporaryAddressBox"
 import PermanentAddressBox from "./PermanentAddressBox"
 import AddressSubmissionButton from "./AddressSubmissionButton"
-import { reactQueryArtisanData } from "../queries/reactQueryArtisanData";
+import { useAuth } from "../queries/useAuth";
 import axios from "axios"
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 
 // All Indian states for the dropdown
 const INDIAN_STATES = [
@@ -46,7 +46,7 @@ const apiBase = process.env.REACT_APP_API_BASE || "http://localhost:7000"
 function AddressQuestionsScreen() {
   const navigate = useNavigate()
 
-  const { phoneNumber } = reactQueryArtisanData();
+  const { phoneNumber } = useAuth();
 
   // State for first question
   const [hasPermanentAddress, setHasPermanentAddress] = useState(null)
