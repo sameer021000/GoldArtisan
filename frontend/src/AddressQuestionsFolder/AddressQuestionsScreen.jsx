@@ -5,7 +5,7 @@ import AddressSameQuestionBox from "./AddressSameQuestionBox"
 import TemporaryAddressBox from "./TemporaryAddressBox"
 import PermanentAddressBox from "./PermanentAddressBox"
 import AddressSubmissionButton from "./AddressSubmissionButton"
-import { useProfile } from "../queries/useProfile";
+import { reactQueryArtisanData } from "../queries/reactQueryArtisanData";
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 
@@ -46,7 +46,7 @@ const apiBase = process.env.REACT_APP_API_BASE || "http://localhost:7000"
 function AddressQuestionsScreen() {
   const navigate = useNavigate()
 
-  const { data: profileData } = useProfile();
+  const { phoneNumber } = reactQueryArtisanData();
 
   // State for first question
   const [hasPermanentAddress, setHasPermanentAddress] = useState(null)
@@ -235,27 +235,6 @@ function AddressQuestionsScreen() {
   return isValid
 }
 
-  const isFormValid = () => {
-    return (
-      addressForm.state &&
-      addressForm.district &&
-      addressForm.pinCode &&
-      addressForm.city &&
-      addressForm.center &&
-      addressForm.street &&
-      addressForm.landmark &&
-      addressForm.doorNo &&
-      !errors.state &&
-      !errors.district &&
-      !errors.pinCode &&
-      !errors.city &&
-      !errors.center &&
-      !errors.street &&
-      !errors.landmark &&
-      !errors.doorNo
-    )
-  }
-
   const getValidityAttrs = (field) => {
     const val = addressForm[field]
     const err = errors[field]
@@ -324,7 +303,6 @@ function AddressQuestionsScreen() {
       return
     }
 
-    const phoneNumber = profileData?.phoneNumber || null;
     const payload = {
       phoneNumber,
       hasPermanentAddress,
