@@ -334,7 +334,7 @@ function AddressQuestionsScreen() {
     setIsSubmitting(true)
 
     try {
-      const response = await axios.post(`${apiBase}/GAAddressPath/saveAddressDetails`, payload, {
+      const response = await axios.post(`${apiBase}/GAAddressDetailsPath/saveGAAddress`, payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
