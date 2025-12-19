@@ -1,66 +1,129 @@
-const express=require("express");
-const GAAddressSavingSchema=require("../SchemaFolder/GAAddressSavingSchema");
-const router=express.Router();
+const express = require("express");
+const GAAddressSavingSchema = require("../SchemaFolder/GAAddressSavingSchema");
+const AuthenticationController = require("../Authentication/AuthenticationController");
+const { validateAddress } = require("../Validators/AddressValidator");
 
-// existing signup route
-router.post("/saveGAAddress", async(req, res)=>
+const router = express.Router();
+
+router.post("/saveGAAddress", AuthenticationController.isAuthenticated, async (req, res) =>
 {
-    const
-    {
-        phoneNumber, hasPermanentAddress, addressesSame, 
-        temporaryAddress, permanentAddress
-    }=req.body;
     try
     {
-        if (!phoneNumber)
+        const
+        {
+            phoneNumber,
+            hasPermanentAddress,
+            addressesSame,
+            temporaryAddress,
+            permanentAddress,
+        } = req.body;
+
+        // 🔐 Token safety check
+        if (!req.user || req.user.PhoneNumber !== phoneNumber)
+        {
+            return res.status(403).json(
+            {
+                success: false,
+                message: "Token phone number mismatch",
+            });
+        }
+
+        if (typeof hasPermanentAddress !== "boolean")
         {
             return res.status(400).json(
             {
                 success: false,
-                message: "Phone number is required",
-            })
+                message: "hasPermanentAddress must be boolean",
+            });
         }
+
+        // Case 1: No permanent address → temporary only
+        if (hasPermanentAddress === false)
+        {
+            const tempErrors = validateAddress(temporaryAddress, "Temporary address");
+            if (tempErrors)
+            {
+                return res.status(400).json(
+                {
+                    success: false,
+                    message: "Temporary address validation failed",
+                    errors: tempErrors,
+                });
+            }
+        }
+
+        // Case 2: Permanent = Same
+        if (hasPermanentAddress === true && addressesSame === true)
+        {
+            const permErrors = validateAddress(permanentAddress, "Permanent address");
+            if (permErrors)
+            {
+                return res.status(400).json(
+                {
+                    success: false,
+                    message: "Permanent address validation failed",
+                    errors: permErrors,
+                });
+            }
+        }
+
+        // Case 3: Permanent ≠ Temporary
+        if (hasPermanentAddress === true && addressesSame === false)
+        {
+            const tempErrors = validateAddress(temporaryAddress, "Temporary address");
+            const permErrors = validateAddress(permanentAddress, "Permanent address");
+
+            if (tempErrors || permErrors)
+            {
+                return res.status(400).json(
+                {
+                    success: false,
+                    message: "Address validation failed",
+                    errors:
+                    {
+                        ...(tempErrors ? { temporaryAddress: tempErrors } : {}),
+                        ...(permErrors ? { permanentAddress: permErrors } : {}),
+                    },
+                });
+            }
+        }
+
+        // SAVE DATA
         const addressData =
         {
             PhoneNumber: phoneNumber,
             HasPermanentAddress: hasPermanentAddress,
-            IsPermanentAndTemporaryAddressSame: addressesSame,
-            TemporaryAddress: temporaryAddress,
-            PermanentAddress: permanentAddress
-        }
+            IsPermanentAndTemporaryAddressSame: hasPermanentAddress ? addressesSame : null,
+            TemporaryAddress: temporaryAddress || null,
+            PermanentAddress: permanentAddress || null,
+        };
+
         const savedAddress = await GAAddressSavingSchema.findOneAndUpdate(
-            { PhoneNumber: phoneNumber }, // Find by phone number
-            addressData, // Update with new data
+            { PhoneNumber: phoneNumber },
+            addressData,
             {
-              new: true, // Return the updated document
-              upsert: true, // Create if doesn't exist
-              runValidators: true, // Run schema validators
-            },
-        )
-        res.status(201).json(
+                new: true, 
+                upsert: true, 
+                runValidators: true
+            }
+        );
+
+        return res.status(200).json(
         {
             success: true,
             message: "Address details saved successfully",
-            data:
-            {
-              id: savedAddress._id,
-              phoneNumber: savedAddress.PhoneNumber,
-              hasPermanentAddress: savedAddress.HasPermanentAddress,
-              addressesSame: savedAddress.IsPermanentAndTemporaryAddressSame,
-              temporaryAddress: savedAddress.TemporaryAddress,
-              permanentAddress: savedAddress.PermanentAddress,
-            },
-        })
+            data: savedAddress,
+        });
     }
     catch (err)
     {
-        console.error("Error saving address details:", err)
-        res.status(500).json(
+        console.error("Address save error:", err);
+        return res.status(500).json(
         {
             success: false,
             message: "Server error while saving address details",
-        })
+        });
     }
-});
-
-module.exports=router;
+  }
+);
+module.exports = router;
