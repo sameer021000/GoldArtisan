@@ -64,7 +64,7 @@ function HomeScreen()
     localStorage.removeItem('GoldArtisanToken');
 
     //Clear auth-related cached queries
-    queryClient.removeQueries({ queryKey: ['profile'], exact: true });
+    queryClient.removeQueries({ queryKey: ['profile'], exact: false });
 
     navigate('/SignInPath', { replace: true });
   }
