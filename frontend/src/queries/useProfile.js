@@ -39,7 +39,7 @@ export function useProfile(options = {})
   const token = typeof window !== 'undefined' ? localStorage.getItem('GoldArtisanToken') : null;
 
   return useQuery({
-    queryKey: ['profile'],
+    queryKey: ['profile', token],
     queryFn: fetchProfile,
     enabled: !!token,
     staleTime: 5 * 60 * 1000, // 5 minutes

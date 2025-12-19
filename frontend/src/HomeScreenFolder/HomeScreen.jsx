@@ -2,6 +2,7 @@ import "./HomeScreenCSS.css"
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useProfile } from "../queries/useProfile"; // <-- React Query hook (keep path if same)
+import { useQueryClient } from "@tanstack/react-query";
 
 function HomeScreen()
 {
@@ -15,6 +16,8 @@ function HomeScreen()
   const { data, isLoading, isError, error: rqError } = useProfile({
     // note: default options are coming from QueryClient setup in App.js
   });
+
+  const queryClient = useQueryClient();
 
   // keep the original loading/error/fullName states for minimal changes to UI/structure
   useEffect(() => {
@@ -59,7 +62,11 @@ function HomeScreen()
   {
     console.log("[v0] SignOut link clicked")
     localStorage.removeItem('GoldArtisanToken');
-    navigate('/SignUpPath', { replace: true });
+
+    //Clear auth-related cached queries
+    queryClient.removeQueries({ queryKey: ['profile'], exact: true });
+
+    navigate('/SignInPath', { replace: true });
   }
 
   if (error)
