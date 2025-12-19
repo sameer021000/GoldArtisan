@@ -46,7 +46,7 @@ const apiBase = process.env.REACT_APP_API_BASE || "http://localhost:7000"
 function AddressQuestionsScreen() {
   const navigate = useNavigate()
 
-  const { phoneNumber } = useAuth();
+  const { phoneNumber, isAuthLoading, isAuthError } = useAuth();
 
   // State for first question
   const [hasPermanentAddress, setHasPermanentAddress] = useState(null)
@@ -302,8 +302,14 @@ function AddressQuestionsScreen() {
       setSubmitError("Missing authentication token. Please sign in again.")
       return
     }
-    if (!phoneNumber) {
-      setSubmitError("Profile data is still loading. Please try again in a moment.");
+    if (isAuthLoading) {
+      setSubmitError("Profile data is still loading. Please refresh the page.");
+      return;
+    }
+
+    // concluded loading, but profile failed
+    if (isAuthError || !phoneNumber) {
+      setSubmitError("Authentication failed. Please sign in again.");
       return;
     }
 
@@ -456,6 +462,7 @@ function AddressQuestionsScreen() {
           isSubmitting={isSubmitting}
           submitError={submitError}
           submitSuccess={submitSuccess}
+          isAuthLoading={isAuthLoading}
       />
 
       </div>
