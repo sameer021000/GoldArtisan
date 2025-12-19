@@ -4,10 +4,10 @@ export function useAuth() {
   const { data, isLoading, isError } = useProfile();
 
   return {
-    phoneNumber: data?.phoneNumber ?? null,
-    fullName: data?.fullName ?? null,
-    profilePhotoUrl: data?.profilePhotoUrl ?? null,
-    isAuthLoading: isLoading,
-    isAuthError: isError,
+    phoneNumber: data?.phoneNumber || null,
+    fullName: data?.fullName || null,
+    profilePhotoUrl: data?.profilePhotoUrl || null,
+    isLoading,
+    isError,
   };
 }
