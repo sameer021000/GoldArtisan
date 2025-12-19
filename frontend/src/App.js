@@ -7,6 +7,7 @@ import HomeScreen from './HomeScreenFolder/HomeScreen';
 import SignInScreen from './SignInFolder/SignInScreen';
 import PictureUploadingScreen from './PictureUploadingFolder/PictureUploadingScreen';
 import AddressQuestionsScreen from './AddressQuestionsFolder/AddressQuestionsScreen';
+import ProfessionDetailsScreen from './ProfessionDetailsFolder/ProfessionDetailsScreen';
 
 // create a single QueryClient for the app
 const queryClient = new QueryClient(
@@ -35,6 +36,7 @@ function App()
           <Route path="/HomeScreenPath" element={<HomeScreen />} />
           <Route path="/PictureUploadingPath" element={<PictureUploadingScreen />} />
           <Route path="/AddressQuestionsPath" element={<AddressQuestionsScreen/>}/>
+          <Route path="/ProfessionDetailsPath" element={<ProfessionDetailsScreen/>} />
         </Routes>
       </Router>
     </QueryClientProvider>

@@ -344,7 +344,7 @@ function AddressQuestionsScreen() {
       if (response?.data?.success) {
         setSubmitSuccess(true)
         setTimeout(() => {
-          navigate("/HomeScreenPath")
+          navigate("/ProfessionDetailsPath")
         }, 600)
       } else {
         setSubmitError(response?.data?.message || "Failed to save address details")
