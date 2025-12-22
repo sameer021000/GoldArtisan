@@ -3,7 +3,8 @@ function ProfessionDetailsScreen()
 {
     return(
         <div>
-            <h1>What you do ?</h1>
+            <h1>What work you actually do ?</h1>
+            <p>In terms of ornament building</p>
         </div>
     )
 }
