@@ -2,9 +2,13 @@ import "./HomeScreenCSS.css"
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useProfile } from "../queries/useProfile"; // <-- React Query hook (keep path if same)
+import { useQueryClient } from "@tanstack/react-query";
+
 
 function HomeScreen()
 {
+  const queryClient = useQueryClient();
+
   const navigate = useNavigate()
 
   const [loading, setLoading] = useState(true);
@@ -59,6 +63,10 @@ function HomeScreen()
   {
     console.log("[v0] SignOut link clicked")
     localStorage.removeItem('GoldArtisanToken');
+
+    //CLEAR AUTH-RELATED CACHE (THIS IS THE FIX)
+    queryClient.removeQueries({ queryKey: ["profile"], exact: true });
+
     navigate('/SignUpPath', { replace: true });
   }
 
