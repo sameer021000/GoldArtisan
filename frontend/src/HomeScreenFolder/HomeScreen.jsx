@@ -64,10 +64,10 @@ function HomeScreen()
     console.log("[v0] SignOut link clicked")
     localStorage.removeItem('GoldArtisanToken');
 
-    //CLEAR AUTH-RELATED CACHE (THIS IS THE FIX)
+    //CLEAR AUTH-RELATED CACHE
     queryClient.removeQueries({ queryKey: ["profile"], exact: true });
 
-    navigate('/SignUpPath', { replace: true });
+    navigate('/SignInPath', { replace: true });
   }
 
   if (error)
