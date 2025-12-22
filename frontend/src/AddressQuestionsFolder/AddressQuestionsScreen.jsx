@@ -283,7 +283,7 @@ function AddressQuestionsScreen() {
   ) {
     const { isValid } = validateAll()
     if (!isValid) {
-      setSubmitError("Please correct the highlighted temporary address fields.")
+      setSubmitError("Please correct the highlighted temporary address fields")
       return
     }
   }
@@ -292,18 +292,18 @@ function AddressQuestionsScreen() {
   if (hasPermanentAddress === true && addressesSame !== null) {
     const isPermanentValid = validatePermanentAll()
     if (!isPermanentValid) {
-      setSubmitError("Please correct the highlighted permanent address fields.")
+      setSubmitError("Please correct the highlighted permanent address fields")
       return
     }
   }
 
     const token = localStorage.getItem("GoldArtisanToken")
     if (!token) {
-      setSubmitError("Missing authentication token. Please sign in again.")
+      setSubmitError("Missing authentication token. Please sign in again")
       return
     }
     if (!phoneNumber) {
-      setSubmitError("Profile data is still loading. Please try again in a moment.");
+      setSubmitError("Profile data is still loading. Please try again in a moment");
       return;
     }
 
