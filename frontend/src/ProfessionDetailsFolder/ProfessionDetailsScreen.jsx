@@ -4,6 +4,12 @@ import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../queries/useAuth"
 
+import Box1_PDS from "./Box1_PDS"
+import Box2_PDS from "./Box2_PDS"
+import Box3_PDS from "./Box3_PDS"
+import Box4_PDS from "./Box4_PDS"
+import Button1_PDS from "./Button1_PDS"
+
 const apiBase = process.env.REACT_APP_API_BASE || "http://localhost:7000"
 
 function ProfessionDetailsScreen() {
@@ -119,116 +125,30 @@ function ProfessionDetailsScreen() {
   return (
     <div id="divId1_ProfessionDetails">
       <div id="contentWrap_ProfessionDetails">
-        {/* Top */}
-        <div id="topBox_ProfessionDetails">
-          <h1 id="h1Id1_ProfessionDetails">
-            What kind of ornament work do you specialize in?
-          </h1>
-          <p id="pId1_ProfessionDetails">
-            This helps us understand your skills better
-          </p>
-        </div>
-
-        {/* Silver */}
-        <div id="questionBox1_ProfessionDetails">
-          <h2 id="questionTitle1_ProfessionDetails">
-            Do you work with silver ornaments?
-          </h2>
-          <div id="buttonGroup1_ProfessionDetails">
-            <button
-              type="button"
-              className={worksWithSilver === true ? "selectedOption" : ""}
-              onClick={() => setWorksWithSilver(true)}
-            >
-              ✓ Yes
-            </button>
-            <button
-              type="button"
-              className={worksWithSilver === false ? "selectedOption" : ""}
-              onClick={() => setWorksWithSilver(false)}
-            >
-              ✕ No
-            </button>
-          </div>
-        </div>
-
-        {/* Gold */}
-        <div id="questionBox2_ProfessionDetails">
-          <h2 id="questionTitle2_ProfessionDetails">
-            Do you work with gold ornaments?
-          </h2>
-          <div id="buttonGroup2_ProfessionDetails">
-            <button
-              type="button"
-              className={worksWithGold === true ? "selectedOption" : ""}
-              onClick={() => setWorksWithGold(true)}
-            >
-              ✓ Yes
-            </button>
-            <button
-              type="button"
-              className={worksWithGold === false ? "selectedOption" : ""}
-              onClick={() => setWorksWithGold(false)}
-            >
-              ✕ No
-            </button>
-          </div>
-        </div>
-
-        {/* Specialties */}
-        <div id="questionBox3_ProfessionDetails">
-          <h2 id="questionTitle3_ProfessionDetails">
-            Which type of work do you do?
-          </h2>
-          <p id="subtitle3_ProfessionDetails">
-            You can select more than one option
-          </p>
-
-          <div id="specialtyGroup_ProfessionDetails">
-            {specialtyOptions.map((opt) => (
-              <button
-                key={opt.id}
-                type="button"
-                className={
-                  specialties.includes(opt.id)
-                    ? "selectedSpecialty"
-                    : ""
-                }
-                onClick={() => toggleSpecialty(opt.id)}
-              >
-                <div className="checkIcon_ProfessionDetails">
-                  {specialties.includes(opt.id) ? "✓" : ""}
-                </div>
-                <span>{opt.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Submit */}
-        {(worksWithSilver !== null ||
-          worksWithGold !== null ||
-          specialties.length > 0) && (
-          <div id="submitButtonContainer_ProfessionDetails">
-            <button
-              id="submitBtn_ProfessionDetails"
-              type="button"
-              onClick={handleSubmit}
-              disabled={!canSubmit}
-            >
-              {isSubmitting ? "Saving..." : "Continue"}
-            </button>
-
-            {submitError && (
-              <div className="submit-message error">{submitError}</div>
-            )}
-            {submitSuccess && (
-              <div className="submit-message success">
-                Profession details saved successfully
-              </div>
-            )}
-          </div>
-        )}
+        <Box1_PDS />
+        <Box2_PDS
+          worksWithSilver={worksWithSilver}
+          setWorksWithSilver={setWorksWithSilver}
+        />
+        <Box3_PDS
+          worksWithGold={worksWithGold}
+          setWorksWithGold={setWorksWithGold}
+        />
+        <Box4_PDS
+          specialtyOptions={specialtyOptions}
+          specialties={specialties}
+          toggleSpecialty={toggleSpecialty}
+        />
+        <Button1_PDS
+          worksWithSilver={worksWithSilver}
+          worksWithGold={worksWithGold}
+          specialties={specialties}
+          canSubmit={canSubmit}
+          isSubmitting={isSubmitting}
+          handleSubmit={handleSubmit}
+          submitError={submitError}
+          submitSuccess={submitSuccess}
+        />
       </div>
     </div>
   )
