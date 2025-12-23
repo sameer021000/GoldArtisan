@@ -3,7 +3,6 @@ import "./ProfessionDetailsCSS.css"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../queries/useAuth"
-
 import Box1_PDS from "./Box1_PDS"
 import Box2_PDS from "./Box2_PDS"
 import Box3_PDS from "./Box3_PDS"
