@@ -1,4 +1,4 @@
-const allowedCharsRegex = /^[a-zA-Z0-9\s&()]+$/;
+const allowedCharsRegex = /^[a-zA-Z0-9\s&()-]+$/;
 
 const validateSingleWorkType = (value, index) =>
 {

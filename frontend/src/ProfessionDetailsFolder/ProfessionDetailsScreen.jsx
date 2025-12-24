@@ -78,7 +78,7 @@ function ProfessionDetailsScreen()
 
     // 1️⃣ Special characters check
     // Allowed: letters, numbers, space, &, (, )
-    if (!/^[a-zA-Z0-9\s&()]+$/.test(trimmed)) {
+    if (!/^[a-zA-Z0-9\s&()-]+$/.test(trimmed)) {
       return "Special characters are not allowed (except &, (, ))"
     }
 
@@ -158,7 +158,7 @@ function ProfessionDetailsScreen()
       phoneNumber,
       worksWithSilver,
       worksWithGold,
-      specialties,
+      typesOfWorks : specialties,
     }
 
     setIsSubmitting(true)
