@@ -1,4 +1,4 @@
-function Box5_PDS({customSpecialty,  setCustomSpecialty,  onAdd,})
+function Box5_PDS({customSpecialty,  setCustomSpecialty,  onAdd, error })
 {
   return (
     <div id="questionBox4_ProfessionDetails">
@@ -25,6 +25,11 @@ function Box5_PDS({customSpecialty,  setCustomSpecialty,  onAdd,})
           onChange={(e) => setCustomSpecialty(e.target.value)}
         />
       </div>
+      {error && (
+        <div className="submit-message error">
+          {error}
+        </div>
+      )}
     </div>
   )
 }

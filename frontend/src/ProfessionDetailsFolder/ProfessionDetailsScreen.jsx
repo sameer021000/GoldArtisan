@@ -226,6 +226,7 @@ function ProfessionDetailsScreen()
             customSpecialty={customSpecialty}
             setCustomSpecialty={setCustomSpecialty}
             onAdd={handleAddCustomSpecialty}
+            error={customSpecialtyError}
           />
         )}
         <Button1_PDS
