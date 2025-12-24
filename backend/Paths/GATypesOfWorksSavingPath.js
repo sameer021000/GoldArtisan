@@ -62,7 +62,7 @@ router.post("/saveGATypesOfWorks", AuthenticationController.isAuthenticated, asy
             TypesOfWorks : typesOfWorks,
         };
         const savedData = await TypesOfWorkSchema.findOneAndUpdate(
-            { phoneNumber },
+            { PhoneNumber: phoneNumber },
             dataToSave,
             {
                 new: true,
