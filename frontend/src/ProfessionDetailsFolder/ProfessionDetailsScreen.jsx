@@ -165,7 +165,7 @@ function ProfessionDetailsScreen()
 
     try {
       const response = await axios.post(
-        `${apiBase}/GAProfessionDetailsPath/saveProfessionDetails`,
+        `${apiBase}/GATypesOfWorksSavingPath/saveGATypesOfWorks`,
         payload,
         {
           headers: {
