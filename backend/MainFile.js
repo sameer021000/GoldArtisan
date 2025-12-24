@@ -35,12 +35,14 @@ const gaSignInPath = require('./Paths/GASignInPath');
 const gaDetailsGettingPath = require('./Paths/GADetailsGettingPath');
 const gaProfilePhotoUploadingPath = require('./Paths/GAProfilePhotoUploadingPath');
 const gaAddressDetailsPath=require('./Paths/GAAddressDetailsPath');
+const gaTypesOfWorksSavingPath=require('./Paths/GATypesOfWorksSavingPath');
 
 app.use('/GASignUpPath', gaSignUpPath);
 app.use('/GASignInPath', gaSignInPath);
 app.use('/GADetailsGettingPath', gaDetailsGettingPath);
 app.use('/GAProfilePhotoUploadingPath', gaProfilePhotoUploadingPath);
 app.use('/GAAddressDetailsPath', gaAddressDetailsPath);
+app.use('/GATypesOfWorksSavingPath', gaTypesOfWorksSavingPath);
 
 mongoose.connect(MONGODB_URI)
 .then(() =>
