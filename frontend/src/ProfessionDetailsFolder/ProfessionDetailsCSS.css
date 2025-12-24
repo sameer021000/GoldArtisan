@@ -245,6 +245,20 @@
   cursor: not-allowed;
 }
 
+/* ✅ Fix long specialty text overflow */
+#specialtyGroup_ProfessionDetails button {
+  align-items: flex-start;       /* allow multi-line alignment */
+  text-align: left;
+}
+
+#specialtyGroup_ProfessionDetails button span,
+#specialtyGroup_ProfessionDetails button {
+  white-space: normal;           /* allow wrapping */
+  word-break: break-word;        /* break long words */
+  overflow-wrap: anywhere;
+  line-height: 1.4;
+}
+
 /* =========================
    Submit Button
 ========================= */
