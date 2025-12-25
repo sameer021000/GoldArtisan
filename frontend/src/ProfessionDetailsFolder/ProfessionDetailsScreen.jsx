@@ -3,6 +3,7 @@ import "./ProfessionDetailsCSS.css"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../queries/useAuth"
+import { useQueryClient } from "@tanstack/react-query";
 import Box1_PDS from "./Box1_PDS"
 import Box2_PDS from "./Box2_PDS"
 import Box3_PDS from "./Box3_PDS"
@@ -15,6 +16,8 @@ const apiBase = process.env.REACT_APP_API_BASE || "http://localhost:7000"
 function ProfessionDetailsScreen()
 {
   const navigate = useNavigate()
+
+  const queryClient = useQueryClient();
 
   // 🔐 Auth/profile data
   const { phoneNumber, isLoading, isError } = useAuth()
@@ -176,6 +179,7 @@ function ProfessionDetailsScreen()
       )
 
       if (response?.data?.success) {
+        queryClient.invalidateQueries({ queryKey: ["profession-details"] });
         setSubmitSuccess(true)
         setTimeout(() => {
           navigate("/WorkExperienceDetailsPath")

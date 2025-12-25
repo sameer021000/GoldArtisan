@@ -66,6 +66,7 @@ function HomeScreen()
 
     //CLEAR AUTH-RELATED CACHE
     queryClient.removeQueries({ queryKey: ["profile"], exact: true });
+    queryClient.removeQueries({ queryKey: ["profession-details"], exact: true });
 
     navigate('/SignInPath', { replace: true });
   }
