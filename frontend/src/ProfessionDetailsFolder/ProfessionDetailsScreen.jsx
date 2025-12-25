@@ -178,7 +178,7 @@ function ProfessionDetailsScreen()
       if (response?.data?.success) {
         setSubmitSuccess(true)
         setTimeout(() => {
-          navigate("/HomeScreenPath")
+          navigate("/WorkExperienceDetailsPath")
         }, 600)
       } else {
         setSubmitError(

@@ -8,6 +8,7 @@ import SignInScreen from './SignInFolder/SignInScreen';
 import PictureUploadingScreen from './PictureUploadingFolder/PictureUploadingScreen';
 import AddressQuestionsScreen from './AddressQuestionsFolder/AddressQuestionsScreen';
 import ProfessionDetailsScreen from './ProfessionDetailsFolder/ProfessionDetailsScreen';
+import WorkExperienceScreen from './WorkExperienceFolder/WorkExperienceScreen';
 
 // create a single QueryClient for the app
 const queryClient = new QueryClient(
@@ -37,6 +38,7 @@ function App()
           <Route path="/PictureUploadingPath" element={<PictureUploadingScreen />} />
           <Route path="/AddressQuestionsPath" element={<AddressQuestionsScreen/>}/>
           <Route path="/ProfessionDetailsPath" element={<ProfessionDetailsScreen/>} />
+          <Route path="/WorkExperienceDetailsPath" element={<WorkExperienceScreen/>}/>
         </Routes>
       </Router>
     </QueryClientProvider>
