@@ -54,3 +54,5 @@ router.get("/getGATypesOfWorksDetails",  AuthenticationController.isAuthenticate
     }
   }
 );
+
+module.exports=router;
