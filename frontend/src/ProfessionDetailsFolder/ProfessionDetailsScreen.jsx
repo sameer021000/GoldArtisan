@@ -151,6 +151,16 @@ function ProfessionDetailsScreen()
       return
     }
 
+    if (isOtherPendingAddition) {
+      setSubmitError("Please add the custom work type using the + button.");
+      return;
+    }
+
+    if (isOtherOnlySelected) {
+      setSubmitError("Please add a valid work type using the + button.");
+      return;
+    }
+
     const token = localStorage.getItem("GoldArtisanToken")
     if (!token) {
       setSubmitError("Session expired. Please sign in again.")
@@ -201,12 +211,19 @@ function ProfessionDetailsScreen()
 
   const isOtherSelected = specialties.includes("other")
 
+  // artisan typed something but DID NOT click +
+  const isOtherPendingAddition = isOtherSelected && customSpecialty.trim().length > 0;
+
+  // "Other" selected but NOT converted into a real work type
+  const isOtherOnlySelected = specialties.length === 1 && specialties[0] === "other";
+
   const canSubmit =
     worksWithSilver !== null &&
     worksWithGold !== null &&
     specialties.length > 0 &&
     !isSubmitting &&
-    (!isOtherSelected || customSpecialty.trim().length > 0)
+    !isOtherPendingAddition &&
+    !isOtherOnlySelected;
 
   return (
     <div id="divId1_ProfessionDetails">
