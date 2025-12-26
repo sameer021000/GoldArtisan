@@ -61,6 +61,14 @@ const validateTypesOfWorks = (typesOfWorks) =>
 
     const errors = {};
 
+    // 2️⃣ Disallow placeholder "other" completely
+    if (typesOfWorks.includes("other"))
+    {
+        errors.typesOfWorks = [
+            "Invalid work type: 'Other' must be replaced with a specific work type"
+        ];
+    }
+
     typesOfWorks.forEach((work, index) =>
     {
         const workErrors = validateSingleWorkType(work, index);
