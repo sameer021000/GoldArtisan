@@ -11,7 +11,7 @@ function WorkExperienceScreen() {
 
   const QUICK_OPTIONS = [
     { label: "0 yrs", value: 0 },
-    { label: "6 mos", value: 6 },
+    { label: "6 mon", value: 6 },
     { label: "1 yr", value: 12 },
     { label: "3 yrs", value: 36 },
     { label: "5 yrs", value: 60 },
@@ -85,7 +85,7 @@ function WorkExperienceScreen() {
                   onChange={(e) => handleChange(workId, "gold", e.target.value)}
                 />
                 <span className="experienceValue">
-                  {Math.floor((experience[workId]?.gold ?? 0) / 12)} yrs {(experience[workId]?.gold ?? 0) % 12} mos
+                  {Math.floor((experience[workId]?.gold ?? 0) / 12)} yrs {(experience[workId]?.gold ?? 0) % 12} mon
                 </span>
               </div>
             </div>
@@ -122,7 +122,7 @@ function WorkExperienceScreen() {
                   onChange={(e) => handleChange(workId, "silver", e.target.value)}
                 />
                 <span className="experienceValue">
-                  {Math.floor((experience[workId]?.silver ?? 0) / 12)} yrs {(experience[workId]?.silver ?? 0) % 12} mos
+                  {Math.floor((experience[workId]?.silver ?? 0) / 12)} yrs {(experience[workId]?.silver ?? 0) % 12} mon
                 </span>
               </div>
             </div>
