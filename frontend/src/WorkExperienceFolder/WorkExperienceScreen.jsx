@@ -68,22 +68,41 @@ function WorkExperienceScreen() {
 
     return (
       <div className="experienceCard" key={workId}>
-        {/* Header (clickable) */}
-        <h3
+        {/* Header */}
+        <div
           className="workTypeTitle"
-          style={{ cursor: "pointer" }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            cursor: "pointer",
+          }}
           onClick={() => toggleRole(workId)}
         >
-          {label}
-          <span style={{ float: "right", fontSize: "18px" }}>
+          <span>{label}</span>
+
+          <button
+            type="button"
+            aria-label={isCollapsed ? "Expand section" : "Collapse section"}
+            style={{
+              background: "none",
+              border: "none",
+              color: "#fff",
+              fontSize: "22px",
+              fontWeight: "700",
+              cursor: "pointer",
+              padding: "4px 8px",
+              lineHeight: "1",
+            }}
+          >
             {isCollapsed ? "+" : "−"}
-          </span>
-        </h3>
+          </button>
+        </div>
 
         {/* Collapsible Content */}
         {!isCollapsed && (
           <div className="metalColumns">
-            {/* Gold Column */}
+            {/* Gold */}
             {WorksWithGold && (
               <div className="metalSection">
                 <div className="metalBadge goldBadge">Gold</div>
@@ -129,7 +148,7 @@ function WorkExperienceScreen() {
               </div>
             )}
 
-            {/* Silver Column */}
+            {/* Silver */}
             {WorksWithSilver && (
               <div className="metalSection">
                 <div className="metalBadge silverBadge">Silver</div>
