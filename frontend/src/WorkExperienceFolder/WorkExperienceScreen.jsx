@@ -8,6 +8,7 @@ function WorkExperienceScreen() {
   const { data, isLoading, isError, error } = useProfessionDetails()
 
   const [experience, setExperience] = useState({})
+  const [collapsedRoles, setCollapsedRoles] = useState({})
 
   const QUICK_OPTIONS = [
     { label: "0 yrs", value: 0 },
@@ -31,10 +32,18 @@ function WorkExperienceScreen() {
   }
 
   if (isError) {
-    return <div className="errorText">{error?.message || "Error fetching profession details"}</div>
+    return (
+      <div className="errorText">
+        {error?.message || "Error fetching profession details"}
+      </div>
+    )
   }
 
-  const { TypesOfWorks = [], WorksWithGold = false, WorksWithSilver = false } = data || {}
+  const {
+    TypesOfWorks = [],
+    WorksWithGold = false,
+    WorksWithSilver = false,
+  } = data || {}
 
   const handleChange = (workId, metal, value) => {
     setExperience((prev) => ({
@@ -46,88 +55,127 @@ function WorkExperienceScreen() {
     }))
   }
 
+  const toggleRole = (workId) => {
+    setCollapsedRoles((prev) => ({
+      ...prev,
+      [workId]: !prev[workId],
+    }))
+  }
+
   const renderWorkTypeCard = (workId) => {
     const label = workTypeLabels[workId] || workId.replace(/-/g, " ")
+    const isCollapsed = collapsedRoles[workId]
 
     return (
       <div className="experienceCard" key={workId}>
-        <h3 className="workTypeTitle">{label}</h3>
+        {/* Header (clickable) */}
+        <h3
+          className="workTypeTitle"
+          style={{ cursor: "pointer" }}
+          onClick={() => toggleRole(workId)}
+        >
+          {label}
+          <span style={{ float: "right", fontSize: "18px" }}>
+            {isCollapsed ? "+" : "−"}
+          </span>
+        </h3>
 
-        <div className="metalColumns">
-          {/* Gold Column */}
-          {WorksWithGold && (
-            <div className="metalSection">
-              <div className="metalBadge goldBadge">Gold</div>
+        {/* Collapsible Content */}
+        {!isCollapsed && (
+          <div className="metalColumns">
+            {/* Gold Column */}
+            {WorksWithGold && (
+              <div className="metalSection">
+                <div className="metalBadge goldBadge">Gold</div>
 
-              <div className="pillRow">
-                {QUICK_OPTIONS.map((opt) => {
-                  const currentValue = experience[workId]?.gold ?? 0
-                  return (
-                    <button
-                      key={opt.value}
-                      type="button"
-                      className={`pillBtn ${currentValue === opt.value ? "active" : ""}`}
-                      onClick={() => handleChange(workId, "gold", opt.value)}
-                    >
-                      {opt.label}
-                    </button>
-                  )
-                })}
+                <div className="pillRow">
+                  {QUICK_OPTIONS.map((opt) => {
+                    const currentValue = experience[workId]?.gold ?? 0
+                    return (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        className={`pillBtn ${
+                          currentValue === opt.value ? "active" : ""
+                        }`}
+                        onClick={() =>
+                          handleChange(workId, "gold", opt.value)
+                        }
+                      >
+                        {opt.label}
+                      </button>
+                    )
+                  })}
+                </div>
+
+                <div className="sliderRow">
+                  <input
+                    type="range"
+                    min={0}
+                    max={240}
+                    step={1}
+                    value={experience[workId]?.gold ?? 0}
+                    onChange={(e) =>
+                      handleChange(workId, "gold", e.target.value)
+                    }
+                  />
+                  <span className="experienceValue">
+                    {Math.floor(
+                      (experience[workId]?.gold ?? 0) / 12
+                    )}{" "}
+                    yrs {(experience[workId]?.gold ?? 0) % 12} mon
+                  </span>
+                </div>
               </div>
+            )}
 
-              <div className="sliderRow">
-                <input
-                  type="range"
-                  min={0}
-                  max={240}
-                  step={1}
-                  value={experience[workId]?.gold ?? 0}
-                  onChange={(e) => handleChange(workId, "gold", e.target.value)}
-                />
-                <span className="experienceValue">
-                  {Math.floor((experience[workId]?.gold ?? 0) / 12)} yrs {(experience[workId]?.gold ?? 0) % 12} mon
-                </span>
+            {/* Silver Column */}
+            {WorksWithSilver && (
+              <div className="metalSection">
+                <div className="metalBadge silverBadge">Silver</div>
+
+                <div className="pillRow">
+                  {QUICK_OPTIONS.map((opt) => {
+                    const currentValue = experience[workId]?.silver ?? 0
+                    return (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        className={`pillBtn ${
+                          currentValue === opt.value ? "active" : ""
+                        }`}
+                        onClick={() =>
+                          handleChange(workId, "silver", opt.value)
+                        }
+                      >
+                        {opt.label}
+                      </button>
+                    )
+                  })}
+                </div>
+
+                <div className="sliderRow">
+                  <input
+                    type="range"
+                    min={0}
+                    max={240}
+                    step={1}
+                    value={experience[workId]?.silver ?? 0}
+                    onChange={(e) =>
+                      handleChange(workId, "silver", e.target.value)
+                    }
+                  />
+                  <span className="experienceValue">
+                    {Math.floor(
+                      (experience[workId]?.silver ?? 0) / 12
+                    )}{" "}
+                    yrs {(experience[workId]?.silver ?? 0) % 12} mon
+                  </span>
+                </div>
               </div>
-            </div>
-          )}
-
-          {/* Silver Column */}
-          {WorksWithSilver && (
-            <div className="metalSection">
-              <div className="metalBadge silverBadge">Silver</div>
-
-              <div className="pillRow">
-                {QUICK_OPTIONS.map((opt) => {
-                  const currentValue = experience[workId]?.silver ?? 0
-                  return (
-                    <button
-                      key={opt.value}
-                      type="button"
-                      className={`pillBtn ${currentValue === opt.value ? "active" : ""}`}
-                      onClick={() => handleChange(workId, "silver", opt.value)}
-                    >
-                      {opt.label}
-                    </button>
-                  )
-                })}
-              </div>
-
-              <div className="sliderRow">
-                <input
-                  type="range"
-                  min={0}
-                  max={240}
-                  step={1}
-                  value={experience[workId]?.silver ?? 0}
-                  onChange={(e) => handleChange(workId, "silver", e.target.value)}
-                />
-                <span className="experienceValue">
-                  {Math.floor((experience[workId]?.silver ?? 0) / 12)} yrs {(experience[workId]?.silver ?? 0) % 12} mon
-                </span>
-              </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
       </div>
     )
   }
@@ -138,7 +186,8 @@ function WorkExperienceScreen() {
         <div id="topBox_WorkExperience">
           <h1 id="h1Id1_WorkExperience">Work Experience</h1>
           <p id="pId1_WorkExperience">
-            Tell us how long you have been working in each area. Select quick options or fine-tune with the slider.
+            Tell us how long you have been working in each area. Select quick
+            options or fine-tune with the slider.
           </p>
         </div>
 
