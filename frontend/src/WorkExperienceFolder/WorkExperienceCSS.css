@@ -1,0 +1,193 @@
+/* =========================
+   Page Wrapper
+========================= */
+#divId1_WorkExperience {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 6vh 20px 40px;
+  box-sizing: border-box;
+  background: radial-gradient(
+      1200px 600px at 10% 20%,
+      rgba(255, 255, 255, 0.02),
+      transparent 6%
+    ),
+    linear-gradient(180deg, #000003 0%, #0b0910 100%);
+  color: #eee;
+}
+
+#contentWrap_WorkExperience {
+  width: 100%;
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* =========================
+   Top Box
+========================= */
+#topBox_WorkExperience {
+  background: rgb(39, 37, 37);
+  border-radius: 18px;
+  padding: 28px 24px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65),
+    inset 0 2px 6px rgba(255, 255, 255, 0.02);
+}
+
+#h1Id1_WorkExperience {
+  margin: 0;
+  font-size: clamp(22px, 3.4vw, 26px);
+  font-weight: 700;
+  color: #ffffff;
+}
+
+#pId1_WorkExperience {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #cfc9d1;
+}
+
+/* =========================
+   Experience Card
+========================= */
+.experienceCard {
+  background: rgb(39, 37, 37);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65),
+    inset 0 2px 6px rgba(255, 255, 255, 0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: slideDown 0.3s ease-out;
+}
+
+.experienceQuestion {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* =========================
+   Quick Select Pills
+========================= */
+.pillRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pillBtn {
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ddd;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pillBtn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  transform: translateY(-1px);
+}
+
+.pillBtn.active {
+  background: linear-gradient(
+    90deg,
+    rgba(93, 96, 244, 1),
+    rgba(247, 178, 103, 1)
+  );
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 6px 18px rgba(93, 96, 244, 0.3);
+}
+
+/* =========================
+   Slider
+========================= */
+.sliderRow {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sliderRow input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    rgba(93, 96, 244, 1),
+    rgba(247, 178, 103, 1)
+  );
+  outline: none;
+}
+
+.sliderRow input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 0 0 4px rgba(93, 96, 244, 0.25);
+}
+
+.sliderRow input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.experienceValue {
+  font-size: 14px;
+  font-weight: 500;
+  color: #cfc9d1;
+  text-align: right;
+}
+
+/* =========================
+   States
+========================= */
+.loadingText,
+.errorText {
+  text-align: center;
+  padding: 20px;
+}
+
+.errorText {
+  color: #ff8a8a;
+}
+
+/* =========================
+   Animation
+========================= */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   Mobile
+========================= */
+@media (max-width: 480px) {
+  .pillBtn {
+    font-size: 12px;
+    padding: 7px 12px;
+  }
+}
