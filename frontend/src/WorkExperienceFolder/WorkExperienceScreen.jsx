@@ -1,12 +1,13 @@
-import "./WorkExperienceCSS.css";
-import { useProfessionDetails } from "../queries/useProfessionDetails";
-import { useState } from "react";
+"use client"
+
+import "./WorkExperienceCSS.css"
+import { useProfessionDetails } from "../queries/useProfessionDetails"
+import { useState } from "react"
 
 function WorkExperienceScreen() {
-  const { data, isLoading, isError, error } = useProfessionDetails();
+  const { data, isLoading, isError, error } = useProfessionDetails()
 
-  // Experience stored in months (0–240)
-  const [experience, setExperience] = useState({});
+  const [experience, setExperience] = useState({})
 
   const QUICK_OPTIONS = [
     { label: "0 yrs", value: 0 },
@@ -17,75 +18,119 @@ function WorkExperienceScreen() {
     { label: "10 yrs", value: 120 },
     { label: "15 yrs", value: 180 },
     { label: "20 yrs", value: 240 },
-  ];
+  ]
+
+  const workTypeLabels = {
+    "ornament-making": "Ornament Making",
+    "polishing-finishing": "Polishing & Finishing",
+    "design-cutting": "Design & Cutting",
+  }
 
   if (isLoading) {
-    return <div className="loadingText">Loading work experience details...</div>;
+    return <div className="loadingText">Loading work experience details...</div>
   }
 
   if (isError) {
-    return (
-      <div className="errorText">
-        {error?.message || "Error fetching profession details"}
-      </div>
-    );
+    return <div className="errorText">{error?.message || "Error fetching profession details"}</div>
   }
 
-  const {
-    TypesOfWorks = [],
-    WorksWithGold = false,
-    WorksWithSilver = false,
-  } = data || {};
+  const { TypesOfWorks = [], WorksWithGold = false, WorksWithSilver = false } = data || {}
 
-  const handleChange = (key, value) => {
+  const handleChange = (workId, metal, value) => {
     setExperience((prev) => ({
       ...prev,
-      [key]: Number(value),
-    }));
-  };
+      [workId]: {
+        ...(prev[workId] || {}),
+        [metal]: Number(value),
+      },
+    }))
+  }
 
-  const renderQuestion = (metal, workId) => {
-    const label = workId.replace(/-/g, " ");
-    const key = `${metal}-${workId}`;
-    const months = experience[key] ?? 0;
+  const renderWorkTypeCard = (workId) => {
+    const label = workTypeLabels[workId] || workId.replace(/-/g, " ")
 
     return (
-      <div className="experienceCard" key={key}>
-        <h4 className="experienceQuestion">
-          How long have you been working with {metal} {label}?
-        </h4>
+      <div className="experienceCard" key={workId}>
+        <h3 className="workTypeTitle">{label}</h3>
 
-        {/* Quick Select Pills */}
-        <div className="pillRow">
-          {QUICK_OPTIONS.map((opt) => (
-            <button
-              key={opt.value}
-              type="button"
-              className={`pillBtn ${months === opt.value ? "active" : ""}`}
-              onClick={() => handleChange(key, opt.value)}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
+        <div className="metalColumns">
+          {/* Gold Column */}
+          {WorksWithGold && (
+            <div className="metalSection">
+              <div className="metalBadge goldBadge">Gold</div>
 
-        {/* Fine Tune Slider */}
-        <div className="sliderRow">
-          <input
-            type="range"
-            min={0}
-            max={240}      // 20 years
-            step={1}       // 1 month interval
-            value={months}
-            onChange={(e) => handleChange(key, e.target.value)}
-          />
-          <span className="experienceValue">
-            {Math.floor(months / 12)} yrs {months % 12} mos
-          </span>
+              <div className="pillRow">
+                {QUICK_OPTIONS.map((opt) => {
+                  const currentValue = experience[workId]?.gold ?? 0
+                  return (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      className={`pillBtn ${currentValue === opt.value ? "active" : ""}`}
+                      onClick={() => handleChange(workId, "gold", opt.value)}
+                    >
+                      {opt.label}
+                    </button>
+                  )
+                })}
+              </div>
+
+              <div className="sliderRow">
+                <input
+                  type="range"
+                  min={0}
+                  max={240}
+                  step={1}
+                  value={experience[workId]?.gold ?? 0}
+                  onChange={(e) => handleChange(workId, "gold", e.target.value)}
+                />
+                <span className="experienceValue">
+                  {Math.floor((experience[workId]?.gold ?? 0) / 12)} yrs {(experience[workId]?.gold ?? 0) % 12} mos
+                </span>
+              </div>
+            </div>
+          )}
+
+          {/* Silver Column */}
+          {WorksWithSilver && (
+            <div className="metalSection">
+              <div className="metalBadge silverBadge">Silver</div>
+
+              <div className="pillRow">
+                {QUICK_OPTIONS.map((opt) => {
+                  const currentValue = experience[workId]?.silver ?? 0
+                  return (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      className={`pillBtn ${currentValue === opt.value ? "active" : ""}`}
+                      onClick={() => handleChange(workId, "silver", opt.value)}
+                    >
+                      {opt.label}
+                    </button>
+                  )
+                })}
+              </div>
+
+              <div className="sliderRow">
+                <input
+                  type="range"
+                  min={0}
+                  max={240}
+                  step={1}
+                  value={experience[workId]?.silver ?? 0}
+                  onChange={(e) => handleChange(workId, "silver", e.target.value)}
+                />
+                <span className="experienceValue">
+                  {Math.floor((experience[workId]?.silver ?? 0) / 12)} yrs {(experience[workId]?.silver ?? 0) % 12} mos
+                </span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
-    );
-  };
+    )
+  }
 
   return (
     <div id="divId1_WorkExperience">
@@ -93,18 +138,14 @@ function WorkExperienceScreen() {
         <div id="topBox_WorkExperience">
           <h1 id="h1Id1_WorkExperience">Work Experience</h1>
           <p id="pId1_WorkExperience">
-            Tell us how long you have been working in each area.
+            Tell us how long you have been working in each area. Select quick options or fine-tune with the slider.
           </p>
         </div>
 
-        {WorksWithGold &&
-          TypesOfWorks.map((work) => renderQuestion("Gold", work))}
-
-        {WorksWithSilver &&
-          TypesOfWorks.map((work) => renderQuestion("Silver", work))}
+        {TypesOfWorks.map((work) => renderWorkTypeCard(work))}
       </div>
     </div>
-  );
+  )
 }
 
-export default WorkExperienceScreen;
+export default WorkExperienceScreen

@@ -8,11 +8,7 @@
   justify-content: center;
   padding: 6vh 20px 40px;
   box-sizing: border-box;
-  background: radial-gradient(
-      1200px 600px at 10% 20%,
-      rgba(255, 255, 255, 0.02),
-      transparent 6%
-    ),
+  background: radial-gradient(1200px 600px at 10% 20%, rgba(255, 255, 255, 0.02), transparent 6%),
     linear-gradient(180deg, #000003 0%, #0b0910 100%);
   color: #eee;
 }
@@ -32,8 +28,7 @@
   background: rgb(39, 37, 37);
   border-radius: 18px;
   padding: 28px 24px;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65),
-    inset 0 2px 6px rgba(255, 255, 255, 0.02);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65), inset 0 2px 6px rgba(255, 255, 255, 0.02);
 }
 
 #h1Id1_WorkExperience {
@@ -47,6 +42,7 @@
   margin-top: 8px;
   font-size: 14px;
   color: #cfc9d1;
+  line-height: 1.5;
 }
 
 /* =========================
@@ -56,19 +52,68 @@
   background: rgb(39, 37, 37);
   border-radius: 18px;
   padding: 24px;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65),
-    inset 0 2px 6px rgba(255, 255, 255, 0.02);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65), inset 0 2px 6px rgba(255, 255, 255, 0.02);
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 20px;
   animation: slideDown 0.3s ease-out;
 }
 
-.experienceQuestion {
+.workTypeTitle {
   margin: 0;
-  font-size: 16px;
+  font-size: clamp(18px, 3vw, 20px);
   font-weight: 600;
   color: #ffffff;
+  text-transform: capitalize;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* =========================
+   Metal Columns Layout
+========================= */
+.metalColumns {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.metalSection {
+  flex: 1;
+  min-width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* =========================
+   Metal Badges
+========================= */
+.metalBadge {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  width: fit-content;
+}
+
+.goldBadge {
+  background: linear-gradient(135deg, #ffd700, #ffa500);
+  color: #000;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.silverBadge {
+  background: linear-gradient(135deg, #e8e8e8, #b0b0b0);
+  color: #000;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
 }
 
 /* =========================
@@ -77,13 +122,13 @@
 .pillRow {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
 }
 
 .pillBtn {
-  padding: 8px 14px;
+  padding: 7px 12px;
   border-radius: 999px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   color: #ddd;
   background: rgba(255, 255, 255, 0.08);
@@ -95,17 +140,15 @@
 .pillBtn:hover {
   background: rgba(255, 255, 255, 0.14);
   transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .pillBtn.active {
-  background: linear-gradient(
-    90deg,
-    rgba(93, 96, 244, 1),
-    rgba(247, 178, 103, 1)
-  );
+  background: linear-gradient(90deg, rgba(93, 96, 244, 1), rgba(247, 178, 103, 1));
   color: #ffffff;
   border-color: transparent;
   box-shadow: 0 6px 18px rgba(93, 96, 244, 0.3);
+  transform: scale(1.05);
 }
 
 /* =========================
@@ -122,37 +165,45 @@
   width: 100%;
   height: 6px;
   border-radius: 6px;
-  background: linear-gradient(
-    90deg,
-    rgba(93, 96, 244, 1),
-    rgba(247, 178, 103, 1)
-  );
+  background: linear-gradient(90deg, rgba(93, 96, 244, 1), rgba(247, 178, 103, 1));
   outline: none;
+  cursor: pointer;
 }
 
 .sliderRow input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: #ffffff;
   cursor: pointer;
   box-shadow: 0 0 0 4px rgba(93, 96, 244, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sliderRow input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 0 6px rgba(93, 96, 244, 0.35);
 }
 
 .sliderRow input[type="range"]::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: #ffffff;
   cursor: pointer;
+  border: none;
 }
 
 .experienceValue {
   font-size: 14px;
-  font-weight: 500;
-  color: #cfc9d1;
-  text-align: right;
+  font-weight: 600;
+  color: #ffffff;
+  text-align: center;
+  padding: 6px 12px;
+  background: rgba(93, 96, 244, 0.15);
+  border-radius: 8px;
+  border: 1px solid rgba(93, 96, 244, 0.3);
 }
 
 /* =========================
@@ -161,7 +212,8 @@
 .loadingText,
 .errorText {
   text-align: center;
-  padding: 20px;
+  padding: 40px 20px;
+  font-size: 16px;
 }
 
 .errorText {
@@ -183,11 +235,37 @@
 }
 
 /* =========================
-   Mobile
+   Mobile Responsive
 ========================= */
+@media (max-width: 768px) {
+  .metalColumns {
+    flex-direction: column;
+  }
+
+  .metalSection {
+    min-width: 100%;
+  }
+}
+
 @media (max-width: 480px) {
+  #divId1_WorkExperience {
+    padding: 4vh 16px 30px;
+  }
+
+  .experienceCard {
+    padding: 20px 16px;
+  }
+
+  .metalSection {
+    padding: 16px;
+  }
+
   .pillBtn {
-    font-size: 12px;
-    padding: 7px 12px;
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+
+  .experienceValue {
+    font-size: 13px;
   }
 }
