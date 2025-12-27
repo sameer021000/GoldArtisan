@@ -1,5 +1,3 @@
-"use client"
-
 import "./WorkExperienceCSS.css"
 import { useProfessionDetails } from "../queries/useProfessionDetails"
 import { useState } from "react"
