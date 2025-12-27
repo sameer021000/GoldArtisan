@@ -135,6 +135,13 @@ function ProfessionDetailsScreen()
       return
     }
 
+    if (worksWithSilver === false && worksWithGold === false) {
+      setSubmitError(
+        "You must work with at least silver or gold ornaments to continue."
+        )
+      return
+    }
+
     if (specialties.length === 0) {
       setSubmitError("Please select at least one type of work you do.")
       return
@@ -220,6 +227,7 @@ function ProfessionDetailsScreen()
   const canSubmit =
     worksWithSilver !== null &&
     worksWithGold !== null &&
+    (worksWithSilver === true || worksWithGold === true) &&
     specialties.length > 0 &&
     !isSubmitting &&
     !isOtherPendingAddition &&
