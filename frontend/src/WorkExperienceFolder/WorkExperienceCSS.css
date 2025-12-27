@@ -221,6 +221,38 @@
 }
 
 /* =========================
+   Submit Button
+========================= */
+#submitButtonContainer_WorkExperience {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  animation: slideDown 0.3s ease-out;
+}
+#submitBtn_WorkExperience {
+  width: 100%;
+  max-width: 380px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 16px;
+  color: #fff;
+  background: linear-gradient(90deg, rgba(93, 96, 244, 1), rgba(247, 178, 103, 1));
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 12px 32px rgba(93, 96, 244, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+#submitBtn_WorkExperience:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(93, 96, 244, 0.35);
+}
+#submitBtn_WorkExperience:active {
+  transform: translateY(0);
+}
+
+/* =========================
    Animation
 ========================= */
 @keyframes slideDown {
@@ -267,5 +299,10 @@
 
   .experienceValue {
     font-size: 13px;
+  }
+
+  #submitBtn_WorkExperience {
+    padding: 14px 16px;
+    font-size: 15px;
   }
 }

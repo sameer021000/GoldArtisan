@@ -209,6 +209,12 @@ function WorkExperienceScreen() {
         </div>
 
         {TypesOfWorks.map((work) => renderWorkTypeCard(work))}
+
+        <div id="submitButtonContainer_WorkExperience">
+          <button type="button" id="submitBtn_WorkExperience">
+            Submit Details
+          </button>
+        </div>
       </div>
     </div>
   )
