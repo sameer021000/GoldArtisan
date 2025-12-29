@@ -1,13 +1,25 @@
 import "./WorkExperienceCSS.css"
 import { useProfessionDetails } from "../queries/useProfessionDetails"
 import { useState } from "react"
+import axios from "axios"
+import { useNavigate } from "react-router-dom"
+import { useAuth } from "../queries/useAuth"
+import { useQueryClient } from "@tanstack/react-query";
+
+const apiBase = process.env.REACT_APP_API_BASE || "http://localhost:7000"
 
 function WorkExperienceScreen() {
+  const navigate = useNavigate()
+  const queryClient = useQueryClient()
+
+  const { phoneNumber, isLoading: authLoading, isError: authError } = useAuth()
   const { data, isLoading, isError, error } = useProfessionDetails()
 
   const [experience, setExperience] = useState({})
   const [collapsedRoles, setCollapsedRoles] = useState({})
   const [submitError, setSubmitError] = useState("")
+  const [submitSuccess, setSubmitSuccess] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const QUICK_OPTIONS = [
     { label: "0 yrs", value: 0 },
@@ -44,6 +56,9 @@ function WorkExperienceScreen() {
     WorksWithSilver = false,
   } = data || {}
 
+  /* =========================
+     HANDLERS
+  ========================= */
   const handleChange = (workId, metal, value) => {
     setExperience((prev) => ({
       ...prev,
@@ -62,7 +77,7 @@ function WorkExperienceScreen() {
   }
 
   /* =========================
-     VALIDATION (ADDED)
+     FRONTEND VALIDATION
   ========================= */
   const validateExperience = () => {
     let hasAnyNonZeroExperience = false
@@ -88,24 +103,94 @@ function WorkExperienceScreen() {
     return ""
   }
 
-  const handleSubmit = () => {
-    const err = validateExperience()
-    if (err) {
-      setSubmitError(err)
+  /* =========================
+     SUBMIT
+  ========================= */
+  const handleSubmit = async () => {
+    setSubmitError("")
+    setSubmitSuccess(false)
+
+    const validationError = validateExperience()
+    if (validationError) {
+      setSubmitError(validationError)
       return
     }
 
-    setSubmitError("")
-    // API integration will be added later
+    if (authLoading) {
+      setSubmitError("Profile data is still loading. Please try again.")
+      return
+    }
+
+    if (authError || !phoneNumber) {
+      setSubmitError("Authentication failed. Please sign in again.")
+      return
+    }
+
+    const token = localStorage.getItem("GoldArtisanToken")
+    if (!token) {
+      setSubmitError("Session expired. Please sign in again.")
+      return
+    }
+
+    // 🔁 Transform frontend state → backend format
+    const experiencesPayload = TypesOfWorks.map((workType) => ({
+      WorkType: workType,
+      GoldMonths: experience[workType]?.gold ?? 0,
+      SilverMonths: experience[workType]?.silver ?? 0,
+    }))
+
+    const payload = {
+      phoneNumber,
+      worksWithGold: WorksWithGold,
+      worksWithSilver: WorksWithSilver,
+      typesOfWorks: TypesOfWorks,
+      experiences: experiencesPayload,
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      const response = await axios.post(
+        `${apiBase}/GAWorkExperienceSavingPath/saveGAWorkExperience`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+
+      if (response?.data?.success) {
+        queryClient.invalidateQueries({ queryKey: ["work-experience"] })
+        setSubmitSuccess(true)
+        setTimeout(() => {
+          navigate("/NextScreenPath") // update when next screen is ready
+        }, 600)
+      } else {
+        setSubmitError(
+          response?.data?.message || "Unable to save work experience"
+        )
+      }
+    } catch (err) {
+      const serverMsg = err?.response?.data?.message
+      setSubmitError(
+        serverMsg || "Something went wrong while saving work experience."
+      )
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
+  /* =========================
+     UI
+  ========================= */
   const renderWorkTypeCard = (workId) => {
     const label = workTypeLabels[workId] || workId.replace(/-/g, " ")
     const isCollapsed = collapsedRoles[workId]
 
     return (
       <div className="experienceCard" key={workId}>
-        {/* Header */}
         <div
           className="workTypeTitle"
           style={{
@@ -117,10 +202,8 @@ function WorkExperienceScreen() {
           onClick={() => toggleRole(workId)}
         >
           <span>{label}</span>
-
           <button
             type="button"
-            aria-label={isCollapsed ? "Expand section" : "Collapse section"}
             style={{
               background: "none",
               border: "none",
@@ -129,21 +212,17 @@ function WorkExperienceScreen() {
               fontWeight: "700",
               cursor: "pointer",
               padding: "4px 8px",
-              lineHeight: "1",
             }}
           >
             {isCollapsed ? "+" : "−"}
           </button>
         </div>
 
-        {/* Collapsible Content */}
         {!isCollapsed && (
           <div className="metalColumns">
-            {/* Gold */}
             {WorksWithGold && (
               <div className="metalSection">
                 <div className="metalBadge goldBadge">Gold</div>
-
                 <div className="pillRow">
                   {QUICK_OPTIONS.map((opt) => {
                     const currentValue = experience[workId]?.gold ?? 0
@@ -164,7 +243,6 @@ function WorkExperienceScreen() {
                   })}
                 </div>
 
-                {/* ✅ SLIDER PRESERVED */}
                 <div className="sliderRow">
                   <input
                     type="range"
@@ -179,18 +257,15 @@ function WorkExperienceScreen() {
                   <span className="experienceValue">
                     {Math.floor(
                       (experience[workId]?.gold ?? 0) / 12
-                    )}{" "}
-                    yrs {(experience[workId]?.gold ?? 0) % 12} mon
+                    )} yrs {(experience[workId]?.gold ?? 0) % 12} mon
                   </span>
                 </div>
               </div>
             )}
 
-            {/* Silver */}
             {WorksWithSilver && (
               <div className="metalSection">
                 <div className="metalBadge silverBadge">Silver</div>
-
                 <div className="pillRow">
                   {QUICK_OPTIONS.map((opt) => {
                     const currentValue = experience[workId]?.silver ?? 0
@@ -211,7 +286,6 @@ function WorkExperienceScreen() {
                   })}
                 </div>
 
-                {/* ✅ SLIDER PRESERVED */}
                 <div className="sliderRow">
                   <input
                     type="range"
@@ -226,8 +300,7 @@ function WorkExperienceScreen() {
                   <span className="experienceValue">
                     {Math.floor(
                       (experience[workId]?.silver ?? 0) / 12
-                    )}{" "}
-                    yrs {(experience[workId]?.silver ?? 0) % 12} mon
+                    )} yrs {(experience[workId]?.silver ?? 0) % 12} mon
                   </span>
                 </div>
               </div>
@@ -244,8 +317,7 @@ function WorkExperienceScreen() {
         <div id="topBox_WorkExperience">
           <h1 id="h1Id1_WorkExperience">Work Experience</h1>
           <p id="pId1_WorkExperience">
-            Tell us how long you have been working in each area. Select quick
-            options or fine-tune with the slider.
+            Tell us how long you have been working in each area.
           </p>
         </div>
 
@@ -255,13 +327,20 @@ function WorkExperienceScreen() {
           <button
             type="button"
             id="submitBtn_WorkExperience"
+            disabled={isSubmitting}
             onClick={handleSubmit}
           >
-            Submit Details
+            {isSubmitting ? "Saving..." : "Submit Details"}
           </button>
 
           {submitError && (
             <div className="submit-message error">{submitError}</div>
+          )}
+
+          {submitSuccess && (
+            <div className="submit-message success">
+              Work experience saved successfully!
+            </div>
           )}
         </div>
       </div>
