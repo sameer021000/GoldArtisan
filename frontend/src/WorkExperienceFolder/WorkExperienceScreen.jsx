@@ -7,6 +7,7 @@ function WorkExperienceScreen() {
 
   const [experience, setExperience] = useState({})
   const [collapsedRoles, setCollapsedRoles] = useState({})
+  const [submitError, setSubmitError] = useState("")
 
   const QUICK_OPTIONS = [
     { label: "0 yrs", value: 0 },
@@ -58,6 +59,44 @@ function WorkExperienceScreen() {
       ...prev,
       [workId]: !prev[workId],
     }))
+  }
+
+  /* =========================
+     VALIDATION (ADDED)
+  ========================= */
+  const validateExperience = () => {
+    let hasAnyNonZeroExperience = false
+
+    for (const workType of TypesOfWorks) {
+      const entry = experience[workType] || {}
+      const gold = entry.gold ?? 0
+      const silver = entry.silver ?? 0
+
+      if (gold < 0 || gold > 240 || silver < 0 || silver > 240) {
+        return "Experience must be between 0 and 20 years."
+      }
+
+      if (gold > 0 || silver > 0) {
+        hasAnyNonZeroExperience = true
+      }
+    }
+
+    if (!hasAnyNonZeroExperience) {
+      return "Please enter experience for at least one work type."
+    }
+
+    return ""
+  }
+
+  const handleSubmit = () => {
+    const err = validateExperience()
+    if (err) {
+      setSubmitError(err)
+      return
+    }
+
+    setSubmitError("")
+    // API integration will be added later
   }
 
   const renderWorkTypeCard = (workId) => {
@@ -125,6 +164,7 @@ function WorkExperienceScreen() {
                   })}
                 </div>
 
+                {/* ✅ SLIDER PRESERVED */}
                 <div className="sliderRow">
                   <input
                     type="range"
@@ -171,6 +211,7 @@ function WorkExperienceScreen() {
                   })}
                 </div>
 
+                {/* ✅ SLIDER PRESERVED */}
                 <div className="sliderRow">
                   <input
                     type="range"
@@ -211,9 +252,17 @@ function WorkExperienceScreen() {
         {TypesOfWorks.map((work) => renderWorkTypeCard(work))}
 
         <div id="submitButtonContainer_WorkExperience">
-          <button type="button" id="submitBtn_WorkExperience">
+          <button
+            type="button"
+            id="submitBtn_WorkExperience"
+            onClick={handleSubmit}
+          >
             Submit Details
           </button>
+
+          {submitError && (
+            <div className="submit-message error">{submitError}</div>
+          )}
         </div>
       </div>
     </div>
