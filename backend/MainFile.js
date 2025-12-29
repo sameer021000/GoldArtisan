@@ -37,6 +37,7 @@ const gaProfilePhotoUploadingPath = require('./Paths/GAProfilePhotoUploadingPath
 const gaAddressDetailsPath=require('./Paths/GAAddressDetailsPath');
 const gaTypesOfWorksSavingPath=require('./Paths/GATypesOfWorksSavingPath');
 const gaTypesOfWorksDetailsGettingPath=require('./Paths/GATypesOfWorksGettingPath');
+const gaWorkExperienceSavingPath=require('./Paths/GAWorkExperienceSavingPath');
 
 app.use('/GASignUpPath', gaSignUpPath);
 app.use('/GASignInPath', gaSignInPath);
@@ -45,6 +46,7 @@ app.use('/GAProfilePhotoUploadingPath', gaProfilePhotoUploadingPath);
 app.use('/GAAddressDetailsPath', gaAddressDetailsPath);
 app.use('/GATypesOfWorksSavingPath', gaTypesOfWorksSavingPath);
 app.use('/GATypesOfWorksDetailsGettingPath', gaTypesOfWorksDetailsGettingPath);
+app.use('/GAWorkExperienceSavingPath', gaWorkExperienceSavingPath);
 
 mongoose.connect(MONGODB_URI)
 .then(() =>
