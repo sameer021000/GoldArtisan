@@ -165,7 +165,7 @@ function WorkExperienceScreen() {
         queryClient.invalidateQueries({ queryKey: ["work-experience"] })
         setSubmitSuccess(true)
         setTimeout(() => {
-          navigate("/NextScreenPath") // update when next screen is ready
+          navigate("/NextScreenPath")
         }, 600)
       } else {
         setSubmitError(
@@ -332,17 +332,19 @@ function WorkExperienceScreen() {
           >
             {isSubmitting ? "Saving..." : "Submit Details"}
           </button>
-
-          {submitError && (
-            <div className="submit-message error">{submitError}</div>
-          )}
-
-          {submitSuccess && (
-            <div className="submit-message success">
-              Work experience saved successfully!
-            </div>
-          )}
         </div>
+
+        {submitError && (
+          <div className="submit-message error">
+            {submitError}
+          </div>
+        )}
+
+        {submitSuccess && (
+          <div className="submit-message success">
+            Work experience saved successfully!
+          </div>
+        )}
       </div>
     </div>
   )
