@@ -38,6 +38,7 @@ const gaAddressDetailsPath=require('./Paths/GAAddressDetailsPath');
 const gaTypesOfWorksSavingPath=require('./Paths/GATypesOfWorksSavingPath');
 const gaTypesOfWorksDetailsGettingPath=require('./Paths/GATypesOfWorksGettingPath');
 const gaWorkExperienceSavingPath=require('./Paths/GAWorkExperienceSavingPath');
+const gaAddressGettingPath=require('./Paths/GAAddressGettingPath');
 
 app.use('/GASignUpPath', gaSignUpPath);
 app.use('/GASignInPath', gaSignInPath);
@@ -47,6 +48,7 @@ app.use('/GAAddressDetailsPath', gaAddressDetailsPath);
 app.use('/GATypesOfWorksSavingPath', gaTypesOfWorksSavingPath);
 app.use('/GATypesOfWorksDetailsGettingPath', gaTypesOfWorksDetailsGettingPath);
 app.use('/GAWorkExperienceSavingPath', gaWorkExperienceSavingPath);
+app.use('/GAAddressGettingPath', gaAddressGettingPath);
 
 mongoose.connect(MONGODB_URI)
 .then(() =>
