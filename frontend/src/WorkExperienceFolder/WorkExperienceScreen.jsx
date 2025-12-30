@@ -165,7 +165,7 @@ function WorkExperienceScreen() {
         queryClient.invalidateQueries({ queryKey: ["work-experience"] })
         setSubmitSuccess(true)
         setTimeout(() => {
-          navigate("/NextScreenPath")
+          navigate("/ShopAddressPath")
         }, 600)
       } else {
         setSubmitError(
