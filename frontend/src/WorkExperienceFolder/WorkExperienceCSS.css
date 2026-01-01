@@ -252,6 +252,19 @@
   transform: translateY(0);
 }
 
+.submit-message {
+  width: 100%;
+  max-width: 380px;        /* same as Submit Details button */
+  margin: 14px auto 0;     /* 🔴 centers on laptop */
+
+  text-align: center;
+  padding: 12px 16px;
+  border-radius: 10px;
+
+  font-size: 14px;
+  font-weight: 500;
+}
+
 /* =========================
    Animation
 ========================= */
