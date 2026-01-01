@@ -470,8 +470,8 @@ function ShopAddress() {
               </div>
             </div>
           </div>
-
-          <div id="submitButtonContainer_ShopAddress">
+        </div>
+        <div id="submitButtonContainer_ShopAddress">
             <button id="submitBtn_ShopAddress" type="button" onClick={handleSubmit} disabled={isSubmitting}>
               {isSubmitting ? "Saving..." : "Save Shop Address"}
             </button>
@@ -486,7 +486,6 @@ function ShopAddress() {
               </div>
             )}
           </div>
-        </div>
       </div>
     </div>
   )
