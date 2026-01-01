@@ -1,4 +1,4 @@
-#divId1_AddressQuestions {
+#divId1_ShopAddress {
   width: 100%;
   min-height: 100vh;
   display: flex;
@@ -11,7 +11,7 @@
   color: #eee;
 }
 
-#contentWrap_AddressQuestions {
+#contentWrap_ShopAddress {
   width: 100%;
   max-width: 680px;
   display: flex;
@@ -20,7 +20,7 @@
   box-sizing: border-box;
 }
 
-#topBox_AddressQuestions {
+#topBox_ShopAddress {
   width: 100%;
   background: rgb(39, 37, 37);
   border-radius: 18px;
@@ -32,7 +32,7 @@
   box-sizing: border-box;
 }
 
-#h1Id1_AddressQuestions {
+#h1Id1_ShopAddress {
   margin: 0;
   font-size: clamp(22px, 3.4vw, 26px);
   font-weight: 700;
@@ -40,7 +40,7 @@
   text-align: left;
 }
 
-#pId1_AddressQuestions {
+#pId1_ShopAddress {
   margin: 0;
   color: #cfc9d1;
   text-align: left;
@@ -48,7 +48,7 @@
   line-height: 1.5;
 }
 
-#addressFormBox_AddressQuestions {
+#addressFormBox_ShopAddress {
   width: 100%;
   background: rgb(39, 37, 37);
   border-radius: 18px;
@@ -58,10 +58,10 @@
   flex-direction: column;
   gap: 20px;
   box-sizing: border-box;
-  animation: slideDown 0.3s ease-out;
+  animation: slideDown_ShopAddress 0.3s ease-out;
 }
 
-#formTitle_AddressQuestions {
+#formTitle_ShopAddress {
   margin: 0;
   font-size: clamp(18px, 2.8vw, 20px);
   font-weight: 600;
@@ -69,20 +69,20 @@
   text-align: left;
 }
 
-#formGrid_AddressQuestions {
+#formGrid_ShopAddress {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1px;
   width: 100%;
 }
 
-.formGroup_AddressQuestions {
+.formGroup_ShopAddress {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.formGroup_AddressQuestions label {
+.formGroup_ShopAddress label {
   font-size: 13px;
   font-weight: 500;
   color: #cfc9d1;
@@ -103,14 +103,10 @@
   font-size: 15px;
   outline: none;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
-  transition: box-shadow .16s ease, border-color .16s ease, transform .08s ease;
+  transition: box-shadow 0.16s ease, border-color 0.16s ease, transform 0.08s ease;
   box-sizing: border-box;
   font-family: inherit;
   margin-bottom: 2px;
-}
-
-.customInput::placeholder {
-  color: #9a95a0;
 }
 
 .customInput:focus {
@@ -145,7 +141,7 @@
   font-size: 15px;
   outline: none;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
-  transition: box-shadow .16s ease, border-color .16s ease, transform .08s ease;
+  transition: box-shadow 0.16s ease, border-color 0.16s ease, transform 0.08s ease;
   box-sizing: border-box;
   font-family: inherit;
   cursor: pointer;
@@ -156,25 +152,12 @@
   justify-content: space-between;
 }
 
-.customDropdownButton .placeholder {
-  color: #9a95a0;
-}
-
-.customDropdownButton:focus {
-  outline: none;
-  border-color: rgba(93, 96, 244, 0.6);
-  box-shadow: 0 0 10px rgba(93, 96, 244, 0.18);
-}
-
-.customDropdownButton[aria-valid="true"] {
-  border-color: rgba(93, 96, 244, 0.6);
-  box-shadow: 0 0 10px rgba(93, 96, 244, 0.6);
-}
-
-.customDropdownButton[aria-invalid="true"],
-.customDropdownButton.error {
-  border-color: #ff5e5e;
-  box-shadow: 0 0 10px rgba(255, 94, 94, 0.18);
+.customDropdownButton.disabled {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #9a95a0 !important;
+  cursor: not-allowed !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: none !important;
 }
 
 .customDropdownMenu {
@@ -190,18 +173,6 @@
   max-height: 320px;
   display: flex;
   flex-direction: column;
-  animation: dropdownSlide 0.2s ease-out;
-}
-
-@keyframes dropdownSlide {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .dropdownSearchWrapper {
@@ -218,7 +189,6 @@
   color: #fff;
   font-size: 14px;
   outline: none;
-  font-family: inherit;
 }
 
 .dropdownOptions {
@@ -237,20 +207,14 @@
   text-align: left;
   cursor: pointer;
   border-radius: 8px;
-  transition: background 0.15s ease, color 0.15s ease;
-  font-family: inherit;
 }
 
 .dropdownOption:hover {
   background: rgba(93, 96, 244, 0.15);
-  color: #ffffff;
 }
 
-.dropdownNoResults {
-  padding: 16px 12px;
-  color: #9a95a0;
-  font-size: 14px;
-  text-align: center;
+.dropdownOption.selected {
+  background: linear-gradient(90deg, rgba(93, 96, 244, 0.2), rgba(247, 178, 103, 0.2));
 }
 
 .selectArrow {
@@ -260,7 +224,6 @@
   transform: translateY(-50%);
   pointer-events: none;
   color: #cfc9d1;
-  z-index: 1;
   transition: transform 0.2s ease;
 }
 
@@ -268,15 +231,7 @@
   transform: translateY(-50%) rotate(180deg);
 }
 
-/* Error messages */
-#err_State,
-#err_District,
-#err_PinCode,
-#err_City,
-#err_Center,
-#err_Street,
-#err_Landmark,
-#err_DoorNo {
+.err {
   font-size: 13px;
   color: #ff8a8a;
   margin-top: 0;
@@ -284,33 +239,25 @@
   margin-bottom: 12px;
   opacity: 0;
   transform: translateY(6px);
-  transition: opacity .25s ease, transform .25s ease;
+  transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
-#err_State:not(:empty),
-#err_District:not(:empty),
-#err_PinCode:not(:empty),
-#err_City:not(:empty),
-#err_Center:not(:empty),
-#err_Street:not(:empty),
-#err_Landmark:not(:empty),
-#err_DoorNo:not(:empty) {
+.err:not(:empty) {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* Submit Button */
-#submitButtonContainer_AddressQuestions {
+#submitButtonContainer_ShopAddress {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
   margin-top: 8px;
-  animation: slideDown 0.3s ease-out;
+  animation: slideDown_ShopAddress 0.3s ease-out;
 }
 
-#submitBtn_AddressQuestions {
+#submitBtn_ShopAddress {
   width: 100%;
   max-width: 380px;
   padding: 14px 12px;
@@ -325,12 +272,12 @@
   transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.08s ease;
 }
 
-#submitBtn_AddressQuestions:hover:not([disabled]) {
+#submitBtn_ShopAddress:hover:not([disabled]) {
   transform: translateY(-2px);
   box-shadow: 0 16px 38px rgba(93, 96, 244, 0.18);
 }
 
-#submitBtn_AddressQuestions:disabled {
+#submitBtn_ShopAddress:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -343,7 +290,6 @@
   font-size: 14px;
   font-weight: 500;
   text-align: center;
-  animation: slideDown 0.3s ease-out;
 }
 
 .submit-message.error {
@@ -358,8 +304,7 @@
   border: 1px solid rgba(93, 244, 159, 0.3);
 }
 
-/* Animations */
-@keyframes slideDown {
+@keyframes slideDown_ShopAddress {
   from {
     opacity: 0;
     transform: translateY(-20px);
@@ -370,9 +315,8 @@
   }
 }
 
-/* Responsive */
 @media (min-width: 640px) {
-  #formGrid_AddressQuestions {
+  #formGrid_ShopAddress {
     grid-template-columns: repeat(2, 1fr);
   }
   #formGroup_State,
@@ -383,15 +327,9 @@
 }
 
 @media (max-width: 879px) {
-  #topBox_AddressQuestions,
-  #addressFormBox_AddressQuestions {
+  #topBox_ShopAddress,
+  #addressFormBox_ShopAddress {
     padding: 24px 18px;
     border-radius: 14px;
-  }
-}
-
-@media (max-width: 480px) {
-  #divId1_AddressQuestions {
-    padding: 4vh 16px 30px 16px;
   }
 }
