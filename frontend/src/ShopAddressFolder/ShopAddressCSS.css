@@ -277,6 +277,18 @@
   box-shadow: 0 16px 38px rgba(93, 96, 244, 0.18);
 }
 
+#submitBtn_ShopAddress:active:not([disabled]) {
+  transform: translateY(0);
+  box-shadow: 0 8px 20px rgba(93, 96, 244, 0.2);
+}
+
+#submitBtn_ShopAddress {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
 #submitBtn_ShopAddress:disabled {
   opacity: 0.5;
   cursor: not-allowed;
