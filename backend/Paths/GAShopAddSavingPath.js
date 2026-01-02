@@ -1,5 +1,5 @@
 const express = require("express");
-const GAShopAddressSavingSchema = require("../SchemaFolder/GAShopAddSavingSchema");
+const GAShopAddressSavingSchema = require("../SchemaFolder/GAShopAddressSavingSchema");
 const AuthenticationController = require("../Authentication/AuthenticationController");
 const { validateAddress } = require("../Validators/AddressValidator");
 
