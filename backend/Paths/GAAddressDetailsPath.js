@@ -124,6 +124,5 @@ router.post("/saveGAAddress", AuthenticationController.isAuthenticated, async (r
             message: "Server error while saving address details",
         });
     }
-  }
-);
+});
 module.exports = router;

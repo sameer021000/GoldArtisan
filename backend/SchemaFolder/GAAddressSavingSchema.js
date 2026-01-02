@@ -42,4 +42,8 @@ const gaAddressSavingSchemaStructure=new mongoose.Schema(
         }
     }
 );
-module.exports=mongoose.model("AddressSavingSchema", gaAddressSavingSchemaStructure, "AddressSavingCollection");
+module.exports=mongoose.model(
+    "AddressSavingSchema", 
+    gaAddressSavingSchemaStructure, 
+    "AddressSavingCollection"
+);

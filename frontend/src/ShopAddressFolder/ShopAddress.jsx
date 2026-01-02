@@ -154,7 +154,7 @@ function ShopAddress() {
     setIsSubmitting(true)
     try {
       const response = await axios.post(
-        `${apiBase}/GAAddressDetailsPath/saveGAAddress`,
+        `${apiBase}/GAShopAddSavingPath/saveGAShopAddress`,
         {
           phoneNumber,
           shopAddress: { ...addressForm },
