@@ -1,5 +1,3 @@
-"use client"
-
 import "./ShopAddressCSS.css"
 import { useState, useRef, useEffect } from "react"
 import axios from "axios"
@@ -473,7 +471,7 @@ function ShopAddress() {
         </div>
         <div id="submitButtonContainer_ShopAddress">
             <button id="submitBtn_ShopAddress" type="button" onClick={handleSubmit} disabled={isSubmitting}>
-              {isSubmitting ? "Saving..." : "Save Shop Address"}
+              {isSubmitting ? "Saving..." : "Save"}
             </button>
             {submitError && (
               <div id="submitError_ShopAddress" className="submit-message error">
